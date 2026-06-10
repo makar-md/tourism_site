@@ -1,7 +1,7 @@
 import express, { json } from 'express';
 const PORT = 3000
 const app = express()
-app.use(json)
+app.use(json())
 
 async function main(){
 
