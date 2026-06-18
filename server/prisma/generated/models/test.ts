@@ -40,18 +40,21 @@ export type TestMinAggregateOutputType = {
   id: number | null
   text: string | null
   num: runtime.Decimal | null
+  created_at: Date | null
 }
 
 export type TestMaxAggregateOutputType = {
   id: number | null
   text: string | null
   num: runtime.Decimal | null
+  created_at: Date | null
 }
 
 export type TestCountAggregateOutputType = {
   id: number
   text: number
   num: number
+  created_at: number
   _all: number
 }
 
@@ -70,18 +73,21 @@ export type TestMinAggregateInputType = {
   id?: true
   text?: true
   num?: true
+  created_at?: true
 }
 
 export type TestMaxAggregateInputType = {
   id?: true
   text?: true
   num?: true
+  created_at?: true
 }
 
 export type TestCountAggregateInputType = {
   id?: true
   text?: true
   num?: true
+  created_at?: true
   _all?: true
 }
 
@@ -175,6 +181,7 @@ export type TestGroupByOutputType = {
   id: number
   text: string | null
   num: runtime.Decimal | null
+  created_at: Date
   _count: TestCountAggregateOutputType | null
   _avg: TestAvgAggregateOutputType | null
   _sum: TestSumAggregateOutputType | null
@@ -204,12 +211,14 @@ export type testWhereInput = {
   id?: Prisma.IntFilter<"test"> | number
   text?: Prisma.StringNullableFilter<"test"> | string | null
   num?: Prisma.DecimalNullableFilter<"test"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFilter<"test"> | Date | string
 }
 
 export type testOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   text?: Prisma.SortOrderInput | Prisma.SortOrder
   num?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_at?: Prisma.SortOrder
 }
 
 export type testWhereUniqueInput = Prisma.AtLeast<{
@@ -219,12 +228,14 @@ export type testWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.testWhereInput | Prisma.testWhereInput[]
   text?: Prisma.StringNullableFilter<"test"> | string | null
   num?: Prisma.DecimalNullableFilter<"test"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFilter<"test"> | Date | string
 }, "id">
 
 export type testOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   text?: Prisma.SortOrderInput | Prisma.SortOrder
   num?: Prisma.SortOrderInput | Prisma.SortOrder
+  created_at?: Prisma.SortOrder
   _count?: Prisma.testCountOrderByAggregateInput
   _avg?: Prisma.testAvgOrderByAggregateInput
   _max?: Prisma.testMaxOrderByAggregateInput
@@ -239,51 +250,60 @@ export type testScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"test"> | number
   text?: Prisma.StringNullableWithAggregatesFilter<"test"> | string | null
   num?: Prisma.DecimalNullableWithAggregatesFilter<"test"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeWithAggregatesFilter<"test"> | Date | string
 }
 
 export type testCreateInput = {
   text?: string | null
   num?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Date | string
 }
 
 export type testUncheckedCreateInput = {
   id?: number
   text?: string | null
   num?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Date | string
 }
 
 export type testUpdateInput = {
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   num?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type testUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   num?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type testCreateManyInput = {
   id?: number
   text?: string | null
   num?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Date | string
 }
 
 export type testUpdateManyMutationInput = {
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   num?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type testUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   num?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type testCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   text?: Prisma.SortOrder
   num?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
 }
 
 export type testAvgOrderByAggregateInput = {
@@ -295,12 +315,14 @@ export type testMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   text?: Prisma.SortOrder
   num?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
 }
 
 export type testMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   text?: Prisma.SortOrder
   num?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
 }
 
 export type testSumOrderByAggregateInput = {
@@ -320,6 +342,10 @@ export type NullableDecimalFieldUpdateOperationsInput = {
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
+}
+
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -334,27 +360,31 @@ export type testSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   id?: boolean
   text?: boolean
   num?: boolean
+  created_at?: boolean
 }, ExtArgs["result"]["test"]>
 
 export type testSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   text?: boolean
   num?: boolean
+  created_at?: boolean
 }, ExtArgs["result"]["test"]>
 
 export type testSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   text?: boolean
   num?: boolean
+  created_at?: boolean
 }, ExtArgs["result"]["test"]>
 
 export type testSelectScalar = {
   id?: boolean
   text?: boolean
   num?: boolean
+  created_at?: boolean
 }
 
-export type testOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "text" | "num", ExtArgs["result"]["test"]>
+export type testOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "text" | "num" | "created_at", ExtArgs["result"]["test"]>
 
 export type $testPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "test"
@@ -363,6 +393,7 @@ export type $testPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: number
     text: string | null
     num: runtime.Decimal | null
+    created_at: Date
   }, ExtArgs["result"]["test"]>
   composites: {}
 }
@@ -789,6 +820,7 @@ export interface testFieldRefs {
   readonly id: Prisma.FieldRef<"test", 'Int'>
   readonly text: Prisma.FieldRef<"test", 'String'>
   readonly num: Prisma.FieldRef<"test", 'Decimal'>
+  readonly created_at: Prisma.FieldRef<"test", 'DateTime'>
 }
     
 

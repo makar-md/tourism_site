@@ -75,7 +75,8 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const TestScalarFieldEnum = {
   id: 'id',
   text: 'text',
-  num: 'num'
+  num: 'num',
+  created_at: 'created_at'
 } as const
 
 export type TestScalarFieldEnum = (typeof TestScalarFieldEnum)[keyof typeof TestScalarFieldEnum]
