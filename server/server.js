@@ -1,5 +1,8 @@
 import express, { json } from 'express';
-const PORT = 3000
+import dotenv from 'dotenv'
+
+dotenv.config()
+
 const app = express()
 app.use(json())
 
@@ -10,7 +13,7 @@ async function main(){
             message: "hello"
         })
     })
-    app.listen(PORT, ()=>{
+    app.listen(process.env.PORT || 4200, ()=>{
         console.log(`server start on ${PORT} port`)
     })
 }
