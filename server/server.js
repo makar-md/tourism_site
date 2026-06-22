@@ -5,26 +5,44 @@ import { PrismaClient } from './prisma/generated/client.ts';
 import cors from 'cors'
 import helmet from 'helmet'
 
+import swaggerUi from 'swagger-ui-express';
+import swaggerFile from './swagger-output.json' with { type: 'json' };;
 
+//========== .env ==========//
 dotenv.config()
+//========== .env ==========//
+
+//========== Prisma ==========//
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
 });
 const prisma = new PrismaClient({ adapter });
+//========== Prisma ==========//
 
-
+//========== Express app ==========//
 const app = express()
-app.use(json(), cors({
-  origin: 'http://localhost:5173'
-}), helmet())
+app.use( json(), helmet())
+app.use(cors({
+        origin: 'http://localhost:5173'
+    })
+)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+//========== Express app ==========//
 
+
+//========== Requests ==========//
 async function main(){
+    
     app.get('/get/test_str', async (req, res) =>{
         const data = await prisma.test.findMany();
 
         const str = data[Math.floor(Math.random() * data.length)];
         console.log(str);
         res.status(200).json(str);
+    })
+
+    app.get('/test', async(req, res) =>{
+        res.send("Hello, World!");
     })
 
     app.get('/get/test_str/:id', async (req, res) => {
@@ -47,7 +65,9 @@ async function main(){
     });
 
     app.listen(process.env.PORT || 4200, ()=>{
-        console.log(`server start on ${process.env.PORT || 4200} port`)
+        console.log(`🗲 server start on ${process.env.PORT || 4200} port 🗲`)
+        console.log(`server http://localhost:4200`)
+        console.log(`swagger http://localhost:4200/api-docs`)
     })
 }
 
