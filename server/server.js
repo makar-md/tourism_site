@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from './prisma/generated/client.ts';
 import cors from 'cors'
+import helmet from 'helmet'
 
 
 dotenv.config()
@@ -15,7 +16,7 @@ const prisma = new PrismaClient({ adapter });
 const app = express()
 app.use(json(), cors({
   origin: 'http://localhost:5173'
-}))
+}), helmet())
 
 async function main(){
     app.get('/get/test_str', async (req, res) =>{
