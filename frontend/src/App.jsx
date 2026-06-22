@@ -68,7 +68,10 @@ function App() {
           },
           body:  JSON.stringify(newData)
         });
-        if (!res.ok) throw new Error('Ошибка загрузки');
+        if (!res.ok){
+          const resData = await res.json();
+          throw new Error(resData.message);
+        } 
         const resData = await res.json();
         setPostData(resData.message)
         setNewData({ text: '', num: '' })

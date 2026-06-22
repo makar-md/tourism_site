@@ -6,7 +6,9 @@ import cors from 'cors'
 import helmet from 'helmet'
 
 import swaggerUi from 'swagger-ui-express';
-import swaggerFile from './swagger-output.json' with { type: 'json' };;
+import swaggerFile from './swagger-output.json' with { type: 'json' };
+
+import {validationTestStr} from './dataValidate.js';
 
 //========== .env ==========//
 dotenv.config()
@@ -41,10 +43,6 @@ async function main(){
         res.status(200).json(str);
     })
 
-    app.get('/test', async(req, res) =>{
-        res.send("Hello, World!");
-    })
-
     app.get('/get/test_str/:id', async (req, res) => {
         const { id } = req.params;
         
@@ -58,6 +56,11 @@ async function main(){
 
     app.post('/create/test_str', async (req, res) => {
         const data = req.body;
+        const validation = validationTestStr.safeParse(data);
+        if (!validation.success){
+            return res.status(400).json({message: "no valid data"})
+        }
+
         const user = await prisma.test.create({
             data: data
         });
@@ -70,5 +73,21 @@ async function main(){
         console.log(`swagger http://localhost:4200/api-docs`)
     })
 }
+
+//========== Zod ==========//
+// export const validate = (schema) => {
+//     return (req, res, next) => {
+
+//         const result = schema.safeParse(req.body);
+
+//         if (!result.success) {
+//             return res.status(400).json(result.error);
+//         }
+
+//         req.body = result.data;
+
+//         next();
+//     };
+// };
 
 main()

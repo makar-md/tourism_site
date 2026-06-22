@@ -21,16 +21,6 @@
         }
       }
     },
-    "/test": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/get/test_str/{id}": {
       "get": {
         "description": "",
@@ -58,6 +48,9 @@
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }
