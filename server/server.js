@@ -31,7 +31,8 @@ const prisma = new PrismaClient({ adapter });
 const app = express()
 app.use( json(), helmet(), cookieParser())
 app.use(cors({
-        origin: 'http://localhost:5173'
+        origin: 'http://localhost:5173',
+        credentials: true
     })
 )
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
@@ -115,8 +116,24 @@ async function main(){
             process.env.JWT_SECRET,
             { expiresIn: "1h" }
         )
-        res.json({ token });
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            maxAge: 60 * 60 * 1000
+        })
+        res.json({ message: "loggined" });
     })
+    app.post("/logout", (req, res) => {
+        res.clearCookie("token", {
+            httpOnly: true,
+            sameSite: "lax",
+            secure: false
+        });
+
+        res.json({ message: "Logged out" });
+    });
+
 
     app.get("/profile", auth, async (req, res) => {
         res.json({
