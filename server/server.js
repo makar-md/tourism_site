@@ -65,13 +65,9 @@ async function main(){
         res.status(201).json({message:"успешно"});
     });
 
-    app.post('/register/user', async (req,res) =>{
+    app.post('/register/user',validation(validationUser), async (req,res) =>{
         const {email, password, firstName, surName, LastName} = req.body;
         const data = { email, password, firstName, surName, lastName };
-        const validation =  validationUser.safeParse(data)
-        if(!validation.success){
-            return res.status(400).json({ message: "validation error"})
-        }
         try{
             const exist = await prisma.User.findUnique({
                 where: {email: data.email}
