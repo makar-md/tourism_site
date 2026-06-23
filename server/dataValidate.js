@@ -1,6 +1,9 @@
-import { z } from "zod";
+import { email, z } from "zod";
 
-export const validationTestStr = z.object({
-    text: z.string().min(1).max(100),
-    num: z.number().min(5, 'number is very small')
+export const validationUser = z.object({
+    email: z.email(),
+    password: z.string(),
+    firstName: z.string().min(1),
+    surName: z.string().min(1),
+    lastName: z.string().min(1).optional()
 });
