@@ -14,7 +14,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import cookieParser from 'cookie-parser'
 import auth from "./middlewear/auth.js"
-import validation from './middlewear/validate';
+import validation from './middlewear/validate.js';
 
 //========== .env ==========//
 dotenv.config()
@@ -67,7 +67,7 @@ async function main(){
     });
 
     app.post('/register/user',validation(validationUser), async (req,res) =>{
-        const {email, password, firstName, surName, LastName} = req.body;
+        const {email, password, firstName, surName, lastName} = req.body;
         const data = { email, password, firstName, surName, lastName };
         try{
             const exist = await prisma.User.findUnique({
@@ -76,7 +76,7 @@ async function main(){
             if(exist){
                 return res.status(400).json({message: "User already exists"})
             }
-            const hash = await bcrypt.hash(password, process.env.SALT_ROUNDS || 10);
+            const hash = await bcrypt.hash(password, 10);
             const user = await prisma.User.create({
                 data: {
                     email,
@@ -84,7 +84,7 @@ async function main(){
                     firstName,
                     surName,
                     lastName,
-                    role: 1
+                    roleId: 1
                 }
             });
             res.json({
