@@ -1,14 +1,12 @@
 import { useState } from 'react'
 import '../index.css'
+import { useNavigate } from 'react-router-dom'
 
-function Register() {
+function Login() {
+  const navigate = useNavigate()
   const [data, setData] = useState({
     email: "",
     password: "",
-    confirmPassword: "",
-    firstName: "",
-    surName: "",
-    lastName: ""
   })
   const handleChange = (e) =>{
     const{ name, value } = e.target;
@@ -17,30 +15,26 @@ function Register() {
       [name]: value
     }));
   }
-  const handleRegister = async () => {
-    console.log(data)
-    if(data.password !== data.confirmPassword){
-      return alert("пароли должны совпадать")
-    }
+  const handleLogin = async () => {
     try{
-      const res = await fetch('http://localhost:4200/register/user', {
+      const res = await fetch('http://localhost:4200/login/user', {
         credentials: "include",
         method: "POST",
         headers: {"Content-Type": "application/json",},
         body: JSON.stringify(data),
       })
+      console.log(res)
       const result = await res.json();
       if (!res.ok) {
         throw new Error(result.message)
       }
-      alert("успешная регистрация")
+      navigate('/profile')
 
     } catch (e){
+      console.log(e.message)
       alert(e.message)
     }
   };
-
-
   return(
   <>
     <div className=' flex h-screen w-full items-center justify-center'>
@@ -49,19 +43,10 @@ function Register() {
           <input type="email" id='email' name='email' value={data.email} onChange={handleChange}
           className='border border-zinc-900 rounded-lg p-1 invalid:border-rose-500'/>
         </label>
-        <input type="text" name='surName' value={data.surName} onChange={handleChange}
-        className='border border-zinc-900 rounded-lg invalid:border-rose-500'/>
-
-        <input type="text" name='firstName' value={data.firstName} onChange={handleChange}
-        className='border border-zinc-900 rounded-lg invalid:border-rose-500'/>
         
-        <input type="text" name='lastName' value={data.lastName} onChange={handleChange}
-        className='border border-zinc-900 rounded-lg invalid:border-rose-500'/>
         <input type="password" name='password' value={data.password} onChange={handleChange}
         className='border border-zinc-900 rounded-lg invalid:border-rose-500'/>
-        <input type="password" name='confirmPassword' value={data.confirmPassword} onChange={handleChange}
-        className='border border-zinc-900 rounded-lg invalid:border-rose-500'/>
-        <button onClick={(e) => handleRegister()}>Зарегестрироваться</button>
+        <button onClick={(e) => handleLogin()}>Войти</button>
       </div>
 
     </div>
@@ -69,4 +54,4 @@ function Register() {
   )
 }
 
-export default Register
+export default Login

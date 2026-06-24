@@ -29,12 +29,13 @@ const prisma = new PrismaClient({ adapter });
 
 //========== Express app ==========//
 const app = express()
-app.use( json(), helmet(), cookieParser())
 app.use(cors({
         origin: 'http://localhost:5173',
-        credentials: true
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     })
 )
+app.use( json(), helmet(), cookieParser())
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 //========== Express app ==========//
 
@@ -129,7 +130,7 @@ async function main(){
             httpOnly: true,
             secure: false,
             sameSite: "lax",
-            maxAge: 15 * 1000
+            maxAge: 15 * 60 * 1000
         })
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
@@ -148,8 +149,8 @@ async function main(){
             const decoded = jwt.verify(token, process.env.REFRESH_SECRET)
             const newAccessTooken = jwt.sign(
                 {
-                    userId: decoded.user.id,
-                    email: decoded.user.email
+                    userId: decoded.userId,
+                    email: decoded.email
                 },
                 process.env.JWT_SECRET,
                 { expiresIn: "15m" }
