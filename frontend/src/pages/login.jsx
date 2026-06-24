@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import Input from '../components/input'
 import Body from '../components/body'
+import Header from '../components/header'
 import '../index.css'
 
 
@@ -41,6 +42,7 @@ function Login() {
   console.log("render Login");
   return(
   <Body>
+    <Header linksShow={false}/>
     <div className=' flex h-screen w-full items-center justify-center'>
       <div className="w-full max-w-md sm:max-w-lg md:max-w-2xl border border-zinc-300 dark:border-zinc-700 rounded-2xl flex flex-col items-center p-4 sm:p-6 md:p-8">
             <div className="w-full flex flex-col gap-2 mb-4">
