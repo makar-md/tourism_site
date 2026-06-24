@@ -87,9 +87,10 @@ async function main(){
                     roleId: 1
                 }
             });
-            res.json({
+            res.status(200).json({
                 id: user.id,
                 email: user.email,
+                message: "user register"
             });
         }catch(e){
             return res.status(500).json({message: e.message})
