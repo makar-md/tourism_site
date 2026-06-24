@@ -6,7 +6,7 @@ export default function ProtectedRouter({ children }) {
     useEffect(()=>{
         const checkAuth = async () => {
             try {
-                const res = await fetch("http://localhost:4200/profile", {
+                const res = await fetch("http://localhost:4200/isAuth", {
                     credentials: "include"
                 });
 

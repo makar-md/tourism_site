@@ -43,17 +43,6 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 //========== Requests ==========//
 async function main(){
     
-
-    app.get('/get/test_str/:id', async (req, res) => {
-        const { id } = req.params;
-        
-        const data = await prisma.test.findUnique({
-            where: { id: Number(id) }
-        });
-        
-        if (!data) return res.status(404).json({ error: 'User not found' });
-        res.json(data);
-    });
     app.post('/create/test_str', async (req, res) => {
         const data = req.body;
         const validation = validationTestStr.safeParse(data);
@@ -184,11 +173,25 @@ async function main(){
 
 
     app.get("/profile", auth, async (req, res) => {
-        res.json({
-            message: "Ты авторизован",
-            user: req.user
-        });
+        const token = req.cookies.refreshToken;
+        if(!token){
+            return res.status(401).json({message: "no token"})
+        }
+        try{
+            const userDecoded = jwt.verify(token, process.env.REFRESH_SECRET)
+            const userData = await prisma.User.findUnique({
+                where: {id: userDecoded.id}
+            });
+            res.status(200).json(userData);
+        } catch (e){
+            return res.status(500).json({message: e.message})
+        }
+        
     });
+    app.get("/isAuth", auth, async (req, res) => {
+        res.status(200).json({message: "ok"});
+    });
+
 
     app.listen(process.env.PORT || 4200, ()=>{
         console.log(`🗲 server start on ${process.env.PORT || 4200} port 🗲`)
