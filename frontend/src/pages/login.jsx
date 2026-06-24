@@ -78,11 +78,6 @@ function Login() {
                 dark:active:bg-zinc-700 dark:active:text-zinc-100/70 flex-none w-full" onClick={(e) => handleLogin()}>Login</button>
             </div>
         </div>
-        
-        {/* <Input type="email" name="email" label="Email" value={data.email} onChange={handleChange}/>
-        <Input type="password" name="password" label="Password" value={data.password} onChange={handleChange}/>
-        <button onClick={(e) => handleLogin()}>Войти</button> */}
-
     </div>
   </Body>
   )
