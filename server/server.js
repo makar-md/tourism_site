@@ -108,24 +108,70 @@ async function main(){
         if (!match) {
             return res.status(400).json({ message: "Invalid password" });
         }
-        const token = jwt.sign(
+        const accessToken = jwt.sign(
             {
                 userId: user.id,
                 email: user.email
             },
             process.env.JWT_SECRET,
-            { expiresIn: "1h" }
+            { expiresIn: "15m" }
         )
-        res.cookie("token", token, {
+        const refreshToken = jwt.sign(
+            { 
+                userId: user.id,
+                email: user.email
+            },
+            process.env.REFRESH_SECRET,
+            { expiresIn: "7d" }
+        );
+        res.cookie("accessToken", accessToken, {
             httpOnly: true,
             secure: false,
             sameSite: "lax",
-            maxAge: 60 * 60 * 1000
+            maxAge: 15 * 1000
+        })
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000
         })
         res.json({ message: "loggined" });
     })
+    app.post('/refresh', (req, res)=>{
+        const token = req.cookies.refreshToken;
+        if(!token){
+            return res.status(401).json({message: "no token"})
+        }
+        try{
+            const decoded = jwt.verify(token, process.env.REFRESH_SECRET)
+            const newAccessTooken = jwt.sign(
+                {
+                    userId: decoded.user.id,
+                    email: decoded.user.email
+                },
+                process.env.JWT_SECRET,
+                { expiresIn: "15m" }
+            );
+            res.cookie("accessToken", newAccessTooken, {
+                httpOnly: true,
+                secure: false,
+                sameSite: "lax",
+                maxAge: 15 * 1000
+            })
+            res.json({message: "token refreshed"})
+        }catch (e){
+            return res.sendStatus(401);
+        }
+    })
+
     app.post("/logout", (req, res) => {
-        res.clearCookie("token", {
+        res.clearCookie("accessToken", {
+            httpOnly: true,
+            sameSite: "lax",
+            secure: false
+        });
+        res.clearCookie("refreshToken", {
             httpOnly: true,
             sameSite: "lax",
             secure: false
