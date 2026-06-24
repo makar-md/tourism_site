@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useTheme } from '../ThemContext';
 /**
  * 
  * @param {*} linksShow 
@@ -7,11 +8,58 @@ import { useState } from 'react'
  */
 export default function Header({linksShow}){
     const [showMenu, setShowMenu] = useState(false)
+    const [isLogined, setIsLogined] = useState(false);
+
+    const {theme, toggleTheme} = useTheme();
+
+    const navigate = useNavigate()
 
     function toggleModal(e){
         setShowMenu(e)
     }
 
+    useEffect(()=>{
+        const checkAuth = async () => {
+            try {
+                let res = await fetch("http://localhost:4200/isAuth", {
+                    credentials: "include"
+                });
+                if (res.status === 401) {
+                    const refreshRes = await fetch("http://localhost:4200/refresh", {
+                        method: "POST",
+                        credentials: "include"
+                    });
+                    if (!refreshRes.ok) {
+                        navigate("/login");
+                        return;
+                    }
+                    res = await fetch("http://localhost:4200/isAuth", {
+                        credentials: "include"
+                    });
+                }   
+                setIsLogined(res.ok);
+            } catch (e) {
+                setIsLogined(false);
+            }
+        };
+        checkAuth();
+    }, [])
+
+    async function LogOut(){
+        try{
+            const res = await fetch("http://localhost:4200/logout", {
+                method: "POST",
+                credentials: "include"
+            });
+            if(!res.ok){
+                alert("не получилось выйти");
+                return;
+            }
+            navigate("/")
+        } catch(e){
+            alert(e.message);
+        }
+    }
 
     return(
         <header className="fixed flex w-full top-2.5 left-0 z-48">
@@ -22,34 +70,34 @@ export default function Header({linksShow}){
                     <div className="flex-row gap-5 rounded-full bg-white/90 px-5 shadow-lg
                     ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm transition dark:bg-zinc-800/20
                     dark:ring-white/10 *:duration-200 *:transition-all md:flex hidden ">
-                        <div className="text-zinc-900 dark:text-zinc-50 hover:text-orange-500 font-medium text-[14px] text-center
+                        <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center">
                             <Link to="/">Main</Link>
                         </div>
-                        <div className="text-zinc-900 dark:text-zinc-50 hover:text-orange-500 font-medium text-[14px] text-center
+                        <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center" >
                             <Link>Projects</Link>
                         </div>
-                        <div className="text-zinc-900 dark:text-zinc-50 hover:text-orange-500 font-medium text-[14px] text-center
+                        <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center" >
                             <Link>Docs</Link>
                         </div>
-                        <div className="text-zinc-900 dark:text-zinc-50 hover:text-orange-500 font-medium text-[14px] text-center
+                        <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center" >
                             <Link>Templates</Link>
                         </div>
-                        <div className="text-zinc-900 dark:text-zinc-50 hover:text-orange-500 font-medium text-[14px] text-center
+                        <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center" >
                             <Link to="/profile">Profile</Link>
                         </div>
-                        <div className="text-zinc-900 dark:text-zinc-50 hover:text-orange-500 font-medium text-[14px] text-center
+                        <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center">
-                            <Link to="/login">Log in</Link>
+                            { !isLogined ? <Link to="/login">Log in</Link> : <button onClick={(e) => LogOut()}>Log out</button>}
                         </div>
                     </div>
                     <div className="pointer-events-auto md:hidden" data-headlessui-state="">
                         <button className="group flex items-center rounded-full bg-white/90 px-4 py-2.5 text-sm font-medium
-                        text-zinc-800 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm hover:text-orange-500
+                        text-zinc-800 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm hover:text-teal-500
                         dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20" 
                         type="button" onClick={(e) => toggleModal(true)}>Menu 
                             <svg viewBox="0 0 8 6"  className="ml-3 h-auto w-2 stroke-zinc-500 group-hover:stroke-zinc-700 dark:group-hover:stroke-zinc-400">
@@ -63,12 +111,12 @@ export default function Header({linksShow}){
                 <div className="w-2/8 p-2 flex justify-start">
                     <button type="button" id="toggleTheme" className="group rounded-full bg-white/90 px-3 py-2 shadow-lg
                     ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm transition dark:bg-zinc-800/90
-                    dark:ring-white/10 dark:hover:ring-white/20">
-                        <svg viewBox="0 0 24 24" strokeWidth="1.5" className="h-6 w-6 fill-zinc-100 stroke-zinc-500 transition group-hover:fill-zinc-200 group-hover:stroke-zinc-700 dark:hidden [@media(prefers-color-scheme:dark)]:fill-orange-50 [@media(prefers-color-scheme:dark)]:stroke-orange-500 [@media(prefers-color-scheme:dark)]:group-hover:fill-orange-50 [@media(prefers-color-scheme:dark)]:group-hover:stroke-orange-600">
+                    dark:ring-white/10 dark:hover:ring-white/20" onClick={toggleTheme}>
+                        <svg viewBox="0 0 24 24" strokeWidth="1.5" className="h-6 w-6 fill-zinc-100 stroke-zinc-500 transition group-hover:fill-zinc-200 group-hover:stroke-zinc-700 dark:hidden [@media(prefers-color-scheme:dark)]:fill-teal-50 [@media(prefers-color-scheme:dark)]:stroke-teal-500 [@media(prefers-color-scheme:dark)]:group-hover:fill-teal-50 [@media(prefers-color-scheme:dark)]:group-hover:stroke-teal-600">
                             <path d="M8 12.25A4.25 4.25 0 0 1 12.25 8v0a4.25 4.25 0 0 1 4.25 4.25v0a4.25 4.25 0 0 1-4.25 4.25v0A4.25 4.25 0 0 1 8 12.25v0Z"></path>
                             <path d="M12.25 3v1.5M21.5 12.25H20M18.791 18.791l-1.06-1.06M18.791 5.709l-1.06 1.06M12.25 20v1.5M4.5 12.25H3M6.77 6.77 5.709 5.709M6.77 17.73l-1.061 1.061" fill="none"></path>
                         </svg>
-                        <svg viewBox="0 0 24 24" className="hidden h-6 w-6 fill-zinc-700 stroke-zinc-500 transition not-[@media_(prefers-color-scheme:dark)]:fill-orange-400/10 not-[@media_(prefers-color-scheme:dark)]:stroke-orange-500 dark:block [@media(prefers-color-scheme:dark)]:group-hover:stroke-zinc-400">
+                        <svg viewBox="0 0 24 24" className="hidden h-6 w-6 fill-zinc-700 stroke-zinc-500 transition not-[@media_(prefers-color-scheme:dark)]:fill-teal-400/10 not-[@media_(prefers-color-scheme:dark)]:stroke-teal-500 dark:block [@media(prefers-color-scheme:dark)]:group-hover:stroke-zinc-400">
                             <path d="M17.25 16.22a6.937 6.937 0 0 1-9.47-9.47 7.451 7.451 0 1 0 9.47 9.47ZM12.75 7C17 7 17 2.75 17 2.75S17 7 21.25 7C17 7 17 11.25 17 11.25S17 7 12.75 7Z" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
                         </svg>
                     </button>
@@ -86,7 +134,7 @@ export default function Header({linksShow}){
                         <button className="group rounded-full bg-white/90 px-3 py-2 ring-1 ring-zinc-900/5
                         backdrop-blur-sm transition dark:bg-zinc-800/90 dark:ring-white/10 dark:hover:ring-white/20"
                         onClick={(e) => toggleModal(false)}>
-                            <svg viewBox="0 0 24 24" className="h-6 w-6 text-zinc-500 dark:text-zinc-400 hover:text-orange-500">
+                            <svg viewBox="0 0 24 24" className="h-6 w-6 text-zinc-500 dark:text-zinc-400 hover:text-teal-500">
                                 <path d="m17.25 6.75-10.5 10.5M6.75 6.75l10.5 10.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">                                
                                 </path>
                             </svg>
@@ -96,22 +144,26 @@ export default function Header({linksShow}){
                     <nav className="mt-6">
                         <ul className="-my-2 divide-y divide-zinc-100 text-base text-zinc-800 dark:divide-zinc-100/5 dark:text-zinc-300">
                             <li>
-                                <Link className="flex py-2 hover:text-orange-500 duration-300" to="/">Main</Link>
+                                <Link className="flex py-2 hover:text-teal-500 duration-300" to="/">Main</Link>
                             </li>
                             <li>
-                                <Link className="flex py-2 hover:text-orange-500 duration-300" href="#">Projects</Link>
+                                <Link className="flex py-2 hover:text-teal-500 duration-300" href="#">Projects</Link>
                             </li>
                             <li>
-                                <Link className="flex py-2 hover:text-orange-500 duration-300" href="#">Docs</Link>
+                                <Link className="flex py-2 hover:text-teal-500 duration-300" href="#">Docs</Link>
                             </li>
                             <li>
-                                <Link className="flex py-2 hover:text-orange-500 duration-300" href="#">Templates</Link>
+                                <Link className="flex py-2 hover:text-teal-500 duration-300" href="#">Templates</Link>
                             </li>
                             <li>
-                                <Link className="flex py-2 hover:text-orange-500 duration-300" to="profile">Profile</Link>
+                                <Link className="flex py-2 hover:text-teal-500 duration-300" to="profile">Profile</Link>
                             </li>
                             <li>
-                                <Link className="flex py-2 hover:text-orange-500 duration-300" to="login">Log in</Link>
+                                { !isLogined ?
+                                    <Link className="flex py-2 hover:text-teal-500 duration-300" to="login">Log in</Link>
+                                    :
+                                    <button onClick={(e) => LogOut()}>Log out</button>
+                                }
                             </li>
                         </ul>
                     </nav>

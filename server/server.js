@@ -180,7 +180,7 @@ async function main(){
         try{
             const userDecoded = jwt.verify(token, process.env.REFRESH_SECRET)
             const userData = await prisma.User.findUnique({
-                where: {id: userDecoded.id}
+                where: {id: userDecoded.userId}
             });
             res.status(200).json(userData);
         } catch (e){
