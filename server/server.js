@@ -16,6 +16,8 @@ import cookieParser from 'cookie-parser'
 import auth from "./middlewear/auth.js"
 import validation from './middlewear/validate.js';
 
+const SALT = 10
+
 //========== .env ==========//
 dotenv.config()
 //========== .env ==========//
@@ -42,20 +44,6 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 //========== Requests ==========//
 async function main(){
-    
-    app.post('/create/test_str', async (req, res) => {
-        const data = req.body;
-        const validation = validationTestStr.safeParse(data);
-        if (!validation.success){
-            return res.status(400).json({message: "no valid data"})
-        }
-
-        const test = await prisma.test.create({
-            data: data
-        });
-        res.status(201).json({message:"успешно"});
-    });
-
     app.post('/register/user',validation(validationUser), async (req,res) =>{
         const {email, password, firstName, surName, lastName} = req.body;
         const data = { email, password, firstName, surName, lastName };
@@ -66,7 +54,7 @@ async function main(){
             if(exist){
                 return res.status(400).json({message: "User already exists"})
             }
-            const hash = await bcrypt.hash(password, 10);
+            const hash = await bcrypt.hash(password, SALT);
             const user = await prisma.User.create({
                 data: {
                     email,
@@ -191,6 +179,38 @@ async function main(){
     app.get("/isAuth", auth, async (req, res) => {
         res.status(200).json({message: "ok"});
     });
+
+    app.put("/user/update", auth, async(req, res) => {
+        const {email, firstName, lastName, surName, password} = req.body;
+        try{
+            const updatetdData = {
+                email, firstName, lastName, surName
+            }
+            if(password){updatetdData.password = await bcrypt.hash(password, SALT)}
+
+            const existEmail= await prisma.user.findFirst({
+                where: { email, NOT: {id: req.user.userId}}
+            });
+
+            if (existEmail) {
+                return res.status(400).json({
+                    message: "Email уже занят"
+                });
+            }
+
+           const user = await prisma.user.update({
+                where: {id: req.user.userId},
+                data: updatetdData
+            });
+            res.status(200).json({
+                message: "user updatet",
+                user
+            })
+
+        } catch(e){
+            return res.status(500).json(e.message)
+        }
+    })
 
 
     app.listen(process.env.PORT || 4200, ()=>{

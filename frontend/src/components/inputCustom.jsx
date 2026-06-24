@@ -9,7 +9,7 @@ import '../index.css'
  * @param {*} onChange 
  * @returns 
  */
-export default function Input( {name, label, type = "text", placeholder = "", peerText ="", value, onChange}){
+export default function InputCustom( {name, label, type = "text", placeholder = "", peerText ="", value, onChange}){
     console.log("render Login");
     return(
         <>
