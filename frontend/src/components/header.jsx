@@ -6,7 +6,7 @@ import { useTheme } from '../ThemContext';
  * @param {*} linksShow 
  * @returns 
  */
-export default function Header({linksShow}){
+export default function Header({linksShow, isCheckAuthUser}){
     const [showMenu, setShowMenu] = useState(false)
     const [isLogined, setIsLogined] = useState(false);
 
@@ -42,7 +42,9 @@ export default function Header({linksShow}){
                 setIsLogined(false);
             }
         };
-        checkAuth();
+        if(isCheckAuthUser){
+            checkAuth();
+        }
     }, [])
 
     async function LogOut(){

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { validationLoginUser } from '../shemas/validate.schema'
+import { validationLoginUser } from '../schemas/validate.schema'
 import InputCustom from '../components/inputCustom'
 import Body from '../components/body'
 import Header from '../components/header'

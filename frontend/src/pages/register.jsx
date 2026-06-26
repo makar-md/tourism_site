@@ -3,11 +3,13 @@ import { useNavigate, Link } from 'react-router-dom'
 import InputCustom from '../components/inputCustom'
 import Body from '../components/body'
 import Header from '../components/header'
+import {validationRegisterUser} from '../schemas/validate.schema'
 import '../index.css'
 
 
 function Register() {
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
   const [passwordMatched, setPasswordMathced] = useState(null)
   const [data, setData] = useState({
     email: "",
@@ -23,9 +25,24 @@ function Register() {
       ...prev,
       [name]: value
     }));
+
+    const valid = validationRegisterUser.safeParse(data)
+    let newErrors = {}
+    if(!valid.success){
+      newErrors = valid.error.flatten().fieldErrors;
+    } 
+    if(data.password !== data.confirmPassword){
+      newErrors.confirmPassword = "Пароли должны совпадать"
+    }
+    setErrors(newErrors)
   }
   const handleRegister = async () => {
-    console.log(data)
+    const valid = validationRegisterUser.safeParse(data)
+    if(!valid.success){
+      setErrors(valid.error.flatten().fieldErrors)
+      return
+    }
+    setErrors({})
     if(data.password !== data.confirmPassword){
       return alert("пароли должны совпадать")
     }
@@ -34,7 +51,7 @@ function Register() {
         credentials: "include",
         method: "POST",
         headers: {"Content-Type": "application/json",},
-        body: JSON.stringify(data),
+        body: JSON.stringify(valid.data),
       })
       const result = await res.json();
       if (!res.ok) {
@@ -71,22 +88,28 @@ function Register() {
 
                 <div className="flex flex-col w-full p-2 space-y-2 sm:space-y-3">
                     <div className="flex flex-col gap-2">
-                        <InputCustom type="email" name="email" label="Email" value={data.email} onChange={handleChange} placeholder="test@mail.ru" peerText="Please provide a valid email address."/>
+                        <InputCustom type="email" name="email" label="Email" value={data.email} onChange={handleChange} 
+                        placeholder="test@mail.ru" error={errors.email?.[0]}/>
                     </div>
                     <div className="flex flex-col gap-2">
-                        <InputCustom type="text" name="surName" label="surName" value={data.surName} onChange={handleChange} placeholder="Ivanov" />
+                        <InputCustom type="text" name="surName" label="surName" value={data.surName} onChange={handleChange}
+                        placeholder="Ivanov" error={errors.surName?.[0]}/>
                     </div>
                     <div className="flex flex-col gap-2">
-                        <InputCustom type="text" name="firstName" label="firstName" value={data.firstName} onChange={handleChange} placeholder="Ivan" />
+                        <InputCustom type="text" name="firstName" label="firstName" value={data.firstName} onChange={handleChange}
+                        placeholder="Ivan" error={errors.firstName?.[0]}/>
                     </div>
                     <div className="flex flex-col gap-2">
-                        <InputCustom type="text" name="lastName" label="lastName" value={data.lastName} onChange={handleChange} placeholder="Ivanovich" />
+                        <InputCustom type="text" name="lastName" label="lastName" value={data.lastName} onChange={handleChange}
+                        placeholder="Ivanovich" error={errors.lastName?.[0]}/>
                     </div>
                     <div className="flex flex-col gap-2">
-                        <InputCustom type="password" name="password" label="Password" value={data.password} onChange={handleChange} placeholder="password"/>
+                        <InputCustom type="password" name="password" label="Password" value={data.password} onChange={handleChange}
+                        placeholder="password" error={errors.password?.[0]}/>
                     </div>
                     <div className="flex flex-col gap-2">
-                        <InputCustom type="password" name="confirmPassword" label="Confirm password" value={data.confirmPassword} onChange={handleChange} placeholder="password"/>
+                        <InputCustom type="password" name="confirmPassword" label="Confirm password" value={data.confirmPassword} onChange={handleChange}
+                        placeholder="password" error={errors.confirmPassword}/>
                     </div>
                 </div>
                 
