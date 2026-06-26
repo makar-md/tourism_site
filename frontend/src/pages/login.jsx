@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { validationLoginUser } from '../shemas/validate.schema'
 import InputCustom from '../components/inputCustom'
 import Body from '../components/body'
 import Header from '../components/header'
@@ -8,6 +9,7 @@ import '../index.css'
 
 function Login() {
   const navigate = useNavigate()
+  const [error, setError] = useState({})
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -18,14 +20,28 @@ function Login() {
       ...prev,
       [name]: value
     }));
+
+    const validation = validationLoginUser.safeParse(data)
+
+    if(!validation.success){
+      setError(validation.error.flatten().fieldErrors)
+    } else{
+      setError({})
+    }
   }
   const handleLogin = async () => {
+    const validation = validationLoginUser.safeParse(data)
+    if(!validation.success){
+      setError(validation.error.flatten().fieldErrors)
+      return;
+    }
+    setError({})
     try{
       const res = await fetch('http://localhost:4200/login/user', {
         credentials: "include",
         method: "POST",
         headers: {"Content-Type": "application/json",},
-        body: JSON.stringify(data),
+        body: JSON.stringify(validation.data),
       })
       console.log(res)
       const result = await res.json();
@@ -39,7 +55,6 @@ function Login() {
       alert(e.message)
     }
   };
-  console.log("render Login");
   return(
   <Body>
     <main className="min-h-screen w-11/12 sm:w-10/12 lg:w-5xl bg-white dark:bg-zinc-900 mx-auto flex items-center justify-center px-4 sm:px-6 lg:px-8 py-2">
@@ -62,10 +77,12 @@ function Login() {
 
               <div className="flex flex-col w-full p-2 space-y-2 sm:space-y-4">
                   <div className="flex flex-col gap-2">
-                      <InputCustom type="email" name="email" label="Email" value={data.email} onChange={handleChange} placeholder="test@mail.ru" peerText="Please provide a valid email address."/>
+                      <InputCustom type="email" name="email" label="Email" value={data.email} onChange={handleChange}
+                      error={error.email?.[0]} require={true} placeholder="test@mail.ru"/>
                   </div>
                   <div className="flex flex-col gap-2">
-                      <InputCustom type="password" name="password" label="Password" value={data.password} onChange={handleChange} placeholder="password"/>
+                      <InputCustom type="password" name="password" label="Password" value={data.password} onChange={handleChange}
+                      error={error.password?.[0]} placeholder="password"/>
                   </div>
               </div>
               

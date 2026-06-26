@@ -8,7 +8,7 @@ import helmet from 'helmet'
 import swaggerUi from 'swagger-ui-express';
 import swaggerFile from './swagger-output.json' with { type: 'json' };
 
-import {validationUser} from './dataValidate.js';
+import * as valid from './dataValidate.js';
 
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
@@ -44,7 +44,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 //========== Requests ==========//
 async function main(){
-    app.post('/register/user',validation(validationUser), async (req,res) =>{
+    app.post('/register/user',validation(valid.validationRegisterUser), async (req,res) =>{
         const {email, password, firstName, surName, lastName} = req.body;
         const data = { email, password, firstName, surName, lastName };
         try{
@@ -75,7 +75,7 @@ async function main(){
         }
     })
 
-    app.post('/login/user', async(req,res) =>{
+    app.post('/login/user',validation(valid.validationLoginUser) ,async(req,res) =>{
         const{email, password} = req.body;
         const user = await prisma.User.findUnique({
             where: {email}
@@ -180,7 +180,7 @@ async function main(){
         res.status(200).json({message: "ok"});
     });
 
-    app.put("/user/update", auth, async(req, res) => {
+    app.put("/user/update", auth, validation(valid.validationUpdateUser), async(req, res) => {
         const {email, firstName, lastName, surName, password} = req.body;
         try{
             const updatetdData = {

@@ -9,8 +9,8 @@ export const validationRegisterUser = z.object({
 });
 
 export const validationLoginUser = z.object({
-    email: z.email(),
-    password: z.string().min(8)
+    email: z.email("Некорректный email"),
+    password: z.string().min(8, "Пароль должен содержать не меньше 8 символов")
 })
 
 export const validationUpdateUser = z.object({
