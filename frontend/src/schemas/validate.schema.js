@@ -14,9 +14,9 @@ export const validationLoginUser = z.object({
 })
 
 export const validationUpdateUser = z.object({
-    email: z.email(),
-    password: z.string().min(8).optional(),
-    firstName: z.string().min(1),
-    surName: z.string().min(1),
+    email: z.email("Некорректный email"),
+    password: z.string().optional(),
+    firstName: z.string().min(1, "Обязательное поле"),
+    surName: z.string().min(1, "Обязательное поле"),
     lastName: z.string().min(1).optional()
 });

@@ -15,7 +15,7 @@ export const validationLoginUser = z.object({
 
 export const validationUpdateUser = z.object({
     email: z.email(),
-    password: z.string().min(8).optional(),
+    password: z.string().optional(),
     firstName: z.string().min(1),
     surName: z.string().min(1),
     lastName: z.string().min(1).optional()

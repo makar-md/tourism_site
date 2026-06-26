@@ -58,7 +58,7 @@ function Login() {
   return(
   <Body>
     <main className="min-h-screen w-11/12 sm:w-10/12 lg:w-5xl bg-white dark:bg-zinc-900 mx-auto flex items-center justify-center px-4 sm:px-6 lg:px-8 py-2">
-      <Header linksShow={false}/>
+      <Header linksShow={false} isCheckAuthUser={false}/>
       <div className=' flex h-screen w-full items-center justify-center'>
         <div className="w-full max-w-md sm:max-w-lg md:max-w-2xl border border-zinc-300 dark:border-zinc-700 rounded-2xl flex flex-col items-center p-4 sm:p-6 md:p-8">
               <div className="w-full flex flex-col gap-2 mb-4">
