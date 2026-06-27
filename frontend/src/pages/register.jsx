@@ -21,23 +21,10 @@ function Register() {
   })
   const handleChange = (e) =>{
     const{ name, value } = e.target;
-    
-    const updatedData = (prev) =>({
+    setData( (prev) =>({
       ...prev,
       [name]: value
-    })
-
-    setData(updatedData);
-
-    const valid = validationRegisterUser.safeParse(updatedData)
-    let newErrors = {}
-    if(!valid.success){
-      newErrors = valid.error.flatten().fieldErrors;
-    } 
-    if(updatedData.password !== updatedData.confirmPassword){
-      newErrors.confirmPassword = "Пароли должны совпадать"
-    }
-    setErrors(newErrors)
+    }));
   }
   const handleRegister = async () => {
     const valid = validationRegisterUser.safeParse(data)

@@ -20,14 +20,6 @@ function Login() {
       ...prev,
       [name]: value
     }));
-
-    const validation = validationLoginUser.safeParse(data)
-
-    if(!validation.success){
-      setError(validation.error.flatten().fieldErrors)
-    } else{
-      setError({})
-    }
   }
   const handleLogin = async () => {
     const validation = validationLoginUser.safeParse(data)
@@ -38,20 +30,16 @@ function Login() {
     setError({})
     try{
       const res = await fetch('http://localhost:4200/login/user', {
-        credentials: "include",
         method: "POST",
         headers: {"Content-Type": "application/json",},
         body: JSON.stringify(validation.data),
       })
-      console.log(res)
       const result = await res.json();
       if (!res.ok) {
         throw new Error(result.message)
       }
       navigate('/profile')
-
     } catch (e){
-      console.log(e.message)
       alert(e.message)
     }
   };

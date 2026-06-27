@@ -4,6 +4,7 @@ import InputCustom from '../components/inputCustom'
 import Body from '../components/body'
 import Header from '../components/header'
 import {validationUpdateUser} from "../schemas/validate.schema"
+import {api} from "../api/api"
 import '../index.css'
 
 export default function Profile(){
@@ -19,39 +20,14 @@ export default function Profile(){
     const handleChange = (e) =>{
         const{ name, value } = e.target;
         setUserData((prev) =>({
-        ...prev,
-        [name]: value
+            ...prev,
+            [name]: value
         }));
-        const valid = validationUpdateUser.safeParse(userData);
-        let newErrors = {}
-        if(!valid.success){
-            newErrors = valid.error.flatten().fieldErrors;
-        } 
-        if(valid.data.password.trim().length < 8 && valid.data.password.trim().length > 0){
-            newErrors.password = "Пароль должен быть не меньше 8 символов";
-        } 
-        setErrors(newErrors);
     }
     useEffect(()=>{
         async function getData(){
             try{
-                let res = await fetch("http://localhost:4200/profile", {
-                    credentials: "include"
-                });
-                if (res.status === 401) {
-                    const refreshRes = await fetch("http://localhost:4200/refresh", {
-                        method: "POST",
-                        credentials: "include"
-                    });
-
-                    if (!refreshRes.ok) {
-                        navigate("/login");
-                        return;
-                    }
-                    res = await fetch("http://localhost:4200/profile", {
-                        credentials: "include"
-                    });
-                }
+                let res = await api("/profile", {})
                 const resData = await res.json()
                 setUserData({...resData, password:""})
             } catch (e){
@@ -73,18 +49,21 @@ export default function Profile(){
         } 
         setErrors({})
         try{
-            const res = await fetch("http://localhost:4200/user/update", {
-                credentials: "include",
+            let res = await api("/user/update", {
                 method: "PUT",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(valid.data)
+                body: JSON.stringify(valid.data)  
             })
             const updatedUserData = await res.json()
             if(!res.ok){
                 return alert(updatedUserData.message)
             }
             alert(updatedUserData.message)
-            setUserData(updatedUserData)
+            console.log(updatedUserData)
+            setUserData({
+                ...updatedUserData.user,
+                password: ""
+            })
         } catch(e){
             alert(e.message)
         }
@@ -115,7 +94,7 @@ export default function Profile(){
                         <div className="flex flex-col gap-2">
                             <InputCustom type="password" name="password" label="New password" value={userData.password} onChange={handleChange}
                             placeholder="new password" error={errors.password}/>
-                            <p className='text-sm text-zinc-600 dark:text-zinc-400 -mt-2 pl-2'>Если хотите оставить старый пароль то оставте поле путсым</p>
+                            <p className='text-sm text-zinc-600 dark:text-zinc-400  pl-2'>Если хотите оставить старый пароль то оставте поле путсым</p>
                         </div>
                         <button className="text-lg sm:text-xl md:text-2xl inline-flex items-center gap-2 justify-center rounded-md py-2 sm:py-3 px-3 outline-offset-2 transition active:transition-none bg-zinc-800
                         font-semibold text-zinc-100 hover:bg-zinc-700 active:bg-zinc-800 active:text-zinc-100/70 dark:bg-zinc-700 dark:hover:bg-zinc-600
