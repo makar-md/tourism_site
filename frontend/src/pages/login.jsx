@@ -31,6 +31,7 @@ function Login() {
     try{
       const res = await fetch('http://localhost:4200/login/user', {
         method: "POST",
+        credentials: "include",
         headers: {"Content-Type": "application/json",},
         body: JSON.stringify(validation.data),
       })
@@ -66,7 +67,7 @@ function Login() {
               <div className="flex flex-col w-full p-2 space-y-2 sm:space-y-4">
                   <div className="flex flex-col gap-2">
                       <InputCustom type="email" name="email" label="Email" value={data.email} onChange={handleChange}
-                      error={error.email?.[0]} require={true} placeholder="test@mail.ru"/>
+                      error={error.email?.[0]} placeholder="test@mail.ru"/>
                   </div>
                   <div className="flex flex-col gap-2">
                       <InputCustom type="password" name="password" label="Password" value={data.password} onChange={handleChange}

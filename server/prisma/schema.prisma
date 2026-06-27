@@ -14,6 +14,7 @@ model User {
   firstName String
   surName   String
   lastName  String?
+  avatar    String?
   
   roleId    Int?     
   role      Role?    @relation(fields: [roleId], references: [id])

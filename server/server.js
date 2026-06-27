@@ -16,6 +16,8 @@ import cookieParser from 'cookie-parser'
 import auth from "./middlewear/auth.js"
 import validation from './middlewear/validate.js';
 
+import upload from "./middlewear/uploadFiles.js"
+
 const SALT = 10
 
 //========== .env ==========//
@@ -39,6 +41,7 @@ app.use(cors({
 )
 app.use( json(), helmet(), cookieParser())
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use("/uploads", express.static("uploadFiles",));
 //========== Express app ==========//
 
 
@@ -210,6 +213,18 @@ async function main(){
         } catch(e){
             return res.status(500).json(e.message)
         }
+    })
+
+    app.post("/upload/avatar", auth, upload.single("avatar"), async(req,res) => {
+        await prisma.User.update({
+            where: {id: req.user.userId},
+            data: {avatar: req.file.filename}
+        })
+
+        console.log(req.file)
+        res.status(200).json({
+            avatar: req.file.filename
+        })
     })
 
 

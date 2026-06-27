@@ -10,12 +10,14 @@ import '../index.css'
 export default function Profile(){
     const navigate = useNavigate()
     const [errors, setErrors] = useState({})
+    const [avatar, setAvatar] = useState()
     const [userData, setUserData] = useState({
         email: "",
         surName: "",
         firstName: "",
         lastName: "",
         password: "",
+        avatar: ""
     });
     const handleChange = (e) =>{
         const{ name, value } = e.target;
@@ -68,6 +70,28 @@ export default function Profile(){
             alert(e.message)
         }
     }
+    async function uploadAvatar(file) {
+        if (!file) return;
+        const formData = new FormData();
+        formData.append("avatar", file);
+        try{
+            const res = await api("/upload/avatar",{
+                method: "POST",
+                body: formData
+            })
+            const resData = await res.json();
+            if(!res.ok){
+                alert(resData.message)
+                return;
+            }
+            setUserData(prev => ({
+                ...prev,
+                avatar: resData.avatar
+            }));
+        } catch(e) {
+            alert(e.message);
+        }
+    }
     return(
     <Body>
         <main className="w-11/12 lg:w-9/12 mx-auto bg-white dark:bg-zinc-900 min-h-screen flex flex-col relative py-15">
@@ -105,10 +129,13 @@ export default function Profile(){
                             <label htmlFor="avatar" className="flex w-60 h-60 lg:w-90 lg:h-90 rounded-2xl border-2 border-dashed border-zinc-300 dark:border-zinc-600 
                             relative group cursor-pointer transition-all duration-300 hover:border-teal-400 dark:hover:border-teal-500 
                             hover:shadow-lg hover:shadow-teal-500/20 overflow-hidden">
+                                <img src={
+                                    userData.avatar ? `http://localhost:4200/uploads/${userData.avatar}` : "/default-avatar.jpg"
+                                    } className="w-full h-full object-cover"/>
                                 
-                                <div className="absolute inset-0 bg-zinc-50 dark:bg-zinc-800/50 
-                                bg-[image:radial-gradient(var(--pattern-fg)_1px,_transparent_0)] bg-[size:10px_10px] [--pattern-fg:var(--color-zinc-300)]
-                                dark:[--pattern-fg:var(--color-white)]/15 transition-all duration-300 group-hover:bg-teal-50/30 dark:group-hover:bg-teal-900/10 rounded-2xl">
+                                <div className="absolute inset-0 bg-zinc-50 dark:bg-zinc-800/50  bg-[image:radial-gradient(var(--pattern-fg)_1px,_transparent_0)]
+                                bg-[size:10px_10px] [--pattern-fg:var(--color-zinc-300)]dark:[--pattern-fg:var(--color-white)]/15 transition-all duration-300
+                                group-hover:bg-teal-50/30 dark:group-hover:bg-teal-900/10 rounded-2xl">
                                 </div>
                                 
                                 <div className="absolute inset-0 bg-cover bg-center bg-[url(../images/astronavt.webp)] rounded-2xl 
@@ -131,7 +158,8 @@ export default function Profile(){
 
                             </label>
                     
-                            <input type="file" name="avatar" id="avatar" accept="image/png, image/jpeg, image/jpg" className="hidden"/>
+                            <input type="file" name="avatar" id="avatar" accept="image/png, image/jpeg, image/jpg" className="hidden"
+                             onChange={(e) => { uploadAvatar(e.target.files[0]); }}/>
                         </div>
                     </div>
                 </div>
