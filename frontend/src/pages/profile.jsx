@@ -156,7 +156,7 @@ export default function Profile(){
                                 
                                 <img crossOrigin="anonymous" src={
                                     userData.avatar ? `http://localhost:4200/uploads/${userData.avatar}` : `http://localhost:4200/uploads/default-avatar.jpg`
-                                } className="absolute inset-0 bg-cover bg-center rounded-2xl transition-all duration-500
+                                } className="absolute inset-0 rounded-2xl transition-all duration-500
                                  group-hover:scale-110 group-hover:rotate-12 group-hover:brightness-110 object-cover h-full w-full object-center"/>
                                 
                                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 

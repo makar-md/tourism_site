@@ -1,22 +1,25 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useTheme } from '../ThemContext';
+import { api } from '../api/api';
+
 /**
  * 
- * @param {*} linksShow 
+ * @param {*} param0 
  * @returns 
  */
 export default function Header({linksShow, isCheckAuthUser}){
     const [showMenu, setShowMenu] = useState(false)
     const [isLogined, setIsLogined] = useState(false);
-
+    const [avatar, setAvatar] = useState();
     const {theme, toggleTheme} = useTheme();
-
     const navigate = useNavigate()
 
     function toggleModal(e){
         setShowMenu(e)
     }
+
+    
 
     useEffect(()=>{
         const checkAuth = async () => {
@@ -42,9 +45,24 @@ export default function Header({linksShow, isCheckAuthUser}){
                 setIsLogined(false);
             }
         };
+        const loadAvatar = async ()=>{
+            try{
+                const avatar = await api("/user/avatar",{});
+                const avatarImg = await avatar.json();
+                if(avatarImg === null || avatarImg === ""){
+                    setAvatar({avatar: "default-avatar.jpg"})
+                } else{
+                    setAvatar(avatarImg.avatar);
+                }
+            } catch (e){
+                alert(e.message)
+            }
+        }
         if(isCheckAuthUser){
             checkAuth();
+            loadAvatar();
         }
+       
     }, [])
 
     async function LogOut(){
@@ -64,9 +82,14 @@ export default function Header({linksShow, isCheckAuthUser}){
     }
 
     return(
-        <header className="fixed flex w-full top-2.5 left-0 z-48">
+        <header className="fixed flex w-full top-2.5 left-0 z-48 ">
             <nav className="flex justify-between w-full">
-                <div className="flex w-2/8"></div>
+                <div className="flex w-2/8 p-2 justify-end">
+                    <Link to="/profile" className='rounded-full p-1 w-10 shadow-lg shadow-zinc-800/10 dark:bg-zinc-800/90 flex justify-center items-center bg-white/90 overflow-hidden
+                        border-0.5 border-r-zinc-700'>
+                            <img src={`http://localhost:4200/uploads/${avatar || `default-avatar.jpg`}`} crossOrigin='anonymous' className='object-cover h-full w-full object-center rounded-full'/>
+                    </Link>
+                </div>
                 <div className="flex justify-end md:justify-center items-center w-6/8 px-2">
                     {linksShow && <>
                     <div className="flex-row gap-5 rounded-full bg-white/90 px-5 shadow-lg
@@ -97,7 +120,7 @@ export default function Header({linksShow, isCheckAuthUser}){
                             { !isLogined ? <Link to="/login">Log in</Link> : <button onClick={(e) => LogOut()}>Log out</button>}
                         </div>
                     </div>
-                    <div className="pointer-events-auto md:hidden" data-headlessui-state="">
+                    <div className="pointer-events-auto md:hidden">
                         <button className="group flex items-center rounded-full bg-white/90 px-4 py-2.5 text-sm font-medium
                         text-zinc-800 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm hover:text-teal-500
                         dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20" 
@@ -110,6 +133,7 @@ export default function Header({linksShow, isCheckAuthUser}){
                     </div>
                     </>}
                 </div>
+
                 <div className="w-2/8 p-2 flex justify-start">
                     <button type="button" id="toggleTheme" className="group rounded-full bg-white/90 px-3 py-2 shadow-lg
                     ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm transition dark:bg-zinc-800/90
@@ -125,6 +149,7 @@ export default function Header({linksShow, isCheckAuthUser}){
                 </div>
                 
 
+                {/* ModalWindow */}
                 <div className={`fixed inset-0 z-49 backdrop-blur-xs duration-150 transition-all data-closed:opacity-0
                 data-enter:ease-out data-leave:ease-in md:hidden ${ !showMenu ? 'hidden' : 'visible'}`} id="blureBackground"></div>
 

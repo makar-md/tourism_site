@@ -34,7 +34,8 @@ export async function api(url, options = {}) {
         }
 
         return res;
-    } catch {
+    } catch (e) {
+        console.error(e);
         throw new Error("Не удалось подключиться к серверу");
     }
 }

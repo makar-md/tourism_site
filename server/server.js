@@ -142,7 +142,7 @@ async function main(){
                 httpOnly: true,
                 secure: false,
                 sameSite: "lax",
-                maxAge: 15 * 1000
+                maxAge: 15 * 60 * 1000
             })
             res.json({message: "token refreshed"})
         }catch (e){
@@ -180,7 +180,6 @@ async function main(){
         } catch (e){
             return res.status(500).json({message: e.message})
         }
-        
     });
     app.get("/isAuth", auth, async (req, res) => {
         res.status(200).json({message: "ok"});
@@ -194,7 +193,7 @@ async function main(){
             }
             if(password){updatetdData.password = await bcrypt.hash(password, SALT)}
 
-            const existEmail= await prisma.user.findFirst({
+            const existEmail= await prisma.User.findFirst({
                 where: { email, NOT: {id: req.user.userId}}
             });
 
@@ -204,7 +203,7 @@ async function main(){
                 });
             }
 
-           const user = await prisma.user.update({
+           const user = await prisma.User.update({
                 where: {id: req.user.userId},
                 data: updatetdData
             });
@@ -221,7 +220,7 @@ async function main(){
     app.post("/upload/avatar", auth, upload.single("avatar"), async(req,res) => {
         try{
             await prisma.User.update({
-                where: {id: req.user.userId},
+                where: {id: req.User.userId},
                 data: {avatar: req.file.filename}
             })
             res.status(200).json({
@@ -245,6 +244,22 @@ async function main(){
             res.status(500).json({message: e.message})
         }
     })
+    app.get("/user/avatar", auth, async (req, res) => {
+        const token = req.cookies.refreshToken;
+        if(!token){
+            return res.status(401).json({message: "no token"})
+        }
+        try{
+            const userDecoded = jwt.verify(token, process.env.REFRESH_SECRET)
+            const avatar = await prisma.User.findFirst({
+                where: {id: userDecoded.userId},
+                select: { avatar: true,}
+            });
+            res.status(200).json(avatar);
+        } catch (e){
+            return res.status(500).json({message: e.message})
+        }
+    });
 
 
     app.listen(process.env.PORT || 4200, ()=>{
