@@ -10,7 +10,6 @@ import '../index.css'
 export default function Profile(){
     const navigate = useNavigate()
     const [errors, setErrors] = useState({})
-    const [avatar, setAvatar] = useState()
     const [userData, setUserData] = useState({
         email: "",
         surName: "",
@@ -45,7 +44,7 @@ export default function Profile(){
             setErrors(valid.error.flatten().fieldErrors);
             return;
         }
-        if(valid.data.password.trim.length < 8 && valid.data.password.trim.length > 0){
+        if(valid.data.password.trim().length < 8 && valid.data.password.trim().length > 0){
             setErrors({password: "Пароль должен быть не меньше 8 символов"})
             return;
         } 
@@ -92,6 +91,25 @@ export default function Profile(){
             alert(e.message);
         }
     }
+    async function deleteAvatar(){
+        try{
+            const res = await api("/delete/avatar",{
+               method: "DELETE" 
+            })
+            const resData = await res.json()
+            if(!res.ok){
+                alert(resData)
+                return;
+            }
+            setUserData(prev => ({
+                ...prev,
+                avatar: resData.avatar
+            }))
+        } catch (e){
+            alert(e.message)
+        }
+    }
+
     return(
     <Body>
         <main className="w-11/12 lg:w-9/12 mx-auto bg-white dark:bg-zinc-900 min-h-screen flex flex-col relative py-15">
@@ -124,23 +142,22 @@ export default function Profile(){
                         font-semibold text-zinc-100 hover:bg-zinc-700 active:bg-zinc-800 active:text-zinc-100/70 dark:bg-zinc-700 dark:hover:bg-zinc-600
                         dark:active:bg-zinc-700 dark:active:text-zinc-100/70 flex-none w-full" onClick={(e)=>{handleUpdateUser()}}>Update</button>
                     </div>
+
                     <div className=' basis-1/2 px-6 flex'>
-                        <div className="w-full flex justify-center items-center ">
-                            <label htmlFor="avatar" className="flex w-60 h-60 lg:w-90 lg:h-90 rounded-2xl border-2 border-dashed border-zinc-300 dark:border-zinc-600 
+                        <div className="w-full flex flex-col justify-center items-center gap-4">
+
+                            <label htmlFor="avatar" className="flex w-60 h-60 lg:w-90 lg:h-90 rounded-2xl border-2 border-dashed border-zinc-500 dark:border-zinc-600 
                             relative group cursor-pointer transition-all duration-300 hover:border-teal-400 dark:hover:border-teal-500 
-                            hover:shadow-lg hover:shadow-teal-500/20 overflow-hidden">
-                                <img src={
-                                    userData.avatar ? `http://localhost:4200/uploads/${userData.avatar}` : "/default-avatar.jpg"
-                                    } className="w-full h-full object-cover"/>
-                                
+                            hover:shadow-lg hover:shadow-teal-500/20 overflow-hidden"> 
                                 <div className="absolute inset-0 bg-zinc-50 dark:bg-zinc-800/50  bg-[image:radial-gradient(var(--pattern-fg)_1px,_transparent_0)]
                                 bg-[size:10px_10px] [--pattern-fg:var(--color-zinc-300)]dark:[--pattern-fg:var(--color-white)]/15 transition-all duration-300
                                 group-hover:bg-teal-50/30 dark:group-hover:bg-teal-900/10 rounded-2xl">
                                 </div>
                                 
-                                <div className="absolute inset-0 bg-cover bg-center bg-[url(../images/astronavt.webp)] rounded-2xl 
-                                transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 group-hover:brightness-110">
-                                </div>
+                                <img crossOrigin="anonymous" src={
+                                    userData.avatar ? `http://localhost:4200/uploads/${userData.avatar}` : `http://localhost:4200/uploads/default-avatar.jpg`
+                                } className="absolute inset-0 bg-cover bg-center rounded-2xl transition-all duration-500
+                                 group-hover:scale-110 group-hover:rotate-12 group-hover:brightness-110 object-cover h-full w-full object-center"/>
                                 
                                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 
                                 group-hover:opacity-100 transition-all duration-300 rounded-2xl">
@@ -157,9 +174,10 @@ export default function Profile(){
                                 </div>
 
                             </label>
-                    
                             <input type="file" name="avatar" id="avatar" accept="image/png, image/jpeg, image/jpg" className="hidden"
                              onChange={(e) => { uploadAvatar(e.target.files[0]); }}/>
+                            <button className='text-white font-boold text-xl bg-red-500 rounded-xl flex justify-center items-center
+                            w-60 lg:w-90' onClick={(e) => deleteAvatar()}> Delete avatar</button>
                         </div>
                     </div>
                 </div>

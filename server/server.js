@@ -39,7 +39,10 @@ app.use(cors({
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     })
 )
-app.use( json(), helmet(), cookieParser())
+
+app.use( json(),helmet(
+    {crossOriginResourcePolicy: false,}
+), cookieParser())
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use("/uploads", express.static("uploadFiles",));
 //========== Express app ==========//
@@ -216,15 +219,31 @@ async function main(){
     })
 
     app.post("/upload/avatar", auth, upload.single("avatar"), async(req,res) => {
-        await prisma.User.update({
-            where: {id: req.user.userId},
-            data: {avatar: req.file.filename}
-        })
-
-        console.log(req.file)
-        res.status(200).json({
-            avatar: req.file.filename
-        })
+        try{
+            await prisma.User.update({
+                where: {id: req.user.userId},
+                data: {avatar: req.file.filename}
+            })
+            res.status(200).json({
+                avatar: req.file.filename
+            })
+        } catch (e){ 
+            res.status(500).json({message: e.message})
+        }
+        
+    })
+    app.delete("/delete/avatar", auth, async(req,res) => {
+        try{
+            await prisma.User.update({
+                where: {id: req.user.userId},
+                data: {avatar: ''}
+            })
+            res.status(200).json({
+                avatar: ""
+            })
+        } catch (e){ 
+            res.status(500).json({message: e.message})
+        }
     })
 
 
