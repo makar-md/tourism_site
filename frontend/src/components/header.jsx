@@ -87,7 +87,8 @@ export default function Header({linksShow, isCheckAuthUser}){
                 <div className="flex w-2/8 p-2 justify-end">
                     <Link to="/profile" className='rounded-full p-1 w-10 shadow-lg shadow-zinc-800/10 dark:bg-zinc-800/90 flex justify-center items-center bg-white/90 overflow-hidden
                         border-0.5 border-r-zinc-700'>
-                            <img src={`http://localhost:4200/uploads/${avatar || `default-avatar.jpg`}`} crossOrigin='anonymous' className='object-cover h-full w-full object-center rounded-full'/>
+                            <img src={`http://localhost:4200/uploads/${avatar || `default-avatar.jpg`}`} crossOrigin='anonymous'
+                             className='object-cover h-full w-full object-center rounded-full'/>
                     </Link>
                 </div>
                 <div className="flex justify-end md:justify-center items-center w-6/8 px-2">

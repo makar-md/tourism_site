@@ -109,7 +109,9 @@ export default function Profile(){
             alert(e.message)
         }
     }
-
+    /*
+    перенести аватарку вверх, внизу сделать по типу регистрации и подумать над красной кнопкой
+    */
     return(
     <Body>
         <main className="w-11/12 lg:w-9/12 mx-auto bg-white dark:bg-zinc-900 min-h-screen flex flex-col relative py-15">
@@ -185,4 +187,5 @@ export default function Profile(){
         </main>
     </Body>
     )
+
 }

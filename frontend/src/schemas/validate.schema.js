@@ -5,7 +5,7 @@ export const validationRegisterUser = z.object({
     password: z.string().min(8, "Пароль должен содержать минимум 8 символов"),
     firstName: z.string().min(1, "Обязательное поле"),
     surName: z.string().min(1, "Обязательное поле"),
-    lastName: z.string().min(1).optional()
+    lastName: z.string().optional()
 });
 
 export const validationLoginUser = z.object({
