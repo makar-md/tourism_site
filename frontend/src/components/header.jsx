@@ -102,7 +102,7 @@ export default function Header({linksShow, isCheckAuthUser}){
                         </div>
                         <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center" >
-                            <Link>Projects</Link>
+                            <Link to="/routes/create">new Route</Link>
                         </div>
                         <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center" >
@@ -175,7 +175,7 @@ export default function Header({linksShow, isCheckAuthUser}){
                                 <Link className="flex py-2 hover:text-teal-500 duration-300" to="/">Main</Link>
                             </li>
                             <li>
-                                <Link className="flex py-2 hover:text-teal-500 duration-300" href="#">Projects</Link>
+                                <Link className="flex py-2 hover:text-teal-500 duration-300" to="/routes/create">new Route</Link>
                             </li>
                             <li>
                                 <Link className="flex py-2 hover:text-teal-500 duration-300" href="#">Docs</Link>

@@ -28,12 +28,12 @@ export default function Hero() {
 
                 <div className="flex flex-col sm:flex-row gap-4 mt-10">
 
-                    <Link to="/map" className=" rounded-lg bg-zinc-800 dark:bg-zinc-70 px-8 py-1 text-lg font-semibold text-zinc-300
+                    <Link to="/routes/create" className=" rounded-lg bg-zinc-800 dark:bg-zinc-70 px-8 py-1 text-lg font-semibold text-zinc-300
                       hover:bg-zinc-700 dark:hover:bg-zinc-60 transition " >
                         Create route
                     </Link>
 
-                    <Link to="/projects" className=" rounded-lg border border-zinc-300 dark:border-zinc-70 px-8 py-1 text-lg font-semibol
+                    <Link to="/routes/public" className=" rounded-lg border border-zinc-300 dark:border-zinc-70 px-8 py-1 text-lg font-semibol
                       text-zinc-300 dark:text-zinc-200  hover:border-teal-500 hover:text-teal-50 transition bg-zinc-900/80">
                         Explore routes
                     </Link>

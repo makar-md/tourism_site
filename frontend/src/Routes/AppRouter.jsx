@@ -5,6 +5,7 @@ import Login from "../pages/login"
 import Index from "../pages";
 import Profile from "../pages/profile"
 import ProtectedRouter from "./ProtectedRouter"
+import CreateRoute from "../pages/createRoute"
 
 export default function AppRouter(){
     return(
@@ -21,6 +22,12 @@ export default function AppRouter(){
                             <Profile />
                         </ProtectedRouter>
                     }/>
+                <Route path="/routes/create"
+                element={
+                    <ProtectedRouter>
+                        <CreateRoute />
+                    </ProtectedRouter>
+                }/>
             </Routes>
         </BrowserRouter>
     )
