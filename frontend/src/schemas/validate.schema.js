@@ -20,3 +20,9 @@ export const validationUpdateUser = z.object({
     surName: z.string().min(1, "Обязательное поле"),
     lastName: z.string().min(1).optional()
 });
+
+export const validateRouteData = z.object({
+    name: z.string().min(1, "Название обязательное поле"),
+    description: z.string().optional(),
+    points: z.array()
+});

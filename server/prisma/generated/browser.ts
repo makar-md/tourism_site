@@ -27,3 +27,13 @@ export type User = Prisma.UserModel
  * 
  */
 export type Role = Prisma.RoleModel
+/**
+ * Model Routes
+ * 
+ */
+export type Routes = Prisma.RoutesModel
+/**
+ * Model Point
+ * 
+ */
+export type Point = Prisma.PointModel

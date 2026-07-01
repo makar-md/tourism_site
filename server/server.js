@@ -261,6 +261,35 @@ async function main(){
         }
     });
 
+    app.post("/route/create", auth, async (req, res) =>{
+        const token = req.cookies.refreshToken;
+        if(!token){
+            return res.status(401).json({message: "no token"})
+        }
+        try{
+            const userDecoded = jwt.verify(token, process.env.REFRESH_SECRET)
+            const Route = await prisma.Routes.create({
+                data:{
+                    name: req.body.name,
+                    description: req.body.description,
+                    userId: userDecoded.userId,
+                    points: {
+                        create: req.body.points.map(([lng, lat]) => ({
+                            lng, lat
+                        }))
+                    }
+                }
+            })
+            res.status(200).json({message: "create route"})
+        } catch(e){
+            res.status(500).json({message: e.message})
+        }
+    })
+
+    // const route = await prisma.route.findUnique({
+    //     where: { id },
+    //     include: { points: true }
+    // });
 
     app.listen(process.env.PORT || 4200, ()=>{
         console.log(`🗲 server start on ${process.env.PORT || 4200} port 🗲`)

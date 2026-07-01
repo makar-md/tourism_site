@@ -10,4 +10,6 @@
  */
 export type * from './models/User.ts'
 export type * from './models/Role.ts'
+export type * from './models/Routes.ts'
+export type * from './models/Point.ts'
 export type * from './commonInputTypes.ts'

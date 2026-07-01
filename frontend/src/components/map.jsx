@@ -4,6 +4,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useTheme } from '../ThemContext';
+import Pointer from './pointer';
 import {
     YMap,
     YMapComponentsProvider,
@@ -24,7 +25,7 @@ import {
     getYmaps3ReadyObject,
 } from "ymap3-components";
 
-export default function Map({onClick}){
+export default function Map({onClick, points}){
     const [center, setCenter] = useState([43.936403, 56.334218])
     const {theme, toggleTheme} = useTheme();
     const API_KEY = "3ce309bc-953b-4b11-8a7f-5b6660b2aad5"
@@ -33,11 +34,6 @@ export default function Map({onClick}){
         center: center,
         zoom: 10
     };
-    const [markers, setMarkers] = useState([]);
-
-    function handleMapClick(coords) {
-        setMarkers(prev => [...prev, coords]);
-    }
 
     
     
@@ -59,13 +55,13 @@ export default function Map({onClick}){
                     <YMapControls position="top left">
                         <YMapGeolocationControl />
                     </YMapControls>
-                    {markers.map((coords, i) => (
-                        <YMapDefaultMarker key={i} coordinates={coords}/>
-                        // </YMapMarker>
+                    {points.map((coords, i) => (
+                        <YMapMarker key={i} coordinates={coords}>
+                            <Pointer/>
+                        </YMapMarker>
                     ))}
                     <YMapListener
                         onClick={(object, event) => {
-                            handleMapClick(event.coordinates)
                             setCenter(event.coordinates)
                             onClick(event.coordinates);
                         }}>

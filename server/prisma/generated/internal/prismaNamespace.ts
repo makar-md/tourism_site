@@ -385,7 +385,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
-  Role: 'Role'
+  Role: 'Role',
+  Routes: 'Routes',
+  Point: 'Point'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -401,7 +403,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "role"
+    modelProps: "user" | "role" | "routes" | "point"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -553,6 +555,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Routes: {
+      payload: Prisma.$RoutesPayload<ExtArgs>
+      fields: Prisma.RoutesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RoutesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RoutesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesPayload>
+        }
+        findFirst: {
+          args: Prisma.RoutesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RoutesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesPayload>
+        }
+        findMany: {
+          args: Prisma.RoutesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesPayload>[]
+        }
+        create: {
+          args: Prisma.RoutesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesPayload>
+        }
+        createMany: {
+          args: Prisma.RoutesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RoutesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesPayload>[]
+        }
+        delete: {
+          args: Prisma.RoutesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesPayload>
+        }
+        update: {
+          args: Prisma.RoutesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesPayload>
+        }
+        deleteMany: {
+          args: Prisma.RoutesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RoutesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RoutesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesPayload>[]
+        }
+        upsert: {
+          args: Prisma.RoutesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesPayload>
+        }
+        aggregate: {
+          args: Prisma.RoutesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRoutes>
+        }
+        groupBy: {
+          args: Prisma.RoutesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoutesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RoutesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoutesCountAggregateOutputType> | number
+        }
+      }
+    }
+    Point: {
+      payload: Prisma.$PointPayload<ExtArgs>
+      fields: Prisma.PointFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PointFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PointPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PointFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PointPayload>
+        }
+        findFirst: {
+          args: Prisma.PointFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PointPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PointFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PointPayload>
+        }
+        findMany: {
+          args: Prisma.PointFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PointPayload>[]
+        }
+        create: {
+          args: Prisma.PointCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PointPayload>
+        }
+        createMany: {
+          args: Prisma.PointCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PointCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PointPayload>[]
+        }
+        delete: {
+          args: Prisma.PointDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PointPayload>
+        }
+        update: {
+          args: Prisma.PointUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PointPayload>
+        }
+        deleteMany: {
+          args: Prisma.PointDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PointUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PointUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PointPayload>[]
+        }
+        upsert: {
+          args: Prisma.PointUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PointPayload>
+        }
+        aggregate: {
+          args: Prisma.PointAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePoint>
+        }
+        groupBy: {
+          args: Prisma.PointGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PointGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PointCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PointCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -614,6 +764,26 @@ export const RoleScalarFieldEnum = {
 } as const
 
 export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
+
+
+export const RoutesScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  userId: 'userId'
+} as const
+
+export type RoutesScalarFieldEnum = (typeof RoutesScalarFieldEnum)[keyof typeof RoutesScalarFieldEnum]
+
+
+export const PointScalarFieldEnum = {
+  id: 'id',
+  lng: 'lng',
+  lat: 'lat',
+  routeId: 'routeId'
+} as const
+
+export type PointScalarFieldEnum = (typeof PointScalarFieldEnum)[keyof typeof PointScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -813,6 +983,8 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   role?: Prisma.RoleOmit
+  routes?: Prisma.RoutesOmit
+  point?: Prisma.PointOmit
 }
 
 /* Types for Logging */
