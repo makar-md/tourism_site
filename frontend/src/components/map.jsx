@@ -3,6 +3,7 @@
 // https://api-maps.yandex.ru/v3/?apikey=3ce309bc-953b-4b11-8a7f-5b6660b2aad5&lang=ru_RU
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useTheme } from '../ThemContext';
 import {
     YMap,
     YMapComponentsProvider,
@@ -22,7 +23,8 @@ import {
     YMapMarker,
 } from "ymap3-components";
 
-export default function Map(){
+export default function Map({onClick}){
+    const {theme, toggleTheme} = useTheme();
     const ymap3Ref = useRef();
     const api = "3ce309bc-953b-4b11-8a7f-5b6660b2aad5"
     
@@ -31,21 +33,28 @@ export default function Map(){
         zoom: 12
     };
     return (
-        <div className="bg-green-300" style={{
-            width:"500px",
-            height:"500px"
-        }}>
+        <div className="w-full h-full">
             <YMapComponentsProvider apiKey={api} lang="ru_RU">
                 <YMap
                     key="map"
                     ref={ymap3Ref}
                     location={location}
                     mode="vector"
-                    theme="dark"
-                    lang="en_EN"
-                    >
+                    theme={theme === "dark" ? "dark" : "light"}
+                    lang="en_EN">
                     <YMapDefaultSchemeLayer />
                     <YMapDefaultFeaturesLayer />
+                    <YMapControls position="left">
+                        <YMapZoomControl />
+                    </YMapControls>
+                    <YMapControls position="top left">
+                        <YMapGeolocationControl />
+                    </YMapControls>
+                    <YMapListener
+                        onClick={(object, event) => {
+                            onClick(event.coordinates);
+                        }}>
+                    </YMapListener>
                 </YMap>
             </YMapComponentsProvider>
         </div>
