@@ -21,27 +21,31 @@ import {
     YMapControlButton,
     YMapCustomClusterer,
     YMapMarker,
+    getYmaps3ReadyObject,
 } from "ymap3-components";
 
 export default function Map({onClick}){
+    const [center, setCenter] = useState([43.936403, 56.334218])
     const {theme, toggleTheme} = useTheme();
-    const ymap3Ref = useRef();
-    const api = "3ce309bc-953b-4b11-8a7f-5b6660b2aad5"
+    const API_KEY = "3ce309bc-953b-4b11-8a7f-5b6660b2aad5"
     
     const location = {
-        center: [37.6176, 55.7558],
-        zoom: 12
+        center: center,
+        zoom: 10
     };
+
+    
+    
     return (
         <div className="w-full h-full">
-            <YMapComponentsProvider apiKey={api} lang="ru_RU">
+            <YMapComponentsProvider apiKey={API_KEY} lang="ru_RU">
                 <YMap
                     key="map"
-                    ref={ymap3Ref}
                     location={location}
                     mode="vector"
                     theme={theme === "dark" ? "dark" : "light"}
                     lang="en_EN">
+                    <YMapGeolocationControl position="top center"/>
                     <YMapDefaultSchemeLayer />
                     <YMapDefaultFeaturesLayer />
                     <YMapControls position="left">
@@ -52,9 +56,11 @@ export default function Map({onClick}){
                     </YMapControls>
                     <YMapListener
                         onClick={(object, event) => {
+                            if (event.domEvent?.target?.tagName === "INPUT") return;
+                            setCenter(event.coordinates)
                             onClick(event.coordinates);
                         }}>
-                    </YMapListener>
+                    </YMapListener> 
                 </YMap>
             </YMapComponentsProvider>
         </div>
