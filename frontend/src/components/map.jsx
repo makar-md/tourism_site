@@ -33,6 +33,11 @@ export default function Map({onClick}){
         center: center,
         zoom: 10
     };
+    const [markers, setMarkers] = useState([]);
+
+    function handleMapClick(coords) {
+        setMarkers(prev => [...prev, coords]);
+    }
 
     
     
@@ -54,9 +59,13 @@ export default function Map({onClick}){
                     <YMapControls position="top left">
                         <YMapGeolocationControl />
                     </YMapControls>
+                    {markers.map((coords, i) => (
+                        <YMapDefaultMarker key={i} coordinates={coords}/>
+                        // </YMapMarker>
+                    ))}
                     <YMapListener
                         onClick={(object, event) => {
-                            if (event.domEvent?.target?.tagName === "INPUT") return;
+                            handleMapClick(event.coordinates)
                             setCenter(event.coordinates)
                             onClick(event.coordinates);
                         }}>
