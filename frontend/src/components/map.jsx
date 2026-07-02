@@ -11,18 +11,10 @@ import {
     YMapDefaultSchemeLayer,
     YMapDefaultFeaturesLayer,
     YMapListener,
-    YMapFeature,
-    YMapCollection,
     YMapControls,
     YMapGeolocationControl,
     YMapZoomControl,
-    YMapHint,
-    YMapDefaultMarker,
-    YMapContainer,
-    YMapControlButton,
-    YMapCustomClusterer,
     YMapMarker,
-    getYmaps3ReadyObject,
 } from "ymap3-components";
 
 export default function Map({onClick, points}){
@@ -55,9 +47,9 @@ export default function Map({onClick, points}){
                     <YMapControls position="top left">
                         <YMapGeolocationControl />
                     </YMapControls>
-                    {points.map((coords, i) => (
-                        <YMapMarker key={i} coordinates={coords}>
-                            <Pointer/>
+                    {points.map((point, i) => (
+                        <YMapMarker key={i} coordinates={point.coords}>
+                            <Pointer number={i + 1}/>
                         </YMapMarker>
                     ))}
                     <YMapListener

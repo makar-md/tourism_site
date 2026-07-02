@@ -1,9 +1,19 @@
-export default function Pointer(){
-    return(
-        <div className="relative flex items-center justify-center">
-            <div className="absolute w-12 h-12 rounded-full bg-teal-500/40 animate-ping"></div>
-            <div className="absolute w-5 h-5 rounded-full bg-teal-500/30 blur-sm"></div>
-            <div className="w-4 h-4 rounded-full bg-zinc-900 dark:bg-zinc-100 border-2 border-teal-500 shadow-md shadow-teal-500/30"></div>
+export default function Pointer({ number }) {
+    return (
+        <div className="relative group">
+
+            <div className="absolute left-1/2 top-[34px] h-3 w-3 -translate-x-1/2 rounded-full bg-black/20 blur-sm"></div>
+
+            <div className="relative transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-110">
+
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-500 text-white font-bold shadow-xl shadow-teal-500/40">
+                    {number}
+                </div>
+
+                <div className="absolute left-1/2 top-[30px] h-4 w-4 -translate-x-1/2 rotate-45 bg-teal-500"></div>
+
+            </div>
+
         </div>
-    )
+    );
 }
