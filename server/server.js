@@ -268,28 +268,34 @@ async function main(){
         }
         try{
             const userDecoded = jwt.verify(token, process.env.REFRESH_SECRET)
-            const images = req.files.map(file => ({
-                image: file.filename
-            }));
+            const data = JSON.parse(req.body.data);
+            console.log(data)
             const Route = await prisma.Routes.create({
                 data:{
-                    name: req.body.name,
-                    description: req.body.description,
+                    name: data.name,
+                    description: data.description,
                     userId: userDecoded.userId,
+                    isPublic:data.isPublic,
+                    statusId: data.isPublic ? 
                     points: {
-                        create: req.body.points.map(([lng, lat]) => ({
-                            lng, lat
+                        create: data.points.map(p => ({
+                            lng: p.coords[0],
+                            lat: p.coords[1]
                         }))
                     },
                     images: {
-                        create: req.body.images.map((img) => ({
-                            img
+                        create: req.files.map((img) => ({
+                            img: img.filename
                         }))
                     }
                 }
             })
             res.status(200).json({message: "create route"})
         } catch(e){
+            console.log(e.message)
+            if (e.code === "P2002") {
+                return res.status(409).json({ message: "Route name already exists" });
+            }
             res.status(500).json({message: e.message})
         }
     })

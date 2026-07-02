@@ -87,21 +87,17 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
             setErrors(valid.error.flatten().fieldErrors);
             return;
         }
-
-
         try{
             const formData = new FormData();
-            formData.append("name", valid.data.name)
-            formData.append("descriptioon", valid.data.descriptioon)
-            formData.append("isPublic", valid.data.isPublic)
-            formData.append(
-                "points",
-                JSON.stringify(valid.data.points)
-            );
-
             valid.data.images.forEach(file => {
                 formData.append("images", file);
             })
+            formData.append(
+                "data",
+                JSON.stringify(valid.data)
+            );
+
+            
 
             const res = await api("/route/create", {
                 method: "POST",

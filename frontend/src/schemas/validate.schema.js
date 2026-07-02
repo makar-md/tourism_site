@@ -24,9 +24,13 @@ export const validationUpdateUser = z.object({
 export const validateRouteData = z.object({
     name:           z.string().min(1, "Название обязательное поле"),
     description:    z.string().optional(),
-    isPublic:       z.boolean,
-    points:         z.array(),
-    images:         z.array().optional
+    isPublic:       z.boolean(),
+    points:         z.array(z.object({
+                                id: z.string(),
+                                coords: z.array(z.number()),
+                                address: z.string()
+                            })),
+    images:         z.array(z.instanceof(File)).optional()
 });
 export const validateRouteUpdateData = z.object({
     id:             z.int(),
