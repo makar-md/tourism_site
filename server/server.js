@@ -276,7 +276,7 @@ async function main(){
                     description: data.description,
                     userId: userDecoded.userId,
                     isPublic:data.isPublic,
-                    statusId: data.isPublic ? 
+                    statusId: data.isPublic ? 2 : 1,
                     points: {
                         create: data.points.map(p => ({
                             lng: p.coords[0],
