@@ -1,6 +1,7 @@
 export default function PointCard({ point, onDelete, mode, index }) {
     return (
-        <div className="group rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-lg shadow-zinc-800/5 hover:shadow-xl hover:shadow-teal-500/10 transition-all duration-300 overflow-hidden">
+        <div className="group rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-700/15
+         shadow-xl shadow-zinc-800/5 dark:shadow-zinc-800/15 hover:shadow-xl hover:shadow-teal-500/10 transition-all duration-300 overflow-hidden">
 
             <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-100 dark:border-zinc-800">
                 <div className="flex items-center gap-3">
@@ -51,7 +52,6 @@ export default function PointCard({ point, onDelete, mode, index }) {
                         <p className="text-xs uppercase text-zinc-500 mb-1">
                             Longitude
                         </p>
-
                         <p className="font-mono text-sm text-zinc-900 dark:text-zinc-100">
                             {point.coords[0].toFixed(6)}
                         </p>
