@@ -35,14 +35,32 @@ model Routes{
   id          Int    @id @default(autoincrement())
   name        String @unique
   description String? 
+  isPublic    Boolean
+  statusId    Int?
+  status      RoutStatus?  @relation(fields: [statusId], references: [id]) 
   points      Point[]
+  images      RoutesImg[]
   userId      String
   user        User   @relation(fields: [userId], references: [id])
 }
+
 model Point{
   id        Int    @id @default(autoincrement())
   lng       Float
   lat       Float
   routeId   Int     
   route     Routes    @relation(fields: [routeId], references: [id])
+}
+
+model RoutesImg{
+  id        Int    @id @default(autoincrement())
+  img       String
+  routeId   Int     
+  route     Routes    @relation(fields: [routeId], references: [id])
+}
+
+model RoutStatus {
+  id    Int    @id @default(autoincrement())
+  name  String @unique  
+  routes Routes[] 
 }

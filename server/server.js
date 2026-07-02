@@ -261,13 +261,16 @@ async function main(){
         }
     });
 
-    app.post("/route/create", auth, async (req, res) =>{
+    app.post("/route/create", auth, upload.array("images", 10), async (req, res) =>{
         const token = req.cookies.refreshToken;
         if(!token){
             return res.status(401).json({message: "no token"})
         }
         try{
             const userDecoded = jwt.verify(token, process.env.REFRESH_SECRET)
+            const images = req.files.map(file => ({
+                image: file.filename
+            }));
             const Route = await prisma.Routes.create({
                 data:{
                     name: req.body.name,
@@ -276,6 +279,11 @@ async function main(){
                     points: {
                         create: req.body.points.map(([lng, lat]) => ({
                             lng, lat
+                        }))
+                    },
+                    images: {
+                        create: req.body.images.map((img) => ({
+                            img
                         }))
                     }
                 }

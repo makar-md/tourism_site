@@ -98,19 +98,19 @@ export default function Header({linksShow, isCheckAuthUser}){
                     dark:ring-white/10 *:duration-200 *:transition-all md:flex hidden ">
                         <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center">
-                            <Link to="/">Main</Link>
+                            <Link to="/">main</Link>
                         </div>
                         <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center" >
-                            <Link to="/routes/create">new Route</Link>
+                            <Link to="/routes/create">new route</Link>
                         </div>
                         <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center" >
-                            <Link>Docs</Link>
+                            <Link to="/routes/private">my routes</Link>
                         </div>
                         <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center" >
-                            <Link>Templates</Link>
+                            <Link to="/routes/public">all routes</Link>
                         </div>
                         <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center" >
@@ -172,16 +172,16 @@ export default function Header({linksShow, isCheckAuthUser}){
                     <nav className="mt-6">
                         <ul className="-my-2 divide-y divide-zinc-100 text-base text-zinc-800 dark:divide-zinc-100/5 dark:text-zinc-300">
                             <li>
-                                <Link className="flex py-2 hover:text-teal-500 duration-300" to="/">Main</Link>
+                                <Link className="flex py-2 hover:text-teal-500 duration-300" to="/">main</Link>
                             </li>
                             <li>
-                                <Link className="flex py-2 hover:text-teal-500 duration-300" to="/routes/create">new Route</Link>
+                                <Link className="flex py-2 hover:text-teal-500 duration-300" to="/routes/create">new route</Link>
                             </li>
                             <li>
-                                <Link className="flex py-2 hover:text-teal-500 duration-300" href="#">Docs</Link>
+                                <Link className="flex py-2 hover:text-teal-500 duration-300" to="/routes/privat">my routes</Link>
                             </li>
                             <li>
-                                <Link className="flex py-2 hover:text-teal-500 duration-300" href="#">Templates</Link>
+                                <Link className="flex py-2 hover:text-teal-500 duration-300" to="/routes/public">all routes</Link>
                             </li>
                             <li>
                                 <Link className="flex py-2 hover:text-teal-500 duration-300" to="profile">Profile</Link>

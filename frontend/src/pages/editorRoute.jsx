@@ -18,7 +18,9 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
         id: routeID,
         name:"",
         description:"",
-        points: []
+        isPublic: false,
+        points: [],
+        images: []
     })
 
     async function getAdress(coords){
@@ -77,27 +79,40 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
             points: [...prev.points, point]
         }));
     }
+
+
     async function createNewRoute(){
         const valid = validateRouteData.safeParse(data);
         if(!valid.success){
             setErrors(valid.error.flatten().fieldErrors);
             return;
         }
+
+
         try{
+            const formData = new FormData();
+            formData.append("name", valid.data.name)
+            formData.append("descriptioon", valid.data.descriptioon)
+            formData.append("isPublic", valid.data.isPublic)
+            formData.append(
+                "points",
+                JSON.stringify(valid.data.points)
+            );
+
+            valid.data.images.forEach(file => {
+                formData.append("images", file);
+            })
+
             const res = await api("/route/create", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(valid.data)
+                body: formData
             });
-            // заменить на все маршруты
             if(!res.ok){
                 const messge = await res.json();
                 alert(messge.message)
                 return;
             }
-            navigate("/profile") 
+            navigate(-1) 
         }catch(e){
             alert(e.message)
         }
@@ -116,13 +131,12 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
                 },
                 body: JSON.stringify(valid.data)
             });
-            // заменить на все маршруты
             if(!res.ok){
                 const messge = await res.json();
                 alert(messge.message)
                 return;
             }
-            navigate("/profile") 
+            navigate(-1) 
         }catch(e){
             alert(e.message)
         }
@@ -134,7 +148,14 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
             points: prev.points.filter(point => point.id !== id)
         }));
     }
-
+    function handleImages(files){
+        setData(prev => ({
+            ...prev,
+            images: [...prev.images, ...Array.from(files)]
+        }));
+        console.log(data);
+    }
+    console.log(data.images[0]);
     return (
         <Body>
 
@@ -209,10 +230,28 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
                                 ))}
                             </div>
                         </div>
+                    </div>
+                    <div className="bg-red-300 min-h-20">
+                        {mode !== "viewing" &&
+                        <label className="flex items-center gap-2">
+                            <input type="checkbox" checked={data.isPublic}
+                                onChange={(e) => setData(prev => ({ ...prev, isPublic: e.target.checked })) }/>
+                            Сделать маршрут публичным
+                        </label>
+                        }
+                        <input type="file" multiple accept="image/*" onChange={(e) => handleImages(e.target.files)} className="bg-green-300 h-10 w-10"/>
+
+                        {data.images.map(file => (
+                            <img
+                                key={file.name}
+                                src={URL.createObjectURL(file)}
+                                className="w-32 h-32 object-cover"
+                            />
+                        ))}
 
                         {mode==="create" &&
                             <div className="flex justify-between gap-4">
-                                <button onClick={() => {navigate("/")}}
+                                <button onClick={() => {navigate(-1)}}
                                     className="mt-6 rounded-xl border-2 border-teal-500 hover:border-teal-900 py-3 text-lg
                                     font-semibold text-teal-500 hover:text-teal-900 transition w-full">
                                     Cancel

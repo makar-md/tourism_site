@@ -54,7 +54,9 @@ export const ModelName = {
   User: 'User',
   Role: 'Role',
   Routes: 'Routes',
-  Point: 'Point'
+  Point: 'Point',
+  RoutesImg: 'RoutesImg',
+  RoutStatus: 'RoutStatus'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -101,6 +103,8 @@ export const RoutesScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  isPublic: 'isPublic',
+  statusId: 'statusId',
   userId: 'userId'
 } as const
 
@@ -115,6 +119,23 @@ export const PointScalarFieldEnum = {
 } as const
 
 export type PointScalarFieldEnum = (typeof PointScalarFieldEnum)[keyof typeof PointScalarFieldEnum]
+
+
+export const RoutesImgScalarFieldEnum = {
+  id: 'id',
+  img: 'img',
+  routeId: 'routeId'
+} as const
+
+export type RoutesImgScalarFieldEnum = (typeof RoutesImgScalarFieldEnum)[keyof typeof RoutesImgScalarFieldEnum]
+
+
+export const RoutStatusScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+} as const
+
+export type RoutStatusScalarFieldEnum = (typeof RoutStatusScalarFieldEnum)[keyof typeof RoutStatusScalarFieldEnum]
 
 
 export const SortOrder = {

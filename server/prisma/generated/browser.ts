@@ -37,3 +37,13 @@ export type Routes = Prisma.RoutesModel
  * 
  */
 export type Point = Prisma.PointModel
+/**
+ * Model RoutesImg
+ * 
+ */
+export type RoutesImg = Prisma.RoutesImgModel
+/**
+ * Model RoutStatus
+ * 
+ */
+export type RoutStatus = Prisma.RoutStatusModel

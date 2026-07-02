@@ -6,6 +6,7 @@ import Index from "../pages";
 import Profile from "../pages/profile"
 import ProtectedRouter from "./ProtectedRouter"
 import EditorRoute from "../pages/editorRoute"
+import RoutesPage from "../pages/routesPage";
 
 export default function AppRouter(){
     return(
@@ -14,6 +15,7 @@ export default function AppRouter(){
                 <Route path="/registration" element={<Register/>}/>
                 <Route path="/" element={<Index/>}/>
                 <Route path="/login" element={<Login/>}/>
+                <Route path="/routes/public" element={<RoutesPage isPublic={true}/>}/>
 
 
                 <Route path="/profile"
@@ -26,6 +28,12 @@ export default function AppRouter(){
                 element={
                     <ProtectedRouter>
                         <EditorRoute mode="create"/>
+                    </ProtectedRouter>
+                }/>
+                <Route path="/routes/private"
+                element={
+                    <ProtectedRouter>
+                        <RoutesPage isPublic={false}/>
                     </ProtectedRouter>
                 }/>
             </Routes>

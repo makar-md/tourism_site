@@ -387,7 +387,9 @@ export const ModelName = {
   User: 'User',
   Role: 'Role',
   Routes: 'Routes',
-  Point: 'Point'
+  Point: 'Point',
+  RoutesImg: 'RoutesImg',
+  RoutStatus: 'RoutStatus'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -403,7 +405,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "role" | "routes" | "point"
+    modelProps: "user" | "role" | "routes" | "point" | "routesImg" | "routStatus"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -703,6 +705,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    RoutesImg: {
+      payload: Prisma.$RoutesImgPayload<ExtArgs>
+      fields: Prisma.RoutesImgFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RoutesImgFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesImgPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RoutesImgFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesImgPayload>
+        }
+        findFirst: {
+          args: Prisma.RoutesImgFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesImgPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RoutesImgFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesImgPayload>
+        }
+        findMany: {
+          args: Prisma.RoutesImgFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesImgPayload>[]
+        }
+        create: {
+          args: Prisma.RoutesImgCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesImgPayload>
+        }
+        createMany: {
+          args: Prisma.RoutesImgCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RoutesImgCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesImgPayload>[]
+        }
+        delete: {
+          args: Prisma.RoutesImgDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesImgPayload>
+        }
+        update: {
+          args: Prisma.RoutesImgUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesImgPayload>
+        }
+        deleteMany: {
+          args: Prisma.RoutesImgDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RoutesImgUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RoutesImgUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesImgPayload>[]
+        }
+        upsert: {
+          args: Prisma.RoutesImgUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutesImgPayload>
+        }
+        aggregate: {
+          args: Prisma.RoutesImgAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRoutesImg>
+        }
+        groupBy: {
+          args: Prisma.RoutesImgGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoutesImgGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RoutesImgCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoutesImgCountAggregateOutputType> | number
+        }
+      }
+    }
+    RoutStatus: {
+      payload: Prisma.$RoutStatusPayload<ExtArgs>
+      fields: Prisma.RoutStatusFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RoutStatusFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutStatusPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RoutStatusFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutStatusPayload>
+        }
+        findFirst: {
+          args: Prisma.RoutStatusFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutStatusPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RoutStatusFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutStatusPayload>
+        }
+        findMany: {
+          args: Prisma.RoutStatusFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutStatusPayload>[]
+        }
+        create: {
+          args: Prisma.RoutStatusCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutStatusPayload>
+        }
+        createMany: {
+          args: Prisma.RoutStatusCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RoutStatusCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutStatusPayload>[]
+        }
+        delete: {
+          args: Prisma.RoutStatusDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutStatusPayload>
+        }
+        update: {
+          args: Prisma.RoutStatusUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutStatusPayload>
+        }
+        deleteMany: {
+          args: Prisma.RoutStatusDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RoutStatusUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RoutStatusUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutStatusPayload>[]
+        }
+        upsert: {
+          args: Prisma.RoutStatusUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoutStatusPayload>
+        }
+        aggregate: {
+          args: Prisma.RoutStatusAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRoutStatus>
+        }
+        groupBy: {
+          args: Prisma.RoutStatusGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoutStatusGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RoutStatusCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoutStatusCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -770,6 +920,8 @@ export const RoutesScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  isPublic: 'isPublic',
+  statusId: 'statusId',
   userId: 'userId'
 } as const
 
@@ -784,6 +936,23 @@ export const PointScalarFieldEnum = {
 } as const
 
 export type PointScalarFieldEnum = (typeof PointScalarFieldEnum)[keyof typeof PointScalarFieldEnum]
+
+
+export const RoutesImgScalarFieldEnum = {
+  id: 'id',
+  img: 'img',
+  routeId: 'routeId'
+} as const
+
+export type RoutesImgScalarFieldEnum = (typeof RoutesImgScalarFieldEnum)[keyof typeof RoutesImgScalarFieldEnum]
+
+
+export const RoutStatusScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+} as const
+
+export type RoutStatusScalarFieldEnum = (typeof RoutStatusScalarFieldEnum)[keyof typeof RoutStatusScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -855,6 +1024,13 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -985,6 +1161,8 @@ export type GlobalOmitConfig = {
   role?: Prisma.RoleOmit
   routes?: Prisma.RoutesOmit
   point?: Prisma.PointOmit
+  routesImg?: Prisma.RoutesImgOmit
+  routStatus?: Prisma.RoutStatusOmit
 }
 
 /* Types for Logging */
