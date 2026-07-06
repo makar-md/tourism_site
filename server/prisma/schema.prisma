@@ -49,14 +49,14 @@ model Point{
   lng       Float
   lat       Float
   routeId   Int     
-  route     Routes    @relation(fields: [routeId], references: [id])
+  route     Routes    @relation(fields: [routeId], references: [id], onDelete: Cascade)
 }
 
 model RoutesImg{
   id        Int    @id @default(autoincrement())
   img       String
   routeId   Int     
-  route     Routes    @relation(fields: [routeId], references: [id])
+  route     Routes    @relation(fields: [routeId], references: [id], onDelete: Cascade)
 }
 
 model RoutStatus {

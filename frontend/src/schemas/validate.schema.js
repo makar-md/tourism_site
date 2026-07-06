@@ -36,5 +36,11 @@ export const validateRouteUpdateData = z.object({
     id:             z.int(),
     name:           z.string().min(1, "Название обязательное поле"),
     description:    z.string().optional(),
-    points:         z.array()
+    isPublic:       z.boolean(),
+    points:         z.array(z.object({
+                                id: z.string(),
+                                coords: z.array(z.number()),
+                                address: z.string()
+                            })),
+    images:         z.array(z.instanceof(File)).optional()
 });

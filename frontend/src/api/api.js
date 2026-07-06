@@ -4,6 +4,7 @@ const skipRefresh = [
     "/login/user",
     "/register/user",
     "/refresh",
+    "/isAuth"
 ];
 
 export async function api(url, options = {}) {
@@ -13,10 +14,7 @@ export async function api(url, options = {}) {
             ...options,
         });
 
-        if (
-            res.status === 401 &&
-            !skipRefresh.includes(url)
-        ) {
+        if (res.status === 401 && !skipRefresh.includes(url)) {
             const refresh = await fetch(BASE_URL + "/refresh", {
                 method: "POST",
                 credentials: "include",
@@ -35,7 +33,7 @@ export async function api(url, options = {}) {
 
         return res;
     } catch (e) {
-        console.error(e);
+        console.error(e.message);
         throw new Error("Не удалось подключиться к серверу");
     }
 }

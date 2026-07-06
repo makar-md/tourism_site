@@ -16,7 +16,7 @@ export default function Profile(){
         firstName: "",
         lastName: "",
         password: "",
-        avatar: ""
+        avatar: null
     });
     const handleChange = (e) =>{
         const{ name, value } = e.target;

@@ -1,18 +1,22 @@
 import express, { json } from 'express';
 import dotenv from 'dotenv'
-import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from './prisma/generated/client.ts';
 import cors from 'cors'
 import helmet from 'helmet'
+import prisma from './prisma/prisma.js';
 
 import swaggerUi from 'swagger-ui-express';
 import swaggerFile from './swagger-output.json' with { type: 'json' };
 
 import * as valid from './dataValidate.js';
-
+import * as authUser from './controller/auth.controller.js'
+import * as avatar from './controller/avatar.controller.js'
+import * as routes from './controller/routes.controller.js'
+//====================//
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
+//====================//
 import cookieParser from 'cookie-parser'
+
 import auth from "./middlewear/auth.js"
 import validation from './middlewear/validate.js';
 
@@ -23,13 +27,6 @@ const SALT = 10
 //========== .env ==========//
 dotenv.config()
 //========== .env ==========//
-
-//========== Prisma ==========//
-const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL,
-});
-const prisma = new PrismaClient({ adapter });
-//========== Prisma ==========//
 
 //========== Express app ==========//
 const app = express()
@@ -50,140 +47,13 @@ app.use("/uploads", express.static("uploadFiles",));
 
 //========== Requests ==========//
 async function main(){
-    app.post('/register/user',validation(valid.validationRegisterUser), async (req,res) =>{
-        const {email, password, firstName, surName, lastName} = req.body;
-        const data = { email, password, firstName, surName, lastName };
-        try{
-            const exist = await prisma.User.findUnique({
-                where: {email: data.email}
-            });
-            if(exist){
-                return res.status(400).json({message: "User already exists"})
-            }
-            const hash = await bcrypt.hash(password, SALT);
-            const user = await prisma.User.create({
-                data: {
-                    email,
-                    password: hash,
-                    firstName,
-                    surName,
-                    lastName,
-                    roleId: 1
-                }
-            });
-            res.status(200).json({
-                id: user.id,
-                email: user.email,
-                message: "user register"
-            });
-        }catch(e){
-            return res.status(500).json({message: e.message})
-        }
-    })
+    app.post('/register/user',validation(valid.validationRegisterUser), authUser.RegisterUser); 
+    app.post('/login/user',validation(valid.validationLoginUser), authUser.LoginUser)
+    app.post('/refresh', authUser.Refresh)
+    app.post("/logout", authUser.LogOut)
+    app.get("/profile", auth, authUser.Profile);
+    app.get("/isAuth", auth, authUser.isAuth);
 
-    app.post('/login/user',validation(valid.validationLoginUser) ,async(req,res) =>{
-        const{email, password} = req.body;
-        const user = await prisma.User.findUnique({
-            where: {email}
-        });
-        if(!user){
-            return res.status(400).json({message: "not found user"})
-        }
-        const match = await bcrypt.compare(password, user.password);
-        if (!match) {
-            return res.status(400).json({ message: "Invalid password" });
-        }
-        const accessToken = jwt.sign(
-            {
-                userId: user.id,
-                email: user.email
-            },
-            process.env.JWT_SECRET,
-            { expiresIn: "15m" }
-        )
-        const refreshToken = jwt.sign(
-            { 
-                userId: user.id,
-                email: user.email
-            },
-            process.env.REFRESH_SECRET,
-            { expiresIn: "7d" }
-        );
-        res.cookie("accessToken", accessToken, {
-            httpOnly: true,
-            secure: false,
-            sameSite: "lax",
-            maxAge: 15 * 60 * 1000
-        })
-        res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            secure: false,
-            sameSite: "lax",
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        })
-        res.json({ message: "loggined" });
-    })
-    app.post('/refresh', (req, res)=>{
-        const token = req.cookies.refreshToken;
-        if(!token){
-            return res.status(401).json({message: "no token"})
-        }
-        try{
-            const decoded = jwt.verify(token, process.env.REFRESH_SECRET)
-            const newAccessTooken = jwt.sign(
-                {
-                    userId: decoded.userId,
-                    email: decoded.email
-                },
-                process.env.JWT_SECRET,
-                { expiresIn: "15m" }
-            );
-            res.cookie("accessToken", newAccessTooken, {
-                httpOnly: true,
-                secure: false,
-                sameSite: "lax",
-                maxAge: 15 * 60 * 1000
-            })
-            res.json({message: "token refreshed"})
-        }catch (e){
-            return res.sendStatus(401);
-        }
-    })
-
-    app.post("/logout", (req, res) => {
-        res.clearCookie("accessToken", {
-            httpOnly: true,
-            sameSite: "lax",
-            secure: false
-        });
-        res.clearCookie("refreshToken", {
-            httpOnly: true,
-            sameSite: "lax",
-            secure: false
-        });
-
-        res.json({ message: "Logged out" });
-    });
-
-
-    app.get("/profile", auth, async (req, res) => {
-        const token = req.cookies.refreshToken;
-        if(!token){
-            return res.status(401).json({message: "no token"})
-        }
-        try{
-            const userDecoded = jwt.verify(token, process.env.REFRESH_SECRET)
-            const userData = await prisma.User.findUnique({
-                where: {id: userDecoded.userId}
-            });
-            res.status(200).json(userData);
-        } catch (e){
-            return res.status(500).json({message: e.message})
-        }
-    });
-    app.get("/isAuth", auth, async (req, res) => {
-        res.status(200).json({message: "ok"});
-    });
 
     app.put("/user/update", auth, validation(valid.validationUpdateUser), async(req, res) => {
         const {email, firstName, lastName, surName, password} = req.body;
@@ -217,88 +87,12 @@ async function main(){
         }
     })
 
-    app.post("/upload/avatar", auth, upload.single("avatar"), async(req,res) => {
-        try{
-            await prisma.User.update({
-                where: {id: req.User.userId},
-                data: {avatar: req.file.filename}
-            })
-            res.status(200).json({
-                avatar: req.file.filename
-            })
-        } catch (e){ 
-            res.status(500).json({message: e.message})
-        }
-        
-    })
-    app.delete("/delete/avatar", auth, async(req,res) => {
-        try{
-            await prisma.User.update({
-                where: {id: req.user.userId},
-                data: {avatar: ''}
-            })
-            res.status(200).json({
-                avatar: ""
-            })
-        } catch (e){ 
-            res.status(500).json({message: e.message})
-        }
-    })
-    app.get("/user/avatar", auth, async (req, res) => {
-        const token = req.cookies.refreshToken;
-        if(!token){
-            return res.status(401).json({message: "no token"})
-        }
-        try{
-            const userDecoded = jwt.verify(token, process.env.REFRESH_SECRET)
-            const avatar = await prisma.User.findFirst({
-                where: {id: userDecoded.userId},
-                select: { avatar: true,}
-            });
-            res.status(200).json(avatar);
-        } catch (e){
-            return res.status(500).json({message: e.message})
-        }
-    });
-
-    app.post("/route/create", auth, upload.array("images", 10), async (req, res) =>{
-        const token = req.cookies.refreshToken;
-        if(!token){
-            return res.status(401).json({message: "no token"})
-        }
-        try{
-            const userDecoded = jwt.verify(token, process.env.REFRESH_SECRET)
-            const data = JSON.parse(req.body.data);
-            console.log(data)
-            const Route = await prisma.Routes.create({
-                data:{
-                    name: data.name,
-                    description: data.description,
-                    userId: userDecoded.userId,
-                    isPublic:data.isPublic,
-                    statusId: data.isPublic ? 2 : 1,
-                    points: {
-                        create: data.points.map(p => ({
-                            lng: p.coords[0],
-                            lat: p.coords[1]
-                        }))
-                    },
-                    images: {
-                        create: req.files.map((img) => ({
-                            img: img.filename
-                        }))
-                    }
-                }
-            })
-            res.status(200).json({message: "create route"})
-        } catch(e){
-            console.log(e.message)
-            if (e.code === "P2002") {
-                return res.status(409).json({ message: "Route name already exists" });
-            }
-            res.status(500).json({message: e.message})
-        }
-    })
+    app.post("/upload/avatar", auth, upload.single("avatar"), avatar.UploadAvatar)
+    app.delete("/delete/avatar", auth, avatar.DeleteAvatar)
+    app.get("/user/avatar", auth, avatar.GetAvatar);
+    
+    app.post("/route/create", auth, routes.CreateRoute)
+    
 
     // const route = await prisma.route.findUnique({
     //     where: { id },

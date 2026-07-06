@@ -1,82 +1,25 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { useTheme } from '../ThemContext';
-import { api } from '../api/api';
+import { useTheme } from '../Contexts/ThemContext.jsx';
+import { api } from '../api/api.js';
+import { useAuth } from '../Contexts/AuthContext';
 
 /**
  * 
  * @param {*} param0 
  * @returns 
  */
-export default function Header({linksShow, isCheckAuthUser}){
-    const [showMenu, setShowMenu] = useState(false)
-    const [isLogined, setIsLogined] = useState(false);
-    const [avatar, setAvatar] = useState();
-    const {theme, toggleTheme} = useTheme();
-    const navigate = useNavigate()
+export default function Header({linksShow}){
+    const [showMenu, setShowMenu] = useState(false);
+    const { isAuth, user, logOutContext } = useAuth()
+    const { toggleTheme } = useTheme();
+    const navigate = useNavigate();
 
-    function toggleModal(e){
-        setShowMenu(e)
-    }
-
-    
-
-    useEffect(()=>{
-        const checkAuth = async () => {
-            try {
-                let res = await fetch("http://localhost:4200/isAuth", {
-                    credentials: "include"
-                });
-                if (res.status === 401) {
-                    const refreshRes = await fetch("http://localhost:4200/refresh", {
-                        method: "POST",
-                        credentials: "include"
-                    });
-                    if (!refreshRes.ok) {
-                        navigate("/login");
-                        return;
-                    }
-                    res = await fetch("http://localhost:4200/isAuth", {
-                        credentials: "include"
-                    });
-                }   
-                setIsLogined(res.ok);
-            } catch (e) {
-                setIsLogined(false);
-            }
-        };
-        const loadAvatar = async ()=>{
-            try{
-                const avatar = await api("/user/avatar",{});
-                const avatarImg = await avatar.json();
-                if(avatarImg === null || avatarImg === ""){
-                    setAvatar({avatar: "default-avatar.jpg"})
-                } else{
-                    setAvatar(avatarImg.avatar);
-                }
-            } catch (e){
-                alert(e.message)
-            }
-        }
-        if(isCheckAuthUser){
-            checkAuth();
-            loadAvatar();
-        }
-       
-    }, [])
-
-    async function LogOut(){
-        try{
-            const res = await fetch("http://localhost:4200/logout", {
-                method: "POST",
-                credentials: "include"
-            });
-            if(!res.ok){
-                alert("не получилось выйти");
-                return;
-            }
-            navigate("/")
-        } catch(e){
+    async function logOut() {
+        try {
+            logOutContext();
+            navigate("/login");
+        } catch (e) {
             alert(e.message);
         }
     }
@@ -87,7 +30,7 @@ export default function Header({linksShow, isCheckAuthUser}){
                 <div className="flex w-2/8 p-2 justify-end">
                     <Link to="/profile" className='rounded-full p-1 w-10 shadow-lg shadow-zinc-800/10 dark:bg-zinc-800/90 flex justify-center items-center bg-white/90 overflow-hidden
                         border-0.5 border-r-zinc-700'>
-                            <img src={`http://localhost:4200/uploads/${avatar || `i.webp`}`} crossOrigin='anonymous'
+                            <img src={`http://localhost:4200/uploads/${user?.avatar || "i.webp"}`} crossOrigin='anonymous'
                              className='object-cover h-full w-full object-center rounded-full'/>
                     </Link>
                 </div>
@@ -114,18 +57,18 @@ export default function Header({linksShow, isCheckAuthUser}){
                         </div>
                         <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center" >
-                            <Link to="/profile">Profile</Link>
+                            <Link to="/profile">profile</Link>
                         </div>
                         <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center">
-                            { !isLogined ? <Link to="/login">Log in</Link> : <button onClick={(e) => LogOut()}>Log out</button>}
+                            { !isAuth ? <Link to="/login">log in</Link> : <button onClick={(e) => logOut()}>Log out</button>}
                         </div>
                     </div>
                     <div className="pointer-events-auto md:hidden">
                         <button className="group flex items-center rounded-full bg-white/90 px-4 py-2.5 text-sm font-medium
                         text-zinc-800 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm hover:text-teal-500
                         dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20" 
-                        type="button" onClick={(e) => toggleModal(true)}>Menu 
+                        type="button" onClick={() => setShowMenu(true)}>Menu 
                             <svg viewBox="0 0 8 6"  className="ml-3 h-auto w-2 stroke-zinc-500 group-hover:stroke-zinc-700 dark:group-hover:stroke-zinc-400">
                                 <path d="M1.75 1.75 4 4.25l2.25-2.5" fill="none" strokeWidth="1.5">
                                 </path>
@@ -161,7 +104,7 @@ export default function Header({linksShow, isCheckAuthUser}){
                     <div className="flex flex-row-reverse items-center justify-between">
                         <button className="group rounded-full bg-white/90 px-3 py-2 ring-1 ring-zinc-900/5
                         backdrop-blur-sm transition dark:bg-zinc-800/90 dark:ring-white/10 dark:hover:ring-white/20"
-                        onClick={(e) => toggleModal(false)}>
+                        onClick={() => setShowMenu(false)}>
                             <svg viewBox="0 0 24 24" className="h-6 w-6 text-zinc-500 dark:text-zinc-400 hover:text-teal-500">
                                 <path d="m17.25 6.75-10.5 10.5M6.75 6.75l10.5 10.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">                                
                                 </path>
@@ -178,19 +121,19 @@ export default function Header({linksShow, isCheckAuthUser}){
                                 <Link className="flex py-2 hover:text-teal-500 duration-300" to="/routes/create">new route</Link>
                             </li>
                             <li>
-                                <Link className="flex py-2 hover:text-teal-500 duration-300" to="/routes/privat">my routes</Link>
+                                <Link className="flex py-2 hover:text-teal-500 duration-300" to="/routes/private">my routes</Link>
                             </li>
                             <li>
                                 <Link className="flex py-2 hover:text-teal-500 duration-300" to="/routes/public">all routes</Link>
                             </li>
                             <li>
-                                <Link className="flex py-2 hover:text-teal-500 duration-300" to="profile">Profile</Link>
+                                <Link className="flex py-2 hover:text-teal-500 duration-300" to="/profile">profile</Link>
                             </li>
                             <li>
-                                { !isLogined ?
-                                    <Link className="flex py-2 hover:text-teal-500 duration-300" to="login">Log in</Link>
+                                { !isAuth ?
+                                    <Link className="flex py-2 hover:text-teal-500 duration-300" to="/login">log in</Link>
                                     :
-                                    <button onClick={(e) => LogOut()}>Log out</button>
+                                    <button onClick={(e) => logOut()}>Log out</button>
                                 }
                             </li>
                         </ul>
