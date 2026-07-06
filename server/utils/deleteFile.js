@@ -5,10 +5,10 @@ export async function deleteFiles(files){
     
     for (const file of files) {
         try {
-            let filePath = path.join(process.cwd(), "uploadFiles", file.filename);
+            let filePath = path.join(process.cwd(), "uploadFiles", file.img);
             await fs.unlink(filePath);
         } catch (err) {
-            console.log("Файл уже удален:", file.filename);
+            console.log("Файл уже удален:", file.img);
         }
     }
 }
@@ -26,3 +26,4 @@ export async function deleteFile(filename) {
         throw err;
     }
 }
+//1783348871485-822934.jpg

@@ -130,7 +130,7 @@ export default function Profile(){
                             </div>
 
                         </label>
-                        <input type="file" name="avatar" id="avatar" accept="image/png, image/jpeg, image/jpg" className="hidden"
+                        <input type="file" name="avatar" id="avatar" accept="image/png, image/jpeg, image/jpg, image/webp" className="hidden"
                             onChange={(e) => { uploadAvatar(e.target.files[0]); }}/>
                         <button className='text-sm font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300
                         transition-colors duration-200 flex items-center gap-2 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 

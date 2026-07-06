@@ -22,7 +22,6 @@ import validation from './middlewear/validate.js';
 
 import upload from "./middlewear/uploadFiles.js"
 
-const SALT = 10
 
 //========== .env ==========//
 dotenv.config()
@@ -92,13 +91,18 @@ async function main(){
 
     app.post("/route/create", auth,  upload.array("images", 10), routes.CreateRoute)
     app.get("/routes/public", routes.getPublicRoutes)
-    app.get("/routes/public/:id", routes.getRouteById)
+    app.get("/routes/public/:id", routes.getPublicRouteById)
 
     app.get("/routes/user", auth, routes.getUserRoutes)
     app.get("/routes/user/:id",auth, routes.getUserRouteById)
 
+    app.get("/moderate/route/:id", auth, routes.getRouteById)
+    app.patch("/moderate/route/makePublic/:id", auth, routes.MakeRoutePublic)
+
     app.patch("/route/update/:id", auth, upload.array("images", 10), routes.UpdateRoute)
     app.delete("/route/delete/:id", auth, routes.DeleteRoute)
+
+    app.get("/moderate/allRoutes", auth, routes.getModerateRoutes)
 
     app.listen(process.env.PORT || 4200, ()=>{
         console.log(`🗲 server start on ${process.env.PORT || 4200} port 🗲`)

@@ -10,6 +10,7 @@ export function AuthProvider({ children }) {
         firstName: "",
         lastName: "",
         password: "",
+        roleId: "",
         avatar: null
     });
     const [isAuth, setIsAuth] = useState(false);

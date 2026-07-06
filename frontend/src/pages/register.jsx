@@ -4,6 +4,7 @@ import InputCustom from '../components/inputCustom'
 import Body from '../components/body'
 import Header from '../components/header'
 import {validationRegisterUser} from '../schemas/validate.schema'
+import { api } from '../api/api'
 import '../index.css'
 
 
@@ -37,7 +38,7 @@ function Register() {
       return alert("пароли должны совпадать")
     }
     try{
-      const res = await api('http://localhost:4200/register/user', {
+      const res = await api('/register/user', {
         method: "POST",
         headers: {"Content-Type": "application/json",},
         body: JSON.stringify(valid.data),
@@ -114,7 +115,7 @@ function Register() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">
-                  <InputCusto type="password" name="password" label="Password" value={data.password} onChange={handleChange} placeholder="password" error={errors.password?.[0]} />
+                  <InputCustom type="password" name="password" label="Password" value={data.password} onChange={handleChange} placeholder="password" error={errors.password?.[0]} />
                 </div>
 
                 <div className="flex flex-col gap-2">

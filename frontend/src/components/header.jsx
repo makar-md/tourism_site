@@ -24,6 +24,7 @@ export default function Header({linksShow}){
         }
     }
 
+
     return(
         <header className="fixed flex w-full top-2.5 left-0 z-48 ">
             <nav className="flex justify-between w-full">
@@ -59,6 +60,12 @@ export default function Header({linksShow}){
                         cursor-pointer py-2.5 flex justify-center items-center" >
                             <Link to="/profile">profile</Link>
                         </div>
+                        {user.roleId === 3 && (
+                            <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
+                            cursor-pointer py-2.5 flex justify-center items-center" >
+                                <Link to="/moderate">moderation</Link>
+                            </div>
+                        )}
                         <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center">
                             { !isAuth ? <Link to="/login">log in</Link> : <button onClick={(e) => logOut()}>log out</button>}
@@ -129,6 +136,11 @@ export default function Header({linksShow}){
                             <li>
                                 <Link className="flex py-2 hover:text-teal-500 duration-300" to="/profile">profile</Link>
                             </li>
+                            {user.roleId === 3 && (
+                                <li>
+                                    <Link className="flex py-2 hover:text-teal-500 duration-300" to="/moderate">moderation</Link>
+                                </li>
+                            )}
                             <li>
                                 { !isAuth ?
                                     <Link className="flex py-2 hover:text-teal-500 duration-300" to="/login">log in</Link>

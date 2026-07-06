@@ -18,7 +18,7 @@ export default function PointCard({ point, onDelete, mode, index }) {
                     </div>
                 </div>
 
-                {mode !== "viewing" && (
+                {(mode !== "viewing" && mode !== "moderate") && (
                     <button onClick={() => onDelete(point.id)}
                         className="rounded-xl p-2 text-zinc-400 hover:bg-red-500 hover:text-white transition-all duration-300">
                         <svg

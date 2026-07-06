@@ -5,7 +5,7 @@ import Body from "../components/body";
 import Header from "../components/header";
 import { api } from "../api/api";
 
-export default function RoutesPage({isPublic=true}){
+export default function RoutesPage({mode="public"}){
     const [routes, setRoutes] = useState([{
         id: "",
         name: "",
@@ -18,10 +18,12 @@ export default function RoutesPage({isPublic=true}){
         async function loadRoutes(){
             try{
                 let res;
-                if(isPublic){
+                if(mode === "public"){
                     res = await api("/routes/public", {});
-                } else{
+                } else if(mode === "private") {
                     res = await api("/routes/user", {});
+                } else if(mode === "moderate"){
+                    res = await api("/moderate/allRoutes",{})
                 }
                 if(!res.ok){
                     throw new Error ({message: "не удалось получить данные"})
@@ -35,13 +37,14 @@ export default function RoutesPage({isPublic=true}){
         }
         loadRoutes()
     }, [])
+    console.log(mode)
     return(
         <Body>
             <main className="w-11/12 lg:w-9/12 mx-auto bg-white dark:bg-zinc-900 min-h-screen flex flex-col relative pt-15 items-center">
                 <Header linksShow={true } isCheckAuthUser={true}/>
-                <div className="w-full min-h-screen py-5 px-10 flex flex-row flex-wrap gap-10 justify-around">
+                <div className="w-full py-5 px-10 flex flex-row flex-wrap gap-10 justify-around">
                     {   routes?.map((route,index)=>(
-                            <Link to={isPublic ? `/routes/${route.id}` : `/routes/${route.id}/edit`}>
+                            <Link to={mode === "public" ? `/routes/${route.id}` : mode === "private" ? `/routes/${route.id}/edit` : `/moderate/route/${route.id}`}>
                                 <RouteCard key={route.id} name={route.name} description={route.description} img={route.image} user={route.email}/>
                             </Link>
                         ))

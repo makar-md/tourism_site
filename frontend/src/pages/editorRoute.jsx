@@ -9,6 +9,8 @@ import Body from "../components/body";
 import Header from "../components/header";
 import RouteImg from "../components/routeImg";
 
+// /moderate/route/makePublic/:id
+
 export default function EditorRoute({mode = "viewing"}){
     const {id} = useParams();
     const API_KEY = "3ce309bc-953b-4b11-8a7f-5b6660b2aad5"
@@ -32,8 +34,10 @@ export default function EditorRoute({mode = "viewing"}){
                 let res
                 if(mode === "viewing"){
                     res = await api(`/routes/public/${id}`,{});
-                } else {
-                    res = await api(`/routes/user/${id}`)
+                } else if(mode === "edit") {
+                    res = await api(`/routes/user/${id}`,{})
+                } else if(mode === "moderate"){
+                    res = await api (`/moderate/route/${id}`,{})
                 }
                 if (!res.ok){
                     throw new Error('Ошибка загрузки');
@@ -79,13 +83,10 @@ export default function EditorRoute({mode = "viewing"}){
                 .map(Number);
             const point = [pos[0], pos[1]]
             return point
-            
         } catch (e){
             alert(e.message)
         }
     }
-
-
     async function handleMapClick(coords) {
         const address = await getAdress(coords);
         const point = {
@@ -134,9 +135,9 @@ export default function EditorRoute({mode = "viewing"}){
                 method: "POST",
                 body: formData
             });
+            const messge = await res.json();
+            alert(messge.message)
             if(!res.ok){
-                const messge = await res.json();
-                alert(messge.message)
                 return;
             }
             navigate(-1) 
@@ -159,10 +160,9 @@ export default function EditorRoute({mode = "viewing"}){
                 method: "PATCH",
                 body: formData
             });
+            const messge = await res.json();
+            alert(messge.message)
             if(!res.ok){
-                const messge = await res.json();
-                console.log("res " + messge.message)
-                alert(messge.message)
                 return;
             }
             navigate(-1) 
@@ -175,10 +175,24 @@ export default function EditorRoute({mode = "viewing"}){
             const res = await api(`/route/delete/${Rid}`, {
                 method: "DELETE",
             });
+            const messge = await res.json();
+            alert(messge.message)
             if(!res.ok){
-                const messge = await res.json();
-                console.log("res " + messge.message)
-                alert(messge.message)
+                return;
+            }
+            navigate(-1) 
+        }catch(e){
+            alert(e.message)
+        }
+    }
+    async function MakePublic(Rid){
+        try{
+            const res = await api(`/moderate/route/makePublic/${Rid}`, {
+                method: "PATCH",
+            });
+            const messge = await res.json();
+            alert(messge.message)
+            if(!res.ok){
                 return;
             }
             navigate(-1) 
@@ -226,6 +240,7 @@ export default function EditorRoute({mode = "viewing"}){
             setDragActive(false);
         }
     }
+    console.log("edit " + mode)
     return (
         <Body>
 
@@ -234,7 +249,7 @@ export default function EditorRoute({mode = "viewing"}){
                 <div className="grid grid-cols-1 xl:grid-cols-[6fr_5fr] gap-6">
                     
                     <div className="rounded-3xl overflow-hidden border border-zinc-200 dark:border-none shadow-xl shadow-zinc-900/5 h-[90vh] p-4">
-                    { mode !== "viewing" &&
+                    { (mode !== "viewing" && mode !=="moderate") &&
                             <>
                                 <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 mb-4">
                                     Route settings
@@ -280,7 +295,7 @@ export default function EditorRoute({mode = "viewing"}){
                                 </div>
                             </>
                         }
-                        {mode === "viewing" &&
+                        { (mode === "viewing" || mode ==="moderate") &&
                             <>
                                 <div className="flex items-start justify-between">
                                     <div>
@@ -311,7 +326,7 @@ export default function EditorRoute({mode = "viewing"}){
                         }
                         <div className="mt-6">
                             <div className="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-700 shadow-lg shadow-zinc-900/5 h-[42vh]">
-                                <Map onClick={mode !== "viewing" ? handleMapClick : ()=>{}} points={data.points}/>
+                                <Map onClick={ (mode !== "viewing" && mode !=="moderate") ? handleMapClick : ()=>{}} points={data.points}/>
                             </div>
                         </div>
                     </div>
@@ -332,9 +347,9 @@ export default function EditorRoute({mode = "viewing"}){
                     </div>
                 </div>
                 <div className="mt-8 border-t border-zinc-200 dark:border-zinc-700 pt-6">
-                        {mode !== "viewing" && <p className="mb-5 text-sm uppercase tracking-wider font-semibold text-zinc-500 dark:text-zinc-400">Route settings</p>}
+                        {(mode !== "viewing" && mode !=="moderate") && <p className="mb-5 text-sm uppercase tracking-wider font-semibold text-zinc-500 dark:text-zinc-400">Route settings</p>}
 
-                        {mode !== "viewing" &&
+                        {(mode !== "viewing" && mode !=="moderate")  &&
                             <div className="flex items-center gap-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/4
                             0 px-4 py-3 cursor-pointer transition hover:border-teal-500">
                                 <input type="checkbox" checked={data.isPublic} onChange={(e) => setData(prev => ({ ...prev, isPublic: e.target.checked }))} className="h-5 w-5 accent-teal-500 rounded-xl" />
@@ -345,7 +360,7 @@ export default function EditorRoute({mode = "viewing"}){
                             </div>
                         }
 
-                         {mode !== "viewing" &&
+                         {(mode !== "viewing" && mode !=="moderate") &&
                             <div className="mt-8">
                                 <label htmlFor="images" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}
                                     className={`relative flex flex-col items-center justify-center gap-3 h-44 rounded-2xl border-2 border-dashed transition-all cursor-pointer overflow-hidden ${
@@ -379,7 +394,7 @@ export default function EditorRoute({mode = "viewing"}){
                                 <div className="flex gap-4 overflow-x-auto py-8 px-4">
 
                                     {data.images.map((file, index) => (
-                                        <RouteImg key={index} index={index} file={file} mode={mode} onDelete={mode !=="viewing" ? handleDeleteImage: () =>{}}/>
+                                        <RouteImg key={index} index={index} file={file} mode={mode} onDelete={mode !=="viewing" && mode !=="moderate" ? handleDeleteImage: () =>{}}/>
                                     ))}
 
                                 </div>
@@ -394,7 +409,7 @@ export default function EditorRoute({mode = "viewing"}){
                                       hover:border-teal-500 hover:text-teal-500">
                                         Cancel
                                     </button>
-                                    <button onClick={createNewRoute} className="flex-1 rounded-xl bg-zinc-800 hover:bg-zinc-700 dark:bg-zinc-800
+                                    <button onClick={() => createNewRoute} className="flex-1 rounded-xl bg-zinc-800 hover:bg-zinc-700 dark:bg-zinc-800
                                      dark:hover:bg-teal-600 py-3 text-lg font-semibold text-white transition">
                                         Create route
                                     </button>
@@ -417,9 +432,19 @@ export default function EditorRoute({mode = "viewing"}){
                                 </div>
                             </div>
                         }
+                        {mode === "moderate" &&
+                            <div className="mt-8 flex gap-4 justify-center">
+                                <div className="w-full md:w-1/2 flex flex-col md:flex-row justify-between gap-10">
+                                    <button onClick={() => {MakePublic(id)}} className="flex-1 rounded-xl bg-zinc-800 hover:bg-zinc-700 dark:bg-zinc-800
+                                     dark:hover:bg-teal-600 py-3 text-lg font-semibold text-white transition">
+                                        make it public
+                                    </button>
+                                </div>
+                            </div>
+                        }
                     </div>
 
-                    {showDeleteModal && (
+                    {(showDeleteModal && mode==="edit") && (
                         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md">
                             <div className="relative w-[92%] max-w-lg rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-2xl overflow-hidden">
                                 <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-red-500 via-red-400 to-red-500"></div>

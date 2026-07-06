@@ -41,109 +41,6 @@ export async function CreateRoute (req, res){
         res.status(500).json({message: e.message})
     }
 }
-
-export async function getPublicRoutes(req, res){
-    try{
-        const routes = await prisma.Routes.findMany({
-            where: {
-                status: {name: "public"}
-            },
-            select: {
-                id: true,
-                name: true,
-                description: true,
-                user: { select: { email: true } },
-                images: { select: { img: true }, take: 1}
-            }
-        });
-        const result = routes.map(route => ({
-            id: route.id,
-            name: route.name,
-            description: route.description,
-            email: route.user.email,
-            image: route.images[0]?.img ?? null
-        }));
-        res.status(200).json(result)
-    } catch(e){
-        console.log(e.message)
-        res.status(500).json({message: e.message})
-    }    
-}
-export async function getUserRoutes(req, res){
-    try{
-        const routes = await prisma.Routes.findMany({
-            where: {
-                user: {id: req.user.userId}
-            },
-            select: {
-                id: true,
-                name: true,
-                description: true,
-                user: { select: { email: true } },
-                images: { select: { img: true }, take: 1}
-            }
-        });
-        const result = routes.map(route => ({
-            id: route.id,
-            name: route.name,
-            description: route.description,
-            email: route.user.email,
-            image: route.images[0]?.img ?? null
-        }));
-        res.status(200).json(result)
-    } catch(e){
-        console.log(e.message)
-        res.status(500).json({message: e.message})
-    }    
-}
-export async function getRouteById(req, res){
-    const {id} = req.params
-    try{
-        const data = await prisma.Routes.findFirst({
-            where:{
-                id: Number(id),
-                status: {name: "public"}
-            },
-            select: {
-                name: true,
-                description: true,
-                isPublic: true,
-                points: {select: {id:true, lng:true, lat:true}},
-                images: { select: { img: true }}
-            }
-        })
-        res.status(200).json(data)
-    } catch (e) {
-        console.log(e.message)
-        res.status(500).json({message: e.message})
-    }
-}
-
-export async function getUserRouteById(req, res){
-    const {id} = req.params
-    try{
-        const data = await prisma.Routes.findFirst({
-            where:{
-                id: Number(id),
-                user:{id: req.user.userId}
-            },
-            select: {
-                name: true,
-                description: true,
-                isPublic: true,
-                points: {select: {id:true, lng:true, lat:true}},
-                images: { select: { img: true }}
-            }
-        })
-        res.status(200).json(data)
-    } catch (e) {
-        console.log(e.message)
-        res.status(500).json({message: e.message})
-    }
-}
-
-// app.patch("/route/update/:id", auth, async (req, res) => {
-// })
 export async function UpdateRoute(req, res) {
     const { id } = req.params;
 
@@ -242,7 +139,6 @@ export async function UpdateRoute(req, res) {
 
 export async function DeleteRoute(req, res){
     const { id } = req.params;
-     console.log("delete")
     try{
         const route = await prisma.Routes.findFirst({
             where: {
@@ -252,7 +148,6 @@ export async function DeleteRoute(req, res){
                 images: true,
             },
         });
-        console.log(route)
         if(!route){
            return res.status(404).json({ message: "Маршрут не найден" }); 
         }
@@ -268,4 +163,179 @@ export async function DeleteRoute(req, res){
             message: e.message
         });        
     }
+}
+
+
+export async function getPublicRoutes(req, res){
+    try{
+        const routes = await prisma.Routes.findMany({
+            where: {
+                status: {name: "public"}
+            },
+            select: {
+                id: true,
+                name: true,
+                description: true,
+                user: { select: { email: true } },
+                images: { select: { img: true }, take: 1}
+            }
+        });
+        const result = routes.map(route => ({
+            id: route.id,
+            name: route.name,
+            description: route.description,
+            email: route.user.email,
+            image: route.images[0]?.img ?? null
+        }));
+        res.status(200).json(result)
+    } catch(e){
+        console.log(e.message)
+        res.status(500).json({message: e.message})
+    }    
+}
+export async function getUserRoutes(req, res){
+    try{
+        const routes = await prisma.Routes.findMany({
+            where: {
+                user: {id: req.user.userId}
+            },
+            select: {
+                id: true,
+                name: true,
+                description: true,
+                user: { select: { email: true } },
+                images: { select: { img: true }, take: 1}
+            }
+        });
+        const result = routes.map(route => ({
+            id: route.id,
+            name: route.name,
+            description: route.description,
+            email: route.user.email,
+            image: route.images[0]?.img ?? null
+        }));
+        res.status(200).json(result)
+    } catch(e){
+        console.log(e.message)
+        res.status(500).json({message: e.message})
+    }    
+}
+
+
+//========== current route ==========//
+export async function getPublicRouteById(req, res){
+    const {id} = req.params
+    try{
+        const data = await prisma.Routes.findFirst({
+            where:{
+                id: Number(id),
+                status: {name: "public"}
+            },
+            select: {
+                name: true,
+                description: true,
+                isPublic: true,
+                points: {select: {id:true, lng:true, lat:true}},
+                images: { select: { img: true }}
+            }
+        })
+        res.status(200).json(data)
+    } catch (e) {
+        console.log(e.message)
+        res.status(500).json({message: e.message})
+    }
+}
+export async function getUserRouteById(req, res){
+    const {id} = req.params
+    try{
+        const data = await prisma.Routes.findFirst({
+            where:{
+                id: Number(id),
+                user:{id: req.user.userId}
+            },
+            select: {
+                name: true,
+                description: true,
+                isPublic: true,
+                points: {select: {id:true, lng:true, lat:true}},
+                images: { select: { img: true }}
+            }
+        })
+        res.status(200).json(data)
+    } catch (e) {
+        console.log(e.message)
+        res.status(500).json({message: e.message})
+    }
+}
+
+
+
+
+//========== moderation ==========//
+export async function MakeRoutePublic(req, res){
+    const { id } = req.params;
+    try{
+
+        const result = await prisma.Routes.update({
+            where: { id: Number(id) },
+            data:{
+                statusId: 3
+            }   
+        })
+        res.status(200).json({message: "make route public"})
+    } catch (e){
+        console.log(e);
+        return res.status(500).json({
+            message: e.message
+        });        
+    }
+}
+
+export async function getRouteById(req, res){
+    const {id} = req.params
+    try{
+        const data = await prisma.Routes.findFirst({
+            where:{
+                id: Number(id),
+            },
+            select: {
+                name: true,
+                description: true,
+                isPublic: true,
+                points: {select: {id:true, lng:true, lat:true}},
+                images: { select: { img: true }}
+            }
+        })
+        res.status(200).json(data)
+    } catch (e) {
+        console.log(e.message)
+        res.status(500).json({message: e.message})
+    }
+}
+export async function getModerateRoutes(req, res){
+    try{
+        const routes = await prisma.Routes.findMany({
+            where: {
+                status: {name: "moderate"}
+            },
+            select: {
+                id: true,
+                name: true,
+                description: true,
+                user: { select: { email: true } },
+                images: { select: { img: true }, take: 1}
+            }
+        });
+        const result = routes.map(route => ({
+            id: route.id,
+            name: route.name,
+            description: route.description,
+            email: route.user.email,
+            image: route.images[0]?.img ?? null
+        }));
+        res.status(200).json(result)
+    } catch(e){
+        console.log(e.message)
+        res.status(500).json({message: e.message})
+    }    
 }

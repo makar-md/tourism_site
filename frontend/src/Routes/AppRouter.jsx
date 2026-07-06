@@ -15,16 +15,15 @@ export default function AppRouter(){
                 <Route path="/registration" element={<Register/>}/>
                 <Route path="/" element={<Index/>}/>
                 <Route path="/login" element={<Login/>}/>
-                <Route path="/routes/public" element={<RoutesPage isPublic={true}/>}/>
+                <Route path="/routes/public" element={<RoutesPage mode="public"/>}/>
                 <Route path="/routes/:id" element={<EditorRoute mode="viewing" />} />
 
 
-                <Route path="/profile"
-                    element={
-                        <ProtectedRouter>
-                            <Profile />
-                        </ProtectedRouter>
-                    }/>
+                <Route path="/profile" element={
+                    <ProtectedRouter>
+                        <Profile />
+                    </ProtectedRouter>
+                }/>
                 <Route path="/routes/create" element={
                     <ProtectedRouter>
                         <EditorRoute mode="create"/>
@@ -32,7 +31,7 @@ export default function AppRouter(){
                 }/>
                 <Route path="/routes/private" element={
                     <ProtectedRouter>
-                        <RoutesPage isPublic={false}/>
+                        <RoutesPage mode="private"/>
                     </ProtectedRouter>
                 }/>
                 <Route path="/routes/:id/edit" element={
@@ -40,6 +39,17 @@ export default function AppRouter(){
                         <EditorRoute mode="edit" />
                     </ProtectedRouter>
                 } />
+
+                <Route path="/moderate" element={
+                    <ProtectedRouter>
+                        <RoutesPage mode="moderate"/>
+                    </ProtectedRouter>
+                }/>
+                <Route path="/moderate/route/:id" element={
+                    <ProtectedRouter>
+                        <EditorRoute mode="moderate"/>
+                    </ProtectedRouter>
+                }/>
             </Routes>
         </BrowserRouter>
     )

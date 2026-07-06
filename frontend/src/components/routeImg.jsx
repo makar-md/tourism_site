@@ -7,7 +7,7 @@ export default function RouteImg({index, file, onDelete, mode}){
         <div key={index} className="relative shrink-0 group">
             <img src={src} className={`${mode !== "viewing"? `w-42 h-42` : `w-60 h-60`} rounded-2xl object-cover shadow-xl shadow-zinc-900/40 transition group-hover:brightness-50`} />
 
-            {mode !=="viewing" &&
+            {(mode !=="viewing" && mode !== "moderate") &&
                 <button onClick={() => onDelete(index)} className="absolute inset-0 flex items-center justify-center rounded-2xl bg-zinc-950/50 opacity-0 transition
                 duration-300 group-hover:opacity-100">
 

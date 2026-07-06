@@ -1,6 +1,7 @@
 import prisma from '../prisma/prisma.js'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
+const SALT = 10
 
 export async function RegisterUser (req,res){
     const {email, password, firstName, surName, lastName} = req.body;
