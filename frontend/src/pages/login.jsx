@@ -29,9 +29,8 @@ function Login() {
     }
     setError({})
     try{
-      const res = await fetch('http://localhost:4200/login/user', {
+      const res = await api('http://localhost:4200/login/user', {
         method: "POST",
-        credentials: "include",
         headers: {"Content-Type": "application/json",},
         body: JSON.stringify(validation.data),
       })
