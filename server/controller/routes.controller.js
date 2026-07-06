@@ -38,3 +38,34 @@ export async function CreateRoute (req, res){
         res.status(500).json({message: e.message})
     }
 }
+
+export async function getPublicRoutes(req, res){
+    console.log("get data")
+    try{
+        const routes = await prisma.Routes.findMany({
+            where: {
+                status: {name: "public"}
+            },
+            select: {
+                id: true,
+                name: true,
+                description: true,
+                user: { select: { email: true } },
+                images: { select: { img: true }, take: 1}
+            }
+        });
+        console.log(routes)
+        const result = routes.map(route => ({
+            id: route.id,
+            name: route.name,
+            description: route.description,
+            email: route.user.email,
+            image: route.images[0]?.img ?? null
+        }));
+        console.log(result)
+        res.status(200).json(result)
+    } catch(e){
+        console.log(e.message)
+        res.status(500).json({message: e.message})
+    }    
+}

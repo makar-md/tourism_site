@@ -90,14 +90,9 @@ async function main(){
     app.post("/upload/avatar", auth, upload.single("avatar"), avatar.UploadAvatar)
     app.delete("/delete/avatar", auth, avatar.DeleteAvatar)
     app.get("/user/avatar", auth, avatar.GetAvatar);
-    
-    app.post("/route/create", auth, routes.CreateRoute)
-    
 
-    // const route = await prisma.route.findUnique({
-    //     where: { id },
-    //     include: { points: true }
-    // });
+    app.post("/route/create", auth, routes.CreateRoute)
+    app.get("/routes/public", routes.getPublicRoutes)
 
     app.listen(process.env.PORT || 4200, ()=>{
         console.log(`🗲 server start on ${process.env.PORT || 4200} port 🗲`)
