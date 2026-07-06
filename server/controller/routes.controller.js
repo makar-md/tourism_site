@@ -69,8 +69,7 @@ export async function getPublicRoutes(req, res){
         res.status(500).json({message: e.message})
     }    
 }
-export async function getPrivateRoutes(req, res){
-    console.log(req)
+export async function getUserRoutes(req, res){
     try{
         const routes = await prisma.Routes.findMany({
             where: {
@@ -117,5 +116,128 @@ export async function getRouteById(req, res){
     } catch (e) {
         console.log(e.message)
         res.status(500).json({message: e.message})
+    }
+}
+
+export async function getUserRouteById(req, res){
+    const {id} = req.params
+    try{
+        const data = await prisma.Routes.findFirst({
+            where:{
+                id: Number(id),
+                user:{id: req.user.userId}
+            },
+            select: {
+                name: true,
+                description: true,
+                isPublic: true,
+                points: {select: {id:true, lng:true, lat:true}},
+                images: { select: { img: true }}
+            }
+        })
+        res.status(200).json(data)
+    } catch (e) {
+        console.log(e.message)
+        res.status(500).json({message: e.message})
+    }
+}
+
+// app.patch("/route/update/:id", auth, async (req, res) => {
+// })
+export async function UpdateRoute(req, res) {
+    const { id } = req.params;
+
+    try {
+        const data = JSON.parse(req.body.data);
+
+        // проверка владельца
+        const route = await prisma.Routes.findFirst({
+            where: {
+                id: Number(id),
+                userId: req.user.userId
+            },
+            include: {
+                images: true,
+            },
+        });
+
+        if (!route) {
+            return res.status(404).json({ message: "Маршрут не найден" });
+        }
+
+        // Проверяем уникальность имени
+        const existName = await prisma.Routes.findFirst({
+            where: {
+                name: data.name,
+                NOT: {id: Number(id)}
+            }
+        });
+
+        if (existName) {
+            if (req.files?.length) {
+                await deleteFiles(req.files);
+            }
+            return res.status(409).json({
+                message: "Имя маршрута уже занято"
+            });
+        }
+
+        console.log(route)
+        const oldImages = route.images;
+
+        const updateData = {
+            name: data.name,
+            description: data.description,
+            isPublic: data.isPublic,
+            statusId: data.isPublic ? 2 : 1,
+
+            points: {
+                deleteMany: {},
+                create: data.points.map(point => ({
+                    lng: point.coords[0],
+                    lat: point.coords[1]
+                }))
+            }
+        };
+
+        if (req.files?.length) {
+            updateData.images = {
+                deleteMany: {},
+                create: req.files.map(file => ({
+                    img: file.filename
+                }))
+            };
+        }
+
+        await prisma.Routes.update({
+            where: {
+                id: Number(id)
+            },
+            data: updateData
+        });
+
+        // Если изображения были заменены —
+        // удаляем старые файлы с диска
+        if (req.files?.length && oldImages.length) {
+            await deleteFiles(oldImages);
+        }
+
+        return res.status(200).json({ message: "Маршрут успешно обновлён" });
+
+    } catch (e) {
+        console.log(e);
+        // Если произошла ошибка —
+        // удаляем только что загруженные файлы
+        if (req.files?.length) {
+            await deleteFiles(req.files);
+        }
+        if (e.code === "P2002") {
+            return res.status(409).json({
+                message: "Имя маршрута уже занято"
+            });
+        }
+        return res.status(500).json({
+            message: e.message
+        });
     }
 }

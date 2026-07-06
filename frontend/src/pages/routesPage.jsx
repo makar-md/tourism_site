@@ -21,7 +21,7 @@ export default function RoutesPage({isPublic=true}){
                 if(isPublic){
                     res = await api("/routes/public", {});
                 } else{
-                    res = await api("/routes/private", {});
+                    res = await api("/routes/user", {});
                 }
                 if(!res.ok){
                     throw new Error ({message: "не удалось получить данные"})
@@ -41,7 +41,7 @@ export default function RoutesPage({isPublic=true}){
                 <Header linksShow={true } isCheckAuthUser={true}/>
                 <div className="w-full min-h-screen py-5 px-10 flex flex-row flex-wrap gap-10 justify-around">
                     {   routes?.map((route,index)=>(
-                            <Link to={`/routes/${route.id}`}>
+                            <Link to={isPublic ? `/routes/${route.id}` : `/routes/${route.id}/edit`}>
                                 <RouteCard key={route.id} name={route.name} description={route.description} img={route.image} user={route.email}/>
                             </Link>
                         ))

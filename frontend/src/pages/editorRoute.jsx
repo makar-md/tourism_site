@@ -28,12 +28,25 @@ export default function EditorRoute({mode = "viewing"}){
     useEffect(() => {
         async function loadRoute(id){
             try{
-                const res = await api(`/routes/public/${id}`,{});
+                let res
+                if(mode === "viewing"){
+                    res = await api(`/routes/public/${id}`,{});
+                } else {
+                    res = await api(`/routes/user/${id}`)
+                }
                 if (!res.ok){
                     throw new Error('Ошибка загрузки');
                 } 
+                
                 const resData = await res.json();
-                setData(resData)
+                setData({
+                    ...resData,
+                    points: resData.points.map(point => ({
+                        id: point.id,
+                        coords: [point.lng, point.lat],
+                        address: point.address ?? ""
+                    }))
+                });
             } catch (e){
                 alert(e.message)
             }
@@ -130,30 +143,33 @@ export default function EditorRoute({mode = "viewing"}){
             alert(e.message)
         }
     }
-    // async function UpdateRoute(routeID){
-    //     const valid = validateRouteData.safeParse(data);
-    //     if(!valid.success){
-    //         setErrors(valid.error.flatten().fieldErrors);
-    //         return;
-    //     }
-    //     try{
-    //         const res = await api("/route/update", {
-    //             method: "PUT",
-    //             headers: {
-    //                 "Content-Type": "application/json"
-    //             },
-    //             body: JSON.stringify(valid.data)
-    //         });
-    //         if(!res.ok){
-    //             const messge = await res.json();
-    //             alert(messge.message)
-    //             return;
-    //         }
-    //         navigate(-1) 
-    //     }catch(e){
-    //         alert(e.message)
-    //     }
-    // }
+
+    async function UpdateRoute(Rid){
+        try{
+            console.log(data)
+            const formData = new FormData();
+            data.images.forEach(file => {
+                formData.append("images", file);
+            })
+            formData.append(
+                "data",
+                JSON.stringify(data)
+            );
+            const res = await api(`/route/update/${Rid}`, {
+                method: "PATCH",
+                body: formData
+            });
+            if(!res.ok){
+                const messge = await res.json();
+                console.log("res " + messge.message)
+                alert(messge.message)
+                return;
+            }
+            navigate(-1) 
+        }catch(e){
+            alert(e.message)
+        }
+    }
 
     function deletePoint(id) {
         setData(prev => ({
@@ -278,18 +294,8 @@ export default function EditorRoute({mode = "viewing"}){
                             </>
                         }
                         <div className="mt-6">
-                            <div className="flex items-center justify-between mb-3">
-                                <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                                    Route on map
-                                </h2>
-
-                                <span className="text-sm text-zinc-500">
-                                    Click markers to view points
-                                </span>
-                            </div>
-
                             <div className="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-700 shadow-lg shadow-zinc-900/5 h-[42vh]">
-                                <Map onClick={() => {}} points={data.points}/>
+                                <Map onClick={mode !== "viewing" ? handleMapClick : ()=>{}} points={data.points}/>
                             </div>
                         </div>
                     </div>
@@ -381,16 +387,17 @@ export default function EditorRoute({mode = "viewing"}){
                         }
 
                         {mode === "edit" &&
-                            <div className="mt-8 flex gap-4">
+                            <div className="mt-8 flex gap-4 justify-center">
+                                <div className="w-full md:w-1/2 flex flex-col md:flex-row justify-between gap-10">
+                                    <button onClick={() => UpdateRoute(id)} className="px-6 rounded-xl bg-zinc-800 hover:bg-zinc-700 dark:bg-zinc-800
+                                     dark:hover:bg-zinc-700 py-2 md:py-3 text-lg font-semibold text-white transition w-full">
+                                        Save changes
+                                    </button>
 
-                                <button onClick={() => UpdateRoute(routeID)} className="flex-1 rounded-xl bg-zinc-800 hover:bg-zinc-700 dark:bg-zinc-700 dark:hover:bg-zinc-600 py-3 text-lg font-semibold text-white transition">
-                                    Save changes
-                                </button>
-
-                                <button className="rounded-xl border border-red-400 px-6 text-red-500 font-semibold transition hover:bg-red-500 hover:text-white">
-                                    Delete
-                                </button>
-
+                                    <button className="py-2 md:py-3 w-full rounded-xl border border-red-400 px-6 text-red-500 font-semibold transition hover:bg-red-500 hover:text-white">
+                                        Delete
+                                    </button>
+                                </div>
                             </div>
                         }
                     </div>

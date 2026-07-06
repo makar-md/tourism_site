@@ -33,7 +33,7 @@ const app = express()
 app.use(cors({
         origin: 'http://localhost:5173',
         credentials: true,
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     })
 )
 app.use( json(),helmet(
@@ -92,8 +92,12 @@ async function main(){
 
     app.post("/route/create", auth,  upload.array("images", 10), routes.CreateRoute)
     app.get("/routes/public", routes.getPublicRoutes)
-    app.get("/routes/private", auth, routes.getPrivateRoutes)
-    app.get("/routes/public/:id", auth, routes.getRouteById)
+    app.get("/routes/public/:id", routes.getRouteById)
+
+    app.get("/routes/user", auth, routes.getUserRoutes)
+    app.get("/routes/user/:id",auth, routes.getUserRouteById)
+
+    app.patch("/route/update/:id", auth, upload.array("images", 10), routes.UpdateRoute)
 
     app.listen(process.env.PORT || 4200, ()=>{
         console.log(`🗲 server start on ${process.env.PORT || 4200} port 🗲`)

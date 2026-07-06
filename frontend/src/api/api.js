@@ -33,7 +33,7 @@ export async function api(url, options = {}) {
 
         return res;
     } catch (e) {
-        console.error(e.message);
+        console.log(e.message);
         throw new Error("Не удалось подключиться к серверу");
     }
 }
