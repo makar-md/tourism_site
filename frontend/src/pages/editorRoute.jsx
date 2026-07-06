@@ -90,6 +90,7 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
             return;
         }
         try{
+            console.log(valid.data)
             const formData = new FormData();
             valid.data.images.forEach(file => {
                 formData.append("images", file);
@@ -98,9 +99,7 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
                 "data",
                 JSON.stringify(valid.data)
             );
-
-            
-
+            console.log(formData)
             const res = await api("/route/create", {
                 method: "POST",
                 body: formData
@@ -115,30 +114,30 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
             alert(e.message)
         }
     }
-    async function UpdateRoute(routeID){
-        const valid = validateRouteData.safeParse(data);
-        if(!valid.success){
-            setErrors(valid.error.flatten().fieldErrors);
-            return;
-        }
-        try{
-            const res = await api("/route/update", {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(valid.data)
-            });
-            if(!res.ok){
-                const messge = await res.json();
-                alert(messge.message)
-                return;
-            }
-            navigate(-1) 
-        }catch(e){
-            alert(e.message)
-        }
-    }
+    // async function UpdateRoute(routeID){
+    //     const valid = validateRouteData.safeParse(data);
+    //     if(!valid.success){
+    //         setErrors(valid.error.flatten().fieldErrors);
+    //         return;
+    //     }
+    //     try{
+    //         const res = await api("/route/update", {
+    //             method: "PUT",
+    //             headers: {
+    //                 "Content-Type": "application/json"
+    //             },
+    //             body: JSON.stringify(valid.data)
+    //         });
+    //         if(!res.ok){
+    //             const messge = await res.json();
+    //             alert(messge.message)
+    //             return;
+    //         }
+    //         navigate(-1) 
+    //     }catch(e){
+    //         alert(e.message)
+    //     }
+    // }
 
     function deletePoint(id) {
         setData(prev => ({
@@ -279,8 +278,7 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
                                         dragActive
                                             ? "border-teal-500 bg-teal-500/10"
                                             : "border-zinc-300 dark:border-zinc-700 hover:border-teal-500 hover:bg-zinc-50 dark:hover:bg-zinc-800/40"
-                                    }`}
-                                >
+                                    }`}>
 
                                     <svg className="w-12 h-12 text-zinc-500 dark:text-zinc-400" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 16V4m0 0l-4 4m4-4l4 4M4 17v1a2 2 0 002 2h12a2 2 0 002-2v-1"/>
@@ -307,7 +305,7 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
                                 <div className="flex gap-4 overflow-x-auto py-8 px-4">
 
                                     {data.images.map((file, index) => (
-                                        <RouteImg index={index} file={file} onDelete={handleDeleteImage}/>
+                                        <RouteImg key={index} index={index} file={file} onDelete={handleDeleteImage}/>
                                     ))}
 
                                 </div>

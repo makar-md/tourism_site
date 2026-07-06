@@ -2,13 +2,13 @@ import fs from "fs/promises";
 import path from "path"
 
 export async function deleteFiles(files){
-    for (const image of files) {
+    for (const file of files) {
         try {
             await fs.unlink(
-                path.join("uploadFiles", image.img)
+                path.join("uploadFiles", file.filename)
             );
         } catch (err) {
-            console.log("Файл уже удален:", image.img);
+            console.log("Файл уже удален:", file.filename);
         }
     }
 }

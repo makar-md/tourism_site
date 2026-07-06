@@ -1,5 +1,6 @@
 import prisma from "../prisma/prisma.js"
 import upload from "../middlewear/uploadFiles.js"
+import { deleteFiles } from "../utils/deleteFile.js";
 
 export async function CreateRoute (req, res){
     const token = req.cookies.refreshToken;
@@ -12,7 +13,7 @@ export async function CreateRoute (req, res){
             data:{
                 name: data.name,
                 description: data.description,
-                userId: req.body.userId,
+                userId: req.user.userId,
                 isPublic:data.isPublic,
                 statusId: data.isPublic ? 2 : 1,
                 points: {
@@ -28,10 +29,12 @@ export async function CreateRoute (req, res){
                 }
             }
         })
-        upload.array("images", 10)
         res.status(200).json({message: "create route"})
     } catch(e){
         console.log(e.message)
+        if (req.files?.length) {
+            await deleteFiles(req.files);
+        }
         if (e.code === "P2002") {
             return res.status(409).json({ message: "Route name already exists" });
         }
@@ -40,7 +43,6 @@ export async function CreateRoute (req, res){
 }
 
 export async function getPublicRoutes(req, res){
-    console.log("get data")
     try{
         const routes = await prisma.Routes.findMany({
             where: {
@@ -54,7 +56,6 @@ export async function getPublicRoutes(req, res){
                 images: { select: { img: true }, take: 1}
             }
         });
-        console.log(routes)
         const result = routes.map(route => ({
             id: route.id,
             name: route.name,
@@ -62,7 +63,6 @@ export async function getPublicRoutes(req, res){
             email: route.user.email,
             image: route.images[0]?.img ?? null
         }));
-        console.log(result)
         res.status(200).json(result)
     } catch(e){
         console.log(e.message)

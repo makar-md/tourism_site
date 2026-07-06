@@ -36,7 +36,6 @@ app.use(cors({
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     })
 )
-
 app.use( json(),helmet(
     {crossOriginResourcePolicy: false,}
 ), cookieParser())
@@ -91,7 +90,7 @@ async function main(){
     app.delete("/delete/avatar", auth, avatar.DeleteAvatar)
     app.get("/user/avatar", auth, avatar.GetAvatar);
 
-    app.post("/route/create", auth, routes.CreateRoute)
+    app.post("/route/create", auth,  upload.array("images", 10), routes.CreateRoute)
     app.get("/routes/public", routes.getPublicRoutes)
 
     app.listen(process.env.PORT || 4200, ()=>{
