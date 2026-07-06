@@ -1,4 +1,10 @@
 export default function RouteCard({name, description, img, user}){
+    function cutText(text, maxLength) {
+        if (text.length <= maxLength) return text;
+
+        const cut = text.slice(0, maxLength);
+        return cut.slice(0, cut.lastIndexOf(" ")) + "...";
+    }
     return(
         <div className="group relative shrink-0 snap-center w-[320px] h-[470px] rounded-3xl overflow-hidden border border-zinc-300 dark:border-zinc-700
             bg-white dark:bg-zinc-900 transition-all duration-500 hover:-translate-y-3 hover:border-teal-500/40 hover:shadow-2xl hover:shadow-teal-500/10">
@@ -15,7 +21,7 @@ export default function RouteCard({name, description, img, user}){
                     {name}
                 </h3>
                 <p className="mt-2 text-white/80 text-sm leading-6">
-                    {description}
+                    {cutText(description, 100)}
                 </p>
             </div>
         </div>

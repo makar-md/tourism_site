@@ -2,28 +2,46 @@ import { useEffect, useState } from "react";
 import Map from "../components/map";
 import InputCustom from '../components/inputCustom';
 import { api } from "../api/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { validateRouteData } from "../schemas/validate.schema";
 import PointCard from "../components/pointCard";
 import Body from "../components/body";
 import Header from "../components/header";
 import RouteImg from "../components/routeImg";
 
-export default function EditorRoute({mode = "viewing", routeID = ""}){
-
+export default function EditorRoute({mode = "viewing"}){
+    const {id} = useParams();
     const API_KEY = "3ce309bc-953b-4b11-8a7f-5b6660b2aad5"
     const navigate = useNavigate();
     const [address, setAddress] = useState("");
     const [errors, setErrors] = useState({});
     const [dragActive, setDragActive] = useState(false);
     const [data, setData] = useState({
-        id: routeID,
+        id: id,
         name:"",
         description:"",
         isPublic: false,
         points: [],
         images: []
     })
+    
+    useEffect(() => {
+        async function loadRoute(id){
+            try{
+                const res = await api(`/routes/public/${id}`,{});
+                if (!res.ok){
+                    throw new Error('Ошибка загрузки');
+                } 
+                const resData = await res.json();
+                setData(resData)
+            } catch (e){
+                alert(e.message)
+            }
+        }
+        if (mode !== "create") {
+            loadRoute(id);
+        }
+    }, []);
 
     async function getAdress(coords){
         const [lon, lat] = coords;
@@ -90,7 +108,6 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
             return;
         }
         try{
-            console.log(valid.data)
             const formData = new FormData();
             valid.data.images.forEach(file => {
                 formData.append("images", file);
@@ -99,7 +116,6 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
                 "data",
                 JSON.stringify(valid.data)
             );
-            console.log(formData)
             const res = await api("/route/create", {
                 method: "POST",
                 body: formData
@@ -191,9 +207,7 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
                                 <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 mb-4">
                                     Route settings
                                 </h2>
-
                                 <div className="space-y-2">
-
                                     <InputCustom name="name" label="Name" value={data.name} error={errors.name?.[0]} onChange={(e)=>
                                             setData(prev=>({
                                                 ...prev,
@@ -205,7 +219,6 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
                                         <label className="text-lg font-medium text-zinc-800 dark:text-zinc-100">
                                             Description
                                         </label>
-
                                         <textarea value={data.description}
                                             onChange={(e)=>
                                                 setData(prev=>({
@@ -218,7 +231,6 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
                                             placeholder="some word about route"/>
                                     </div>
                                 </div>
-
                                 <div className="mt-2">
                                     <label className="text-lg font-medium text-zinc-800 dark:text-zinc-100">
                                         Search place
@@ -236,8 +248,49 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
                                 </div>
                             </>
                         }
-                        <div className="w-full h-[40vh] mt-4 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-xl shadow-zinc-900/5">
-                            <Map onClick={mode !== "viewing" ? handleMapClick : ()=>{}} points={data.points} />
+                        {mode === "viewing" &&
+                            <>
+                                <div className="flex items-start justify-between">
+                                    <div>
+                                        <h1 className="text-4xl font-bold text-zinc-900 dark:text-zinc-50">{data.name}</h1>
+                                        <div className="mt-3 flex flex-wrap gap-2">
+                                            <span className="rounded-full bg-teal-500/10 text-teal-500 px-4 py-1 text-sm font-semibold">
+                                                {data.isPublic ? "Public route" : "Private route"}
+                                            </span>
+                                            <span className="rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 px-4 py-1 text-sm font-medium">
+                                                {data.points.length} points
+                                            </span>
+                                            <span className="rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 px-4 py-1 text-sm font-medium">
+                                                {data.images.length} photos
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="mt-8 rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/40 p-6">
+                                    <p className="uppercase tracking-wider text-sm font-semibold text-zinc-500 mb-4">
+                                        Description
+                                    </p>
+
+                                    <p className="leading-8 text-lg text-zinc-700 dark:text-zinc-300 whitespace-pre-wrap">
+                                        {data.description || "No description"}
+                                    </p>
+                                </div>
+                            </>
+                        }
+                        <div className="mt-6">
+                            <div className="flex items-center justify-between mb-3">
+                                <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+                                    Route on map
+                                </h2>
+
+                                <span className="text-sm text-zinc-500">
+                                    Click markers to view points
+                                </span>
+                            </div>
+
+                            <div className="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-700 shadow-lg shadow-zinc-900/5 h-[42vh]">
+                                <Map onClick={() => {}} points={data.points}/>
+                            </div>
                         </div>
                     </div>
 
@@ -257,18 +310,17 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
                     </div>
                 </div>
                 <div className="mt-8 border-t border-zinc-200 dark:border-zinc-700 pt-6">
-
-                        <p className="mb-5 text-sm uppercase tracking-wider font-semibold text-zinc-500 dark:text-zinc-400">Route settings</p>
+                        {mode !== "viewing" && <p className="mb-5 text-sm uppercase tracking-wider font-semibold text-zinc-500 dark:text-zinc-400">Route settings</p>}
 
                         {mode !== "viewing" &&
-                            <label className="flex items-center gap-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/4
+                            <div className="flex items-center gap-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/4
                             0 px-4 py-3 cursor-pointer transition hover:border-teal-500">
                                 <input type="checkbox" checked={data.isPublic} onChange={(e) => setData(prev => ({ ...prev, isPublic: e.target.checked }))} className="h-5 w-5 accent-teal-500 rounded-xl" />
                                 <div>
                                     <p className="font-medium text-zinc-900 dark:text-zinc-100">Public route</p>
                                     <p className="text-sm text-zinc-500 dark:text-zinc-400">The route will be visible to other users after moderation.</p>
                                 </div>
-                            </label>
+                            </div>
                         }
 
                          {mode !== "viewing" &&
@@ -305,7 +357,7 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
                                 <div className="flex gap-4 overflow-x-auto py-8 px-4">
 
                                     {data.images.map((file, index) => (
-                                        <RouteImg key={index} index={index} file={file} onDelete={handleDeleteImage}/>
+                                        <RouteImg key={index} index={index} file={file} mode={mode} onDelete={mode !=="viewing" ? handleDeleteImage: () =>{}}/>
                                     ))}
 
                                 </div>
@@ -328,7 +380,7 @@ export default function EditorRoute({mode = "viewing", routeID = ""}){
                             </div>
                         }
 
-                        {mode === "update" &&
+                        {mode === "edit" &&
                             <div className="mt-8 flex gap-4">
 
                                 <button onClick={() => UpdateRoute(routeID)} className="flex-1 rounded-xl bg-zinc-800 hover:bg-zinc-700 dark:bg-zinc-700 dark:hover:bg-zinc-600 py-3 text-lg font-semibold text-white transition">

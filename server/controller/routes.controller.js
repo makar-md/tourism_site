@@ -69,3 +69,53 @@ export async function getPublicRoutes(req, res){
         res.status(500).json({message: e.message})
     }    
 }
+export async function getPrivateRoutes(req, res){
+    console.log(req)
+    try{
+        const routes = await prisma.Routes.findMany({
+            where: {
+                user: {id: req.user.userId}
+            },
+            select: {
+                id: true,
+                name: true,
+                description: true,
+                user: { select: { email: true } },
+                images: { select: { img: true }, take: 1}
+            }
+        });
+        const result = routes.map(route => ({
+            id: route.id,
+            name: route.name,
+            description: route.description,
+            email: route.user.email,
+            image: route.images[0]?.img ?? null
+        }));
+        res.status(200).json(result)
+    } catch(e){
+        console.log(e.message)
+        res.status(500).json({message: e.message})
+    }    
+}
+export async function getRouteById(req, res){
+    const {id} = req.params
+    try{
+        const data = await prisma.Routes.findFirst({
+            where:{
+                id: Number(id),
+                status: {name: "public"}
+            },
+            select: {
+                name: true,
+                description: true,
+                isPublic: true,
+                points: {select: {id:true, lng:true, lat:true}},
+                images: { select: { img: true }}
+            }
+        })
+        res.status(200).json(data)
+    } catch (e) {
+        console.log(e.message)
+        res.status(500).json({message: e.message})
+    }
+}

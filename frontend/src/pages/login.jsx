@@ -4,6 +4,7 @@ import { validationLoginUser } from '../schemas/validate.schema'
 import InputCustom from '../components/inputCustom'
 import Body from '../components/body'
 import Header from '../components/header'
+import { api } from '../api/api'
 import '../index.css'
 
 
@@ -29,7 +30,7 @@ function Login() {
     }
     setError({})
     try{
-      const res = await api('http://localhost:4200/login/user', {
+      const res = await api('/login/user', {
         method: "POST",
         headers: {"Content-Type": "application/json",},
         body: JSON.stringify(validation.data),

@@ -92,6 +92,8 @@ async function main(){
 
     app.post("/route/create", auth,  upload.array("images", 10), routes.CreateRoute)
     app.get("/routes/public", routes.getPublicRoutes)
+    app.get("/routes/private", auth, routes.getPrivateRoutes)
+    app.get("/routes/public/:id", auth, routes.getRouteById)
 
     app.listen(process.env.PORT || 4200, ()=>{
         console.log(`🗲 server start on ${process.env.PORT || 4200} port 🗲`)

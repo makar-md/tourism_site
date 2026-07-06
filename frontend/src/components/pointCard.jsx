@@ -1,4 +1,6 @@
 export default function PointCard({ point, onDelete, mode, index }) {
+    const lng = point.coords ? point.coords[0] : point.lng;
+    const lat = point.coords ? point.coords[1] : point.lat;
     return (
         <div className="group rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-700/15
          shadow-xl shadow-zinc-800/5 dark:shadow-zinc-800/15 hover:shadow-xl hover:shadow-teal-500/10 transition-all duration-300 overflow-hidden">
@@ -53,7 +55,7 @@ export default function PointCard({ point, onDelete, mode, index }) {
                             Longitude
                         </p>
                         <p className="font-mono text-sm text-zinc-900 dark:text-zinc-100">
-                            {point.coords[0].toFixed(6)}
+                            {lng.toFixed(6)}
                         </p>
                     </div>
 
@@ -63,7 +65,7 @@ export default function PointCard({ point, onDelete, mode, index }) {
                         </p>
 
                         <p className="font-mono text-sm text-zinc-900 dark:text-zinc-100">
-                            {point.coords[1].toFixed(6)}
+                            {lat.toFixed(6)}
                         </p>
                     </div>
 

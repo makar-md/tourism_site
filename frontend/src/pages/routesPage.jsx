@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom";
 import RouteCard from "../components/routeCard";
 import Body from "../components/body";
 import Header from "../components/header";
@@ -16,7 +17,12 @@ export default function RoutesPage({isPublic=true}){
     useEffect(()=>{
         async function loadRoutes(){
             try{
-                const res = await api("/routes/public", {});
+                let res;
+                if(isPublic){
+                    res = await api("/routes/public", {});
+                } else{
+                    res = await api("/routes/private", {});
+                }
                 if(!res.ok){
                     throw new Error ({message: "не удалось получить данные"})
                     return; 
@@ -29,14 +35,15 @@ export default function RoutesPage({isPublic=true}){
         }
         loadRoutes()
     }, [])
-    console.log(routes)
     return(
         <Body>
             <main className="w-11/12 lg:w-9/12 mx-auto bg-white dark:bg-zinc-900 min-h-screen flex flex-col relative pt-15 items-center">
                 <Header linksShow={true } isCheckAuthUser={true}/>
-                <div className="border border-red-500 w-full min-h-screen p-10">
+                <div className="w-full min-h-screen py-5 px-10 flex flex-row flex-wrap gap-10 justify-around">
                     {   routes?.map((route,index)=>(
-                            <RouteCard key={route.id} name={route.name} description={route.description} img={route.image} user={route.email}/>
+                            <Link to={`/routes/${route.id}`}>
+                                <RouteCard key={route.id} name={route.name} description={route.description} img={route.image} user={route.email}/>
+                            </Link>
                         ))
                     }
                 </div>  

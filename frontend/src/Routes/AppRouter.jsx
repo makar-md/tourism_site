@@ -16,6 +16,7 @@ export default function AppRouter(){
                 <Route path="/" element={<Index/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/routes/public" element={<RoutesPage isPublic={true}/>}/>
+                <Route path="/routes/:id" element={<EditorRoute mode="viewing" />} />
 
 
                 <Route path="/profile"
@@ -24,18 +25,21 @@ export default function AppRouter(){
                             <Profile />
                         </ProtectedRouter>
                     }/>
-                <Route path="/routes/create"
-                element={
+                <Route path="/routes/create" element={
                     <ProtectedRouter>
                         <EditorRoute mode="create"/>
                     </ProtectedRouter>
                 }/>
-                <Route path="/routes/private"
-                element={
+                <Route path="/routes/private" element={
                     <ProtectedRouter>
                         <RoutesPage isPublic={false}/>
                     </ProtectedRouter>
                 }/>
+                <Route path="/routes/:id/edit" element={
+                    <ProtectedRouter>
+                        <EditorRoute mode="edit" />
+                    </ProtectedRouter>
+                } />
             </Routes>
         </BrowserRouter>
     )
