@@ -181,8 +181,6 @@ export async function UpdateRoute(req, res) {
                 message: "Имя маршрута уже занято"
             });
         }
-
-        console.log(route)
         const oldImages = route.images;
 
         const updateData = {
@@ -239,5 +237,35 @@ export async function UpdateRoute(req, res) {
         return res.status(500).json({
             message: e.message
         });
+    }
+}
+
+export async function DeleteRoute(req, res){
+    const { id } = req.params;
+     console.log("delete")
+    try{
+        const route = await prisma.Routes.findFirst({
+            where: {
+                id: Number(id),
+            },
+            include: {
+                images: true,
+            },
+        });
+        console.log(route)
+        if(!route){
+           return res.status(404).json({ message: "Маршрут не найден" }); 
+        }
+        const oldImg = route.images;
+        const result = await prisma.Routes.delete({
+            where: { id: Number(id) }   
+        })
+        await deleteFiles(oldImg);
+        res.status(200).json({message: "delete route"})
+    } catch (e){
+        console.log(e);
+        return res.status(500).json({
+            message: e.message
+        });        
     }
 }

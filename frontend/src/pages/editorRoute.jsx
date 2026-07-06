@@ -13,6 +13,7 @@ export default function EditorRoute({mode = "viewing"}){
     const {id} = useParams();
     const API_KEY = "3ce309bc-953b-4b11-8a7f-5b6660b2aad5"
     const navigate = useNavigate();
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [address, setAddress] = useState("");
     const [errors, setErrors] = useState({});
     const [dragActive, setDragActive] = useState(false);
@@ -146,7 +147,6 @@ export default function EditorRoute({mode = "viewing"}){
 
     async function UpdateRoute(Rid){
         try{
-            console.log(data)
             const formData = new FormData();
             data.images.forEach(file => {
                 formData.append("images", file);
@@ -158,6 +158,22 @@ export default function EditorRoute({mode = "viewing"}){
             const res = await api(`/route/update/${Rid}`, {
                 method: "PATCH",
                 body: formData
+            });
+            if(!res.ok){
+                const messge = await res.json();
+                console.log("res " + messge.message)
+                alert(messge.message)
+                return;
+            }
+            navigate(-1) 
+        }catch(e){
+            alert(e.message)
+        }
+    }
+    async function deleteRoute(Rid){
+        try{
+            const res = await api(`/route/delete/${Rid}`, {
+                method: "DELETE",
             });
             if(!res.ok){
                 const messge = await res.json();
@@ -394,13 +410,45 @@ export default function EditorRoute({mode = "viewing"}){
                                         Save changes
                                     </button>
 
-                                    <button className="py-2 md:py-3 w-full rounded-xl border border-red-400 px-6 text-red-500 font-semibold transition hover:bg-red-500 hover:text-white">
+                                    <button onClick={() => setShowDeleteModal(true)} className="py-2 md:py-3 w-full rounded-xl border border-red-400 px-6 text-red-500
+                                    font-semibold transition hover:bg-red-500 hover:text-white">
                                         Delete
                                     </button>
                                 </div>
                             </div>
                         }
                     </div>
+
+                    {showDeleteModal && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md">
+                            <div className="relative w-[92%] max-w-lg rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-2xl overflow-hidden">
+                                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-red-500 via-red-400 to-red-500"></div>
+                                <div className="flex flex-col items-center px-8 py-10">
+                                    <div className="flex items-center justify-center w-22 h-22 rounded-full bg-red-500/10 border border-red-500/30">
+                                        <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7L18.133 19.142A2 2 0 0116.138 21H7.862A2 2 0 015.867 19.142L5 7m3 0V5a2 2 0 012-2h4a2 2 0 012 2v2m-9 0h10"/>
+                                        </svg>
+                                    </div>
+                                    <h2 className="mt-6 text-3xl font-bold text-zinc-900 dark:text-zinc-100">
+                                        Delete route?
+                                    </h2>
+                                    <p className="mt-4 max-w-sm text-center text-zinc-600 dark:text-zinc-400 leading-7">
+                                        This action cannot be undone. All route points, images and information will be permanently deleted.
+                                    </p>
+                                    <div className="mt-10 flex w-full gap-4">
+                                        <button onClick={() => setShowDeleteModal(false)}
+                                            className="flex-1 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 py-3 text-lg font-semibold text-zinc-700 dark:text-zinc-300 transition hover:border-teal-500 hover:text-teal-500">
+                                            Cancel
+                                        </button>
+                                        <button onClick={() => deleteRoute(id)}
+                                            className="flex-1 rounded-xl bg-red-600 py-3 text-lg font-semibold text-white transition hover:bg-red-500 active:scale-[0.98]">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
             </main>
         </Body>
     );

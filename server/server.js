@@ -98,6 +98,7 @@ async function main(){
     app.get("/routes/user/:id",auth, routes.getUserRouteById)
 
     app.patch("/route/update/:id", auth, upload.array("images", 10), routes.UpdateRoute)
+    app.delete("/route/delete/:id", auth, routes.DeleteRoute)
 
     app.listen(process.env.PORT || 4200, ()=>{
         console.log(`🗲 server start on ${process.env.PORT || 4200} port 🗲`)
