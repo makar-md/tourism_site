@@ -61,7 +61,7 @@ export default function Header({linksShow}){
                         </div>
                         <div className="text-zinc-900 dark:text-zinc-50 hover:text-teal-500 font-medium text-[14px] text-center
                         cursor-pointer py-2.5 flex justify-center items-center">
-                            { !isAuth ? <Link to="/login">log in</Link> : <button onClick={(e) => logOut()}>Log out</button>}
+                            { !isAuth ? <Link to="/login">log in</Link> : <button onClick={(e) => logOut()}>log out</button>}
                         </div>
                     </div>
                     <div className="pointer-events-auto md:hidden">
@@ -133,7 +133,7 @@ export default function Header({linksShow}){
                                 { !isAuth ?
                                     <Link className="flex py-2 hover:text-teal-500 duration-300" to="/login">log in</Link>
                                     :
-                                    <button onClick={(e) => logOut()}>Log out</button>
+                                    <button onClick={(e) => logOut()}>log out</button>
                                 }
                             </li>
                         </ul>

@@ -5,7 +5,6 @@ export const AuthContext = createContext()
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState({
-        id:"",
         email: "",
         surName: "",
         firstName: "",
@@ -35,7 +34,6 @@ export function AuthProvider({ children }) {
     }, []);
 
     const logOutContext = async() => {
-        console.log("logOutContext")
         const res = await api("/logout", {
             method: "POST",
         });
@@ -44,7 +42,8 @@ export function AuthProvider({ children }) {
             return;
         }
         setIsAuth(false);
-        setUser({email: "",
+        setUser({
+            email: "",
             surName: "",
             firstName: "",
             lastName: "",

@@ -1,6 +1,6 @@
 import prisma from "../prisma/prisma.js"
 import jwt from 'jsonwebtoken'
-import { deleteFiles } from "../utils/deleteFile.js"
+import { deleteFile } from "../utils/deleteFile.js"
 
 export async function UploadAvatar(req,res){
     try{
@@ -22,13 +22,13 @@ export async function DeleteAvatar(req,res){
             where: {id: req.user.userId},
             select: {avatar: true}
         })
-        deleteFiles(oldImg)
+        const t = await deleteFile(oldImg.avatar)
         await prisma.User.update({
             where: {id: req.user.userId},
-            data: {avatar: ''}
+            data: {avatar: null}
         })
         res.status(200).json({
-            avatar: ""
+            avatar: null
         })
     } catch (e){ 
         res.status(500).json({message: e.message})

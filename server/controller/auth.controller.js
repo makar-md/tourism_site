@@ -129,7 +129,6 @@ export async function Profile (req, res){
         const userData = await prisma.User.findUnique({
             where: {id: userDecoded.userId}
         });
-        console.log(userData)
         res.status(200).json(userData);
     } catch (e){
         return res.status(500).json({message: e.message})

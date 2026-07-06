@@ -1,45 +1,30 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import {validationUpdateUser} from "../schemas/validate.schema"
+import { useAuth } from '../Contexts/AuthContext'
+import {api} from "../api/api"
+
 import InputCustom from '../components/inputCustom'
 import Body from '../components/body'
 import Header from '../components/header'
-import {validationUpdateUser} from "../schemas/validate.schema"
-import {api} from "../api/api"
 import '../index.css'
 
 export default function Profile(){
     const navigate = useNavigate()
     const [errors, setErrors] = useState({})
-    const [userData, setUserData] = useState({
-        email: "",
-        surName: "",
-        firstName: "",
-        lastName: "",
-        password: "",
-        avatar: null
-    });
+    const {user, setUser} = useAuth()
+
+
     const handleChange = (e) =>{
         const{ name, value } = e.target;
-        setUserData((prev) =>({
+        setUser((prev) =>({
             ...prev,
             [name]: value
         }));
     }
-    useEffect(()=>{
-        async function getData(){
-            try{
-                let res = await api("/profile", {})
-                const resData = await res.json()
-                setUserData({...resData, password:""})
-            } catch (e){
-                alert(e.message);
-            }
-        }
-        getData();
-    }, [])
 
     async function handleUpdateUser(){
-        const valid = validationUpdateUser.safeParse(userData);
+        const valid = validationUpdateUser.safeParse(user);
         if(!valid.success){
             setErrors(valid.error.flatten().fieldErrors);
             return;
@@ -60,8 +45,7 @@ export default function Profile(){
                 return alert(updatedUserData.message)
             }
             alert(updatedUserData.message)
-            console.log(updatedUserData)
-            setUserData({
+            setUser({
                 ...updatedUserData.user,
                 password: ""
             })
@@ -69,6 +53,7 @@ export default function Profile(){
             alert(e.message)
         }
     }
+
     async function uploadAvatar(file) {
         if (!file) return;
         const formData = new FormData();
@@ -83,7 +68,7 @@ export default function Profile(){
                 alert(resData.message)
                 return;
             }
-            setUserData(prev => ({
+            setUser(prev => ({
                 ...prev,
                 avatar: resData.avatar
             }));
@@ -91,6 +76,7 @@ export default function Profile(){
             alert(e.message);
         }
     }
+
     async function deleteAvatar(){
         try{
             const res = await api("/delete/avatar",{
@@ -101,7 +87,7 @@ export default function Profile(){
                 alert(resData)
                 return;
             }
-            setUserData(prev => ({
+            setUser(prev => ({
                 ...prev,
                 avatar: resData.avatar
             }))
@@ -125,8 +111,8 @@ export default function Profile(){
                             group-hover:bg-teal-50/30 dark:group-hover:bg-teal-900/10 rounded-2xl">
                             </div>
                             
-                            <img crossOrigin="anonymous" src={userData.avatar ? `http://localhost:4200/uploads/${userData.avatar}` : ``}
-                            className={`absolute inset-0 rounded-2xl transition-all duration-500 ${!userData.avatar ? "scale-150":""}
+                            <img crossOrigin="anonymous" src={user.avatar ? `http://localhost:4200/uploads/${user.avatar}` : ``}
+                            className={`absolute inset-0 rounded-2xl transition-all duration-500 ${!user.avatar ? "scale-150":""}
                             group-hover:scale-110 group-hover:brightness-110 object-cover h-full w-full object-center`}/>
                             
                             <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 
@@ -161,7 +147,7 @@ export default function Profile(){
     
                 <div className="w-full space-y-4">
                     <div className="flex flex-col gap-2">
-                        <InputCustom type="email" name="email" label="Email" value={userData.email} onChange={handleChange} 
+                        <InputCustom type="email" name="email" label="Email" value={user.email} onChange={handleChange} 
                             placeholder="test@mail.ru" error={errors.email?.[0]}/>
                     </div>
                 </div>
@@ -170,17 +156,17 @@ export default function Profile(){
                     <div className="border-t border-zinc-200 dark:border-zinc-700 pt-2">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="flex flex-col gap-2">
-                                <InputCustom type="text" name="surName" label="surName" value={userData.surName} onChange={handleChange}
+                                <InputCustom type="text" name="surName" label="surName" value={user.surName} onChange={handleChange}
                                 placeholder="Ivanov" error={errors.surName?.[0]}/>
                             </div>
         
                             <div className="flex flex-col gap-2">
-                                <InputCustom type="text" name="firstName" label="firstName" value={userData.firstName} onChange={handleChange}
+                                <InputCustom type="text" name="firstName" label="firstName" value={user.firstName} onChange={handleChange}
                                 placeholder="Ivan" error={errors.firstName?.[0]}/>
                             </div>
                         </div>
                         <div className="mt-4 flex flex-col gap-2">
-                            <InputCustom type="text" name="lastName" label="lastName" value={userData.lastName} onChange={handleChange}
+                            <InputCustom type="text" name="lastName" label="lastName" value={user.lastName} onChange={handleChange}
                             placeholder="Ivanovich" error={errors.lastName?.[0]}/>
                         </div>
                     </div>
@@ -190,7 +176,7 @@ export default function Profile(){
                     <div className="border-t border-zinc-200 dark:border-zinc-700 pt-2">
                         <div className="grid grid-cols-1 gap-4">
                             <div className="flex flex-col gap-2">
-                                <InputCustom type="password" name="password" label="New password" value={userData.password} onChange={handleChange}
+                                <InputCustom type="password" name="password" label="New password" value={user.password} onChange={handleChange}
                                 placeholder="new password" error={errors.password}/>
                                 <p className='text-sm text-zinc-600 dark:text-zinc-400  pl-2'>Если хотите оставить старый пароль то оставте поле путсым</p>
                             </div>
