@@ -1,11 +1,9 @@
 import FeatureCard from "./FeatureCard";
 
-import createRoute from "../assets/create_route.png";
-import publicRoute from "../assets/Public_route.png";
-import exportRoute from "../assets/export_routes.png";
-import editRoute from "../assets/editing_routes.png";
-import placeNear from "../assets/place_near.png";
-import comments from "../assets/Comments.png";
+import createRoute from "../assets/routes.png";
+import publicRoute from "../assets/public.png";
+import editRoute from "../assets/edit.png";
+import placeNear from "../assets/find.png";
 
 export default function Features() {
     const features = [
@@ -24,31 +22,17 @@ export default function Features() {
             reverse: true,
         },
         {
-            title: "Export files",
-            description:
-                "Download your routes in GPX, KML and KMZ formats. Perfect for GPS navigators and other mapping software.",
-            image: exportRoute,
-            reverse: false,
-        },
-        {
             title: "Edit anytime",
             description:
                 "Need to improve your route? No problem. Every change is saved, and your editing history remains available.",
             image: editRoute,
-            reverse: true,
+            reverse: false,
         },
         {
             title: "Find nearby places",
             description:
                 "Search for interesting locations near your route. Cafes, hotels, viewpoints and many other places are just a few clicks away.",
             image: placeNear,
-            reverse: false,
-        },
-        {
-            title: "Leave comments",
-            description:
-                "Share your experience, rate routes and help other travelers choose the best destinations.",
-            image: comments,
             reverse: true,
         },
     ];

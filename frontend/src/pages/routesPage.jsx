@@ -37,7 +37,6 @@ export default function RoutesPage({mode="public"}){
         }
         loadRoutes()
     }, [])
-    console.log(mode)
     return(
         <Body>
             <main className="w-11/12 lg:w-9/12 mx-auto bg-white dark:bg-zinc-900 min-h-screen flex flex-col relative pt-15 items-center">

@@ -6,6 +6,7 @@ import Body from '../components/body'
 import Header from '../components/header'
 import { api } from '../api/api'
 import '../index.css'
+import { useAuth } from '../Contexts/AuthContext'
 
 
 function Login() {
@@ -15,6 +16,8 @@ function Login() {
     email: "",
     password: "",
   })
+  const {setIsAuth} = useAuth()
+
   const handleChange = (e) =>{
     const{ name, value } = e.target;
     setData((prev) =>({
@@ -39,6 +42,7 @@ function Login() {
       if (!res.ok) {
         throw new Error(result.message)
       }
+      setIsAuth(true)
       navigate('/profile')
     } catch (e){
       alert(e.message)

@@ -240,7 +240,6 @@ export default function EditorRoute({mode = "viewing"}){
             setDragActive(false);
         }
     }
-    console.log("edit " + mode)
     return (
         <Body>
 
@@ -382,7 +381,13 @@ export default function EditorRoute({mode = "viewing"}){
                                         </p>
                                     </div>
 
-                                    <input id="images" type="file" multiple accept="image/*" className="hidden" onChange={(e) => handleImages(e.target.files)} />
+                                    <input id="images" type="file" multiple accept="image/*" className="hidden"
+                                        onChange={(e) => {
+                                            if (!e.target.files?.length) return;
+                                            handleImages(e.target.files);
+                                            e.target.value = "";
+                                        }}
+                                    />
                                 </label>
                             </div>
                         }
@@ -409,7 +414,7 @@ export default function EditorRoute({mode = "viewing"}){
                                       hover:border-teal-500 hover:text-teal-500">
                                         Cancel
                                     </button>
-                                    <button onClick={() => createNewRoute} className="flex-1 rounded-xl bg-zinc-800 hover:bg-zinc-700 dark:bg-zinc-800
+                                    <button onClick={() => createNewRoute()} className="flex-1 rounded-xl bg-zinc-800 hover:bg-zinc-700 dark:bg-zinc-800
                                      dark:hover:bg-teal-600 py-3 text-lg font-semibold text-white transition">
                                         Create route
                                     </button>

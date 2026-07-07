@@ -32,7 +32,7 @@ export function AuthProvider({ children }) {
             }
         }
         loadUser();
-    }, []);
+    }, [isAuth]);
 
     const logOutContext = async() => {
         const res = await api("/logout", {
