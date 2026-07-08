@@ -13,7 +13,7 @@ import RouteImg from "../components/routeImg";
 
 export default function EditorRoute({mode = "viewing"}){
     const {id} = useParams();
-    const API_KEY = "3ce309bc-953b-4b11-8a7f-5b6660b2aad5"
+    const API_KEY = import.meta.env.VITE_YANDEX_API_KEY;
     const navigate = useNavigate();
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [address, setAddress] = useState("");
