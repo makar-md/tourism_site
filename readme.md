@@ -76,22 +76,188 @@
 # Структура проекта
 
 ```
-tourism_site
-│
-├── client
-│   ├── src
-│   ├── public
-│   └── package.json
-│
-├── server
-│   ├── controller
-│   ├── middleware
-│   ├── prisma
-│   ├── routes
-│   ├── uploadFiles
-│   └── package.json
-│
-└── README.md
+|   readme.md
+|
++---frontend
+|   |   .env
+|   |   .env.example
+|   |   .gitignore
+|   |   eslint.config.js
+|   |   index.html
+|   |   package-lock.json
+|   |   package.json
+|   |   README.md
+|   |   vite.config.js
+|   |
+|   +---public
+|   |       vite.svg
+|   |
+|   \---src
+|       |   App.jsx
+|       |   index.css
+|       |   main.jsx
+|       |
+|       +---api
+|       |       api.js
+|       |
+|       +---assets
+|       |       1.jpg
+|       |       2.jpg
+|       |       3.png
+|       |       4.jpg
+|       |       5.png
+|       |       6.jpg
+|       |       edit.png
+|       |       find.png
+|       |       forest.jpg
+|       |       public.png
+|       |       react.svg
+|       |       routes.png
+|       |
+|       +---components
+|       |       body.jsx
+|       |       FeatureCard.jsx
+|       |       Features.jsx
+|       |       Gallery.jsx
+|       |       header.jsx
+|       |       Hero.jsx
+|       |       inputCustom.jsx
+|       |       map.jsx
+|       |       pointCard.jsx
+|       |       pointer.jsx
+|       |       roleSelect.jsx
+|       |       routeCard.jsx
+|       |       routeImg.jsx
+|       |       userCard.jsx
+|       |
+|       +---Contexts
+|       |       AuthContext.jsx
+|       |       ThemContext.jsx
+|       |
+|       +---pages
+|       |       changeRoles.jsx
+|       |       editorRoute.jsx
+|       |       index.jsx
+|       |       login.jsx
+|       |       profile.jsx
+|       |       register.jsx
+|       |       routesPage.jsx
+|       |
+|       +---Routes
+|       |       AppRouter.jsx
+|       |       ProtectedRouter.jsx
+|       |
+|       \---schemas
+|               validate.schema.js
+|
+\---server
+    |   .env.example
+    |   .gitignore
+    |   dataValidate.js
+    |   package-lock.json
+    |   package.json
+    |   prisma.config.ts
+    |   server.js
+    |   swagger-output.json
+    |   swagger.js
+    |
+    +---controller
+    |       admin.controller.js
+    |       auth.controller.js
+    |       avatar.controller.js
+    |       routes.controller.js
+    |
+    +---middlewear
+    |       auth.js
+    |       uploadFiles.js
+    |       validate.js
+    |
+    +---prisma
+    |   |   prisma.js
+    |   |   schema.prisma
+    |   |   seed.js
+    |   |
+    |   +---generated
+    |   |   |   browser.ts
+    |   |   |   client.ts
+    |   |   |   commonInputTypes.ts
+    |   |   |   enums.ts
+    |   |   |   models.ts
+    |   |   |
+    |   |   +---internal
+    |   |   |       class.ts
+    |   |   |       prismaNamespace.ts
+    |   |   |       prismaNamespaceBrowser.ts
+    |   |   |
+    |   |   \---models
+    |   |           Point.ts
+    |   |           Role.ts
+    |   |           Routes.ts
+    |   |           RoutesImg.ts
+    |   |           RoutStatus.ts
+    |   |           User.ts
+    |   |
+    |   \---migrations
+    |       |   migration_lock.toml
+    |       |
+    |       +---20260618103451_init_db
+    |       |       migration.sql
+    |       |
+    |       +---20260618103625_add_tables
+    |       |       migration.sql
+    |       |
+    |       +---20260618111626_add_new_columns_to_test
+    |       |       migration.sql
+    |       |
+    |       +---20260618122216_remove_str_updated_at
+    |       |       migration.sql
+    |       |
+    |       +---20260623080807_add_user_and_roles
+    |       |       migration.sql
+    |       |
+    |       +---20260623093704_fix_bug_for_references_to_role
+    |       |       migration.sql
+    |       |
+    |       +---20260627195921_y
+    |       |       migration.sql
+    |       |
+    |       +---20260701182110_add_routes
+    |       |       migration.sql
+    |       |
+    |       +---20260701182420_add_route_to_user
+    |       |       migration.sql
+    |       |
+    |       +---20260701182919_fix_bug
+    |       |       migration.sql
+    |       |
+    |       +---20260701184118_add_desc
+    |       |       migration.sql
+    |       |
+    |       +---20260701185631_add_float_to_points_coords
+    |       |       migration.sql
+    |       |
+    |       +---20260702065336_add_routes_img_and_public
+    |       |       migration.sql
+    |       |
+    |       \---20260706163239_add_cascade
+    |               migration.sql
+    |
+    +---uploadFiles
+    |       1783318810045-889212.jpg
+    |       1783348871485-822934.jpg
+    |       1783348871488-64440.jpg
+    |       1783348871494-253668.jpg
+    |       1783348871501-153094.jpg
+    |       1783415654924-912413.jpg
+    |       1783415654950-627663.jpg
+    |       1783415654964-127298.jpg
+    |       1783415654977-443985.jpg
+    |       1783415654980-397843.jpg
+    |       1783415751832-834376.jpg
+    |       i.webp
+    |
+    \---utils
+            deleteFile.js
 ```
 
 ---
