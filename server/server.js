@@ -11,6 +11,7 @@ import * as valid from './dataValidate.js';
 import * as authUser from './controller/auth.controller.js'
 import * as avatar from './controller/avatar.controller.js'
 import * as routes from './controller/routes.controller.js'
+import * as admin from './controller/admin.controller.js'
 //====================//
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
@@ -103,6 +104,10 @@ async function main(){
     app.delete("/route/delete/:id", auth, routes.DeleteRoute)
 
     app.get("/moderate/allRoutes", auth, routes.getModerateRoutes)
+
+    app.get("/admin/users", auth, admin.getAllUsers)
+    app.get("/admin/roles", auth, admin.getAllRoles)
+    app.patch("/admin/users/:id/role/:roleId", auth, admin.changeRole);
 
     app.listen(process.env.PORT || 4200, ()=>{
         console.log(`🗲 server start on ${process.env.PORT || 4200} port 🗲`)

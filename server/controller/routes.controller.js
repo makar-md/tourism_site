@@ -275,7 +275,6 @@ export async function getUserRouteById(req, res){
 export async function MakeRoutePublic(req, res){
     const { id } = req.params;
     try{
-
         const result = await prisma.Routes.update({
             where: { id: Number(id) },
             data:{

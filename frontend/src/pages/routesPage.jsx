@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import RouteCard from "../components/routeCard";
 import Body from "../components/body";
 import Header from "../components/header";
 import { api } from "../api/api";
+import { useAuth } from "../Contexts/AuthContext";
 
 export default function RoutesPage({mode="public"}){
+    const {user} = useAuth();
+    const navigate = useNavigate()
     const [routes, setRoutes] = useState([{
         id: "",
         name: "",
@@ -23,6 +26,9 @@ export default function RoutesPage({mode="public"}){
                 } else if(mode === "private") {
                     res = await api("/routes/user", {});
                 } else if(mode === "moderate"){
+                    if(user.roleId !== 3){
+                        navigate(-1) //заменить на стр ошибки
+                    }
                     res = await api("/moderate/allRoutes",{})
                 }
                 if(!res.ok){

@@ -7,6 +7,7 @@ import Profile from "../pages/profile"
 import ProtectedRouter from "./ProtectedRouter"
 import EditorRoute from "../pages/editorRoute"
 import RoutesPage from "../pages/routesPage";
+import ChangeRoles from "../pages/changeRoles";
 
 export default function AppRouter(){
     return(
@@ -48,6 +49,11 @@ export default function AppRouter(){
                 <Route path="/moderate/route/:id" element={
                     <ProtectedRouter>
                         <EditorRoute mode="moderate"/>
+                    </ProtectedRouter>
+                }/>
+                <Route path="/admin/changeRoles" element={
+                    <ProtectedRouter>
+                        <ChangeRoles/>
                     </ProtectedRouter>
                 }/>
             </Routes>

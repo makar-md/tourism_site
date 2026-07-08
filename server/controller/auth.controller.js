@@ -21,7 +21,7 @@ export async function RegisterUser (req,res){
                 firstName,
                 surName,
                 lastName,
-                roleId: 1
+                roleId: 2
             }
         });
         res.status(200).json({
