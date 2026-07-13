@@ -8,6 +8,7 @@ import PointCard from "../components/pointCard";
 import Body from "../components/body";
 import Header from "../components/header";
 import RouteImg from "../components/routeImg";
+import CustomSelect from "../components/customSelect";
 
 // /moderate/route/makePublic/:id
 
@@ -19,6 +20,8 @@ export default function EditorRoute({mode = "viewing"}){
     const [address, setAddress] = useState("");
     const [errors, setErrors] = useState({});
     const [dragActive, setDragActive] = useState(false);
+    const [versions, setVersions] = useState([]);
+    const [currentVersion, setCurrentVersion] = useState(null)
     const [data, setData] = useState({
         id: id,
         name:"",
@@ -61,7 +64,27 @@ export default function EditorRoute({mode = "viewing"}){
         }
     }, []);
 
-    async function getAdress(coords){
+    useEffect(() => {
+        async function loadVersions(id){
+            try{
+                const res = await api(`/routes/history/countVersion/${id}`,{});
+                const data = await res.json()
+                if(!res.ok){
+                    throw new Error (data.message)
+                }
+                setVersions(
+                    Array.from({ length: data.version }, (_, i) => i + 1)
+                );
+            } catch (e){
+                alert(e.message)
+            }
+        }
+        if(mode !== "create" && mode !=="moderate"){
+            loadVersions(id)
+        }
+    }, [data, id, mode]);
+
+    async function getAdвress(coords){
         const [lon, lat] = coords;
         try{
             const res = await fetch( `https://geocode-maps.yandex.ru/v1/?apikey=${API_KEY}&geocode=${lon},${lat}&format=json`)
@@ -88,7 +111,7 @@ export default function EditorRoute({mode = "viewing"}){
         }
     }
     async function handleMapClick(coords) {
-        const address = await getAdress(coords);
+        const address = await getAdвress(coords);
         const point = {
             id: crypto.randomUUID(),
             coords,
@@ -103,7 +126,7 @@ export default function EditorRoute({mode = "viewing"}){
    async function handleSearchAddress(query) {
         const coords = await searchAddress(query);
         if (!coords) return;
-        const address = await getAdress(coords);
+        const address = await getAdвress(coords);
         const point = {
             id: crypto.randomUUID(),
             coords,
@@ -116,7 +139,7 @@ export default function EditorRoute({mode = "viewing"}){
     }
 
 
-    async function createNewRoute(){
+    async function SaveRoute(url, method){
         const valid = validateRouteData.safeParse(data);
         if(!valid.success){
             setErrors(valid.error.flatten().fieldErrors);
@@ -131,33 +154,8 @@ export default function EditorRoute({mode = "viewing"}){
                 "data",
                 JSON.stringify(valid.data)
             );
-            const res = await api("/route/create", {
-                method: "POST",
-                body: formData
-            });
-            const messge = await res.json();
-            alert(messge.message)
-            if(!res.ok){
-                return;
-            }
-            navigate(-1) 
-        }catch(e){
-            alert(e.message)
-        }
-    }
-
-    async function UpdateRoute(Rid){
-        try{
-            const formData = new FormData();
-            data.images.forEach(file => {
-                formData.append("images", file);
-            })
-            formData.append(
-                "data",
-                JSON.stringify(data)
-            );
-            const res = await api(`/route/update/${Rid}`, {
-                method: "PATCH",
+            const res = await api(url, {
+                method: method,
                 body: formData
             });
             const messge = await res.json();
@@ -240,6 +238,29 @@ export default function EditorRoute({mode = "viewing"}){
             setDragActive(false);
         }
     }
+
+    async function onChangeVersion(version){
+        setCurrentVersion(version)
+        try{
+            const res = await api (`/routes/history/route/${id}/version/${version}`, {})
+            if (!res.ok){
+                throw new Error('Ошибка загрузки');
+            } 
+            
+            const resData = await res.json();
+            setData({
+                ...resData,
+                points: resData.points.map(point => ({
+                    id: point.id,
+                    coords: [point.lng, point.lat],
+                    address: point.address ?? ""
+                }))
+            });
+        }catch(e){
+            alert (e.message)
+        }
+    }
+
     return (
         <Body>
 
@@ -253,6 +274,9 @@ export default function EditorRoute({mode = "viewing"}){
                                 <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 mb-4">
                                     Route settings
                                 </h2>
+                                {(mode === "edit") &&
+                                    <CustomSelect data={versions} currentValue={currentVersion || versions.length} onChange={onChangeVersion}/>
+                                }
                                 <div className="space-y-2">
                                     <InputCustom name="name" label="Name" value={data.name} error={errors.name?.[0]} onChange={(e)=>
                                             setData(prev=>({
@@ -414,7 +438,7 @@ export default function EditorRoute({mode = "viewing"}){
                                       hover:border-teal-500 hover:text-teal-500">
                                         Cancel
                                     </button>
-                                    <button onClick={() => createNewRoute()} className="flex-1 rounded-xl bg-zinc-800 hover:bg-zinc-700 dark:bg-zinc-800
+                                    <button onClick={() => saveRoute("/route/create", "POST")} className="flex-1 rounded-xl bg-zinc-800 hover:bg-zinc-700 dark:bg-zinc-800
                                      dark:hover:bg-teal-600 py-3 text-lg font-semibold text-white transition">
                                         Create route
                                     </button>
@@ -425,7 +449,7 @@ export default function EditorRoute({mode = "viewing"}){
                         {mode === "edit" &&
                             <div className="mt-8 flex gap-4 justify-center">
                                 <div className="w-full md:w-1/2 flex flex-col md:flex-row justify-between gap-10">
-                                    <button onClick={() => UpdateRoute(id)} className="px-6 rounded-xl bg-zinc-800 hover:bg-zinc-700 dark:bg-zinc-800
+                                    <button onClick={() => saveRoute(`/route/update/${id}`, "PATCH")} className="px-6 rounded-xl bg-zinc-800 hover:bg-zinc-700 dark:bg-zinc-800
                                      dark:hover:bg-zinc-700 py-2 md:py-3 text-lg font-semibold text-white transition w-full">
                                         Save changes
                                     </button>

@@ -100,7 +100,7 @@ export async function UpdateRoute(req, res) {
                 try{
                     await deleteFiles(req.files);
                 } catch (e){
-                    throw new Error(e)
+                    throw e
                 }
             }
             return res.status(409).json({
@@ -139,14 +139,14 @@ export async function UpdateRoute(req, res) {
         });
 
 
-        const lastVersion = await prisma.historyRoutes.aggregate({
+        const lastVersion = await prisma.HistoryRoutes.aggregate({
             where: { routeId: Number(id)},
             _max: { version: true }
         });
 
         const version = (lastVersion._max.version ?? 0) + 1;
 
-        await prisma.historyRoutes.create({
+        await prisma.HistoryRoutes.create({
              data: {
                 routeId: Number(id),
                 version,
@@ -176,7 +176,7 @@ export async function UpdateRoute(req, res) {
             try{
                 await deleteFiles(req.files);
             } catch (e){
-                throw new Error(e)
+                throw e
             }
         }
         if (e.code === "P2002") {
@@ -204,11 +204,26 @@ export async function DeleteRoute(req, res){
         if(!route){
            return res.status(404).json({ message: "Маршрут не найден" }); 
         }
+
+        const oldRoutes = await prisma.HistoryRoutes.findMany({
+            where:{routeId: Number(id)},
+            include: {
+                images: true,
+            },
+        })
+
         const oldImg = route.images;
-        const result = await prisma.Routes.delete({
+        await prisma.Routes.delete({
             where: { id: Number(id) }   
         })
-        await deleteFiles(oldImg);
+        try{
+            await deleteFiles(oldImg);
+            for (const route of oldRoutes) {
+                await deleteFiles(route.images);
+            }
+        } catch (e){
+            throw e
+        }
         res.status(200).json({message: "delete route"})
     } catch (e){
         console.log(e);
@@ -280,7 +295,7 @@ export async function getUserRouteById(req, res){
 export async function MakeRoutePublic(req, res){
     const { id } = req.params;
     try{
-        const result = await prisma.Routes.update({
+        await prisma.Routes.update({
             where: { id: Number(id) },
             data:{ statusId: 3 }   
         })
@@ -317,4 +332,44 @@ export async function getModerateRoutes(req, res){
     }catch(e){
         res.status(500).json({message:e.message});
     }    
+}
+
+export async function getCountVersionRoute(req, res){
+    const {id} = req.params;
+    try{
+        const lastVersion = await prisma.HistoryRoutes.aggregate({
+            where: { routeId: Number(id)},
+            _max: { version: true }
+        });
+
+        const version = (lastVersion._max.version ?? 0);
+        return res.status(200).json({version})
+    }catch(e){
+        res.status(500).json({message:e.message});
+    } 
+}
+
+export async function getHistoryRoute(req, res){
+    const {id, version} = req.params;
+    try{
+        const data = await prisma.HistoryRoutes.findUnique({
+            where: {
+                routeId_version: {
+                    routeId: Number(id),
+                    version: Number(version)
+                }
+            },
+            select:{
+                name:true,
+                description:true,
+                isPublic:true,
+                statusId: true,
+                points:{ select:{ id:true, lng:true, lat:true } },
+                images:{select:{img:true}}
+            }
+        });
+        return res.status(200).json(data)
+    }catch(e){
+        res.status(500).json({message:e.message});
+    } 
 }

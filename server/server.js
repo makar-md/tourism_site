@@ -31,7 +31,8 @@ dotenv.config()
 //========== Express app ==========//
 const app = express()
 app.use(cors({
-        origin: 'http://localhost:4173',
+        // origin: 'http://localhost:4173',
+        origin: 'http://localhost:5173',
         credentials: true,
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     })
@@ -108,6 +109,9 @@ async function main(){
     app.get("/admin/users", auth, admin.getAllUsers)
     app.get("/admin/roles", auth, admin.getAllRoles)
     app.patch("/admin/users/:id/role/:roleId", auth, admin.changeRole);
+
+    app.get("/routes/history/countVersion/:id", auth, routes.getCountVersionRoute)
+    app.get("/routes/history/route/:id/version/:version", auth, routes.getHistoryRoute)
 
     app.listen(process.env.PORT || 4200, ()=>{
         console.log(`🗲 server start on ${process.env.PORT || 4200} port 🗲`)
