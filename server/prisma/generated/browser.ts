@@ -47,3 +47,18 @@ export type RoutesImg = Prisma.RoutesImgModel
  * 
  */
 export type RoutStatus = Prisma.RoutStatusModel
+/**
+ * Model HistoryRoutes
+ * 
+ */
+export type HistoryRoutes = Prisma.HistoryRoutesModel
+/**
+ * Model HistoryPoint
+ * 
+ */
+export type HistoryPoint = Prisma.HistoryPointModel
+/**
+ * Model HistoryRoutesImg
+ * 
+ */
+export type HistoryRoutesImg = Prisma.HistoryRoutesImgModel

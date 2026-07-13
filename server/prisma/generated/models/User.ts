@@ -258,6 +258,7 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   role?: Prisma.XOR<Prisma.RoleNullableScalarRelationFilter, Prisma.RoleWhereInput> | null
   route?: Prisma.RoutesListRelationFilter
+  historyyRoute?: Prisma.HistoryRoutesListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -273,6 +274,7 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   role?: Prisma.RoleOrderByWithRelationInput
   route?: Prisma.RoutesOrderByRelationAggregateInput
+  historyyRoute?: Prisma.HistoryRoutesOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -291,6 +293,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   role?: Prisma.XOR<Prisma.RoleNullableScalarRelationFilter, Prisma.RoleWhereInput> | null
   route?: Prisma.RoutesListRelationFilter
+  historyyRoute?: Prisma.HistoryRoutesListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -339,6 +342,7 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   role?: Prisma.RoleCreateNestedOneWithoutUsersInput
   route?: Prisma.RoutesCreateNestedManyWithoutUserInput
+  historyyRoute?: Prisma.HistoryRoutesCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -353,6 +357,7 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   route?: Prisma.RoutesUncheckedCreateNestedManyWithoutUserInput
+  historyyRoute?: Prisma.HistoryRoutesUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -367,6 +372,7 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
   route?: Prisma.RoutesUpdateManyWithoutUserNestedInput
+  historyyRoute?: Prisma.HistoryRoutesUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -381,6 +387,7 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   route?: Prisma.RoutesUncheckedUpdateManyWithoutUserNestedInput
+  historyyRoute?: Prisma.HistoryRoutesUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -559,6 +566,20 @@ export type UserUpdateOneRequiredWithoutRouteNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRouteInput, Prisma.UserUpdateWithoutRouteInput>, Prisma.UserUncheckedUpdateWithoutRouteInput>
 }
 
+export type UserCreateNestedOneWithoutHistoryyRouteInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutHistoryyRouteInput, Prisma.UserUncheckedCreateWithoutHistoryyRouteInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutHistoryyRouteInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutHistoryyRouteNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutHistoryyRouteInput, Prisma.UserUncheckedCreateWithoutHistoryyRouteInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutHistoryyRouteInput
+  upsert?: Prisma.UserUpsertWithoutHistoryyRouteInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutHistoryyRouteInput, Prisma.UserUpdateWithoutHistoryyRouteInput>, Prisma.UserUncheckedUpdateWithoutHistoryyRouteInput>
+}
+
 export type UserCreateWithoutRoleInput = {
   id?: string
   email: string
@@ -570,6 +591,7 @@ export type UserCreateWithoutRoleInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   route?: Prisma.RoutesCreateNestedManyWithoutUserInput
+  historyyRoute?: Prisma.HistoryRoutesCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRoleInput = {
@@ -583,6 +605,7 @@ export type UserUncheckedCreateWithoutRoleInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   route?: Prisma.RoutesUncheckedCreateNestedManyWithoutUserInput
+  historyyRoute?: Prisma.HistoryRoutesUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRoleInput = {
@@ -638,6 +661,7 @@ export type UserCreateWithoutRouteInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   role?: Prisma.RoleCreateNestedOneWithoutUsersInput
+  historyyRoute?: Prisma.HistoryRoutesCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRouteInput = {
@@ -651,6 +675,7 @@ export type UserUncheckedCreateWithoutRouteInput = {
   roleId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  historyyRoute?: Prisma.HistoryRoutesUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRouteInput = {
@@ -680,6 +705,7 @@ export type UserUpdateWithoutRouteInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
+  historyyRoute?: Prisma.HistoryRoutesUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRouteInput = {
@@ -693,6 +719,79 @@ export type UserUncheckedUpdateWithoutRouteInput = {
   roleId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  historyyRoute?: Prisma.HistoryRoutesUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutHistoryyRouteInput = {
+  id?: string
+  email: string
+  password: string
+  firstName: string
+  surName: string
+  lastName?: string | null
+  avatar?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: Prisma.RoleCreateNestedOneWithoutUsersInput
+  route?: Prisma.RoutesCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutHistoryyRouteInput = {
+  id?: string
+  email: string
+  password: string
+  firstName: string
+  surName: string
+  lastName?: string | null
+  avatar?: string | null
+  roleId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  route?: Prisma.RoutesUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutHistoryyRouteInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutHistoryyRouteInput, Prisma.UserUncheckedCreateWithoutHistoryyRouteInput>
+}
+
+export type UserUpsertWithoutHistoryyRouteInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutHistoryyRouteInput, Prisma.UserUncheckedUpdateWithoutHistoryyRouteInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutHistoryyRouteInput, Prisma.UserUncheckedCreateWithoutHistoryyRouteInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutHistoryyRouteInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutHistoryyRouteInput, Prisma.UserUncheckedUpdateWithoutHistoryyRouteInput>
+}
+
+export type UserUpdateWithoutHistoryyRouteInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  surName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
+  route?: Prisma.RoutesUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutHistoryyRouteInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  surName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  route?: Prisma.RoutesUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyRoleInput = {
@@ -718,6 +817,7 @@ export type UserUpdateWithoutRoleInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   route?: Prisma.RoutesUpdateManyWithoutUserNestedInput
+  historyyRoute?: Prisma.HistoryRoutesUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRoleInput = {
@@ -731,6 +831,7 @@ export type UserUncheckedUpdateWithoutRoleInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   route?: Prisma.RoutesUncheckedUpdateManyWithoutUserNestedInput
+  historyyRoute?: Prisma.HistoryRoutesUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -752,10 +853,12 @@ export type UserUncheckedUpdateManyWithoutRoleInput = {
 
 export type UserCountOutputType = {
   route: number
+  historyyRoute: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   route?: boolean | UserCountOutputTypeCountRouteArgs
+  historyyRoute?: boolean | UserCountOutputTypeCountHistoryyRouteArgs
 }
 
 /**
@@ -775,6 +878,13 @@ export type UserCountOutputTypeCountRouteArgs<ExtArgs extends runtime.Types.Exte
   where?: Prisma.RoutesWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountHistoryyRouteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HistoryRoutesWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -789,6 +899,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   role?: boolean | Prisma.User$roleArgs<ExtArgs>
   route?: boolean | Prisma.User$routeArgs<ExtArgs>
+  historyyRoute?: boolean | Prisma.User$historyyRouteArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -837,6 +948,7 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   role?: boolean | Prisma.User$roleArgs<ExtArgs>
   route?: boolean | Prisma.User$routeArgs<ExtArgs>
+  historyyRoute?: boolean | Prisma.User$historyyRouteArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -851,6 +963,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     role: Prisma.$RolePayload<ExtArgs> | null
     route: Prisma.$RoutesPayload<ExtArgs>[]
+    historyyRoute: Prisma.$HistoryRoutesPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1259,6 +1372,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   role<T extends Prisma.User$roleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$roleArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   route<T extends Prisma.User$routeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$routeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoutesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  historyyRoute<T extends Prisma.User$historyyRouteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$historyyRouteArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HistoryRoutesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1739,6 +1853,30 @@ export type User$routeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   take?: number
   skip?: number
   distinct?: Prisma.RoutesScalarFieldEnum | Prisma.RoutesScalarFieldEnum[]
+}
+
+/**
+ * User.historyyRoute
+ */
+export type User$historyyRouteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HistoryRoutes
+   */
+  select?: Prisma.HistoryRoutesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HistoryRoutes
+   */
+  omit?: Prisma.HistoryRoutesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HistoryRoutesInclude<ExtArgs> | null
+  where?: Prisma.HistoryRoutesWhereInput
+  orderBy?: Prisma.HistoryRoutesOrderByWithRelationInput | Prisma.HistoryRoutesOrderByWithRelationInput[]
+  cursor?: Prisma.HistoryRoutesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HistoryRoutesScalarFieldEnum | Prisma.HistoryRoutesScalarFieldEnum[]
 }
 
 /**

@@ -56,7 +56,10 @@ export const ModelName = {
   Routes: 'Routes',
   Point: 'Point',
   RoutesImg: 'RoutesImg',
-  RoutStatus: 'RoutStatus'
+  RoutStatus: 'RoutStatus',
+  HistoryRoutes: 'HistoryRoutes',
+  HistoryPoint: 'HistoryPoint',
+  HistoryRoutesImg: 'HistoryRoutesImg'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -136,6 +139,39 @@ export const RoutStatusScalarFieldEnum = {
 } as const
 
 export type RoutStatusScalarFieldEnum = (typeof RoutStatusScalarFieldEnum)[keyof typeof RoutStatusScalarFieldEnum]
+
+
+export const HistoryRoutesScalarFieldEnum = {
+  id: 'id',
+  routeId: 'routeId',
+  version: 'version',
+  name: 'name',
+  description: 'description',
+  isPublic: 'isPublic',
+  statusId: 'statusId',
+  userId: 'userId'
+} as const
+
+export type HistoryRoutesScalarFieldEnum = (typeof HistoryRoutesScalarFieldEnum)[keyof typeof HistoryRoutesScalarFieldEnum]
+
+
+export const HistoryPointScalarFieldEnum = {
+  id: 'id',
+  lng: 'lng',
+  lat: 'lat',
+  historyId: 'historyId'
+} as const
+
+export type HistoryPointScalarFieldEnum = (typeof HistoryPointScalarFieldEnum)[keyof typeof HistoryPointScalarFieldEnum]
+
+
+export const HistoryRoutesImgScalarFieldEnum = {
+  id: 'id',
+  img: 'img',
+  historyId: 'historyId'
+} as const
+
+export type HistoryRoutesImgScalarFieldEnum = (typeof HistoryRoutesImgScalarFieldEnum)[keyof typeof HistoryRoutesImgScalarFieldEnum]
 
 
 export const SortOrder = {

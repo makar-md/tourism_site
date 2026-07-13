@@ -8,21 +8,22 @@ generator client {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  firstName String
-  surName   String
-  lastName  String?
-  avatar    String?
+  id            String   @id @default(cuid())
+  email         String   @unique
+  password      String
+  firstName     String
+  surName       String
+  lastName      String?
+  avatar        String?
   
-  roleId    Int?     
-  role      Role?    @relation(fields: [roleId], references: [id])
+  roleId        Int?     
+  role          Role?    @relation(fields: [roleId], references: [id])
 
-  route    Routes[]
+  route         Routes[]
+  historyyRoute HistoryRoutes[]
   
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Role {
@@ -42,6 +43,7 @@ model Routes{
   images      RoutesImg[]
   userId      String
   user        User   @relation(fields: [userId], references: [id])
+  Versions    HistoryRoutes[]
 }
 
 model Point{
@@ -60,7 +62,48 @@ model RoutesImg{
 }
 
 model RoutStatus {
-  id    Int    @id @default(autoincrement())
-  name  String @unique  
-  routes Routes[] 
+  id            Int    @id @default(autoincrement())
+  name          String @unique  
+  routes        Routes[] 
+  historyyRoute HistoryRoutes[]
+}
+
+// история измениния маршрутов
+
+model HistoryRoutes {
+    id          Int      @id @default(autoincrement())
+
+    routeId     Int
+    route       Routes   @relation(fields: [routeId], references: [id], onDelete: Cascade)
+
+    version     Int
+
+    name        String
+    description String?
+    isPublic    Boolean
+
+    statusId    Int?
+    status      RoutStatus? @relation(fields: [statusId], references: [id])
+
+    userId      String
+    user        User @relation(fields: [userId], references: [id])
+
+    points      HistoryPoint[]
+    images      HistoryRoutesImg[]
+    @@unique([routeId, version])
+}
+
+model HistoryPoint {
+    id        Int @id @default(autoincrement())
+    lng Float
+    lat Float
+    historyId Int
+    history HistoryRoutes @relation(fields: [historyId], references: [id], onDelete: Cascade)
+}
+
+model HistoryRoutesImg {
+    id Int @id @default(autoincrement())
+    img String
+    historyId Int
+    history HistoryRoutes @relation(fields: [historyId], references: [id], onDelete: Cascade)
 }

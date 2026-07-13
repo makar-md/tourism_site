@@ -389,7 +389,10 @@ export const ModelName = {
   Routes: 'Routes',
   Point: 'Point',
   RoutesImg: 'RoutesImg',
-  RoutStatus: 'RoutStatus'
+  RoutStatus: 'RoutStatus',
+  HistoryRoutes: 'HistoryRoutes',
+  HistoryPoint: 'HistoryPoint',
+  HistoryRoutesImg: 'HistoryRoutesImg'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "role" | "routes" | "point" | "routesImg" | "routStatus"
+    modelProps: "user" | "role" | "routes" | "point" | "routesImg" | "routStatus" | "historyRoutes" | "historyPoint" | "historyRoutesImg"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -853,6 +856,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    HistoryRoutes: {
+      payload: Prisma.$HistoryRoutesPayload<ExtArgs>
+      fields: Prisma.HistoryRoutesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HistoryRoutesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HistoryRoutesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesPayload>
+        }
+        findFirst: {
+          args: Prisma.HistoryRoutesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HistoryRoutesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesPayload>
+        }
+        findMany: {
+          args: Prisma.HistoryRoutesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesPayload>[]
+        }
+        create: {
+          args: Prisma.HistoryRoutesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesPayload>
+        }
+        createMany: {
+          args: Prisma.HistoryRoutesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HistoryRoutesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesPayload>[]
+        }
+        delete: {
+          args: Prisma.HistoryRoutesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesPayload>
+        }
+        update: {
+          args: Prisma.HistoryRoutesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesPayload>
+        }
+        deleteMany: {
+          args: Prisma.HistoryRoutesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HistoryRoutesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HistoryRoutesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesPayload>[]
+        }
+        upsert: {
+          args: Prisma.HistoryRoutesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesPayload>
+        }
+        aggregate: {
+          args: Prisma.HistoryRoutesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHistoryRoutes>
+        }
+        groupBy: {
+          args: Prisma.HistoryRoutesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HistoryRoutesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HistoryRoutesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HistoryRoutesCountAggregateOutputType> | number
+        }
+      }
+    }
+    HistoryPoint: {
+      payload: Prisma.$HistoryPointPayload<ExtArgs>
+      fields: Prisma.HistoryPointFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HistoryPointFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryPointPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HistoryPointFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryPointPayload>
+        }
+        findFirst: {
+          args: Prisma.HistoryPointFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryPointPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HistoryPointFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryPointPayload>
+        }
+        findMany: {
+          args: Prisma.HistoryPointFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryPointPayload>[]
+        }
+        create: {
+          args: Prisma.HistoryPointCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryPointPayload>
+        }
+        createMany: {
+          args: Prisma.HistoryPointCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HistoryPointCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryPointPayload>[]
+        }
+        delete: {
+          args: Prisma.HistoryPointDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryPointPayload>
+        }
+        update: {
+          args: Prisma.HistoryPointUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryPointPayload>
+        }
+        deleteMany: {
+          args: Prisma.HistoryPointDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HistoryPointUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HistoryPointUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryPointPayload>[]
+        }
+        upsert: {
+          args: Prisma.HistoryPointUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryPointPayload>
+        }
+        aggregate: {
+          args: Prisma.HistoryPointAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHistoryPoint>
+        }
+        groupBy: {
+          args: Prisma.HistoryPointGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HistoryPointGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HistoryPointCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HistoryPointCountAggregateOutputType> | number
+        }
+      }
+    }
+    HistoryRoutesImg: {
+      payload: Prisma.$HistoryRoutesImgPayload<ExtArgs>
+      fields: Prisma.HistoryRoutesImgFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HistoryRoutesImgFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesImgPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HistoryRoutesImgFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesImgPayload>
+        }
+        findFirst: {
+          args: Prisma.HistoryRoutesImgFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesImgPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HistoryRoutesImgFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesImgPayload>
+        }
+        findMany: {
+          args: Prisma.HistoryRoutesImgFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesImgPayload>[]
+        }
+        create: {
+          args: Prisma.HistoryRoutesImgCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesImgPayload>
+        }
+        createMany: {
+          args: Prisma.HistoryRoutesImgCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HistoryRoutesImgCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesImgPayload>[]
+        }
+        delete: {
+          args: Prisma.HistoryRoutesImgDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesImgPayload>
+        }
+        update: {
+          args: Prisma.HistoryRoutesImgUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesImgPayload>
+        }
+        deleteMany: {
+          args: Prisma.HistoryRoutesImgDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HistoryRoutesImgUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HistoryRoutesImgUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesImgPayload>[]
+        }
+        upsert: {
+          args: Prisma.HistoryRoutesImgUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoryRoutesImgPayload>
+        }
+        aggregate: {
+          args: Prisma.HistoryRoutesImgAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHistoryRoutesImg>
+        }
+        groupBy: {
+          args: Prisma.HistoryRoutesImgGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HistoryRoutesImgGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HistoryRoutesImgCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HistoryRoutesImgCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -953,6 +1178,39 @@ export const RoutStatusScalarFieldEnum = {
 } as const
 
 export type RoutStatusScalarFieldEnum = (typeof RoutStatusScalarFieldEnum)[keyof typeof RoutStatusScalarFieldEnum]
+
+
+export const HistoryRoutesScalarFieldEnum = {
+  id: 'id',
+  routeId: 'routeId',
+  version: 'version',
+  name: 'name',
+  description: 'description',
+  isPublic: 'isPublic',
+  statusId: 'statusId',
+  userId: 'userId'
+} as const
+
+export type HistoryRoutesScalarFieldEnum = (typeof HistoryRoutesScalarFieldEnum)[keyof typeof HistoryRoutesScalarFieldEnum]
+
+
+export const HistoryPointScalarFieldEnum = {
+  id: 'id',
+  lng: 'lng',
+  lat: 'lat',
+  historyId: 'historyId'
+} as const
+
+export type HistoryPointScalarFieldEnum = (typeof HistoryPointScalarFieldEnum)[keyof typeof HistoryPointScalarFieldEnum]
+
+
+export const HistoryRoutesImgScalarFieldEnum = {
+  id: 'id',
+  img: 'img',
+  historyId: 'historyId'
+} as const
+
+export type HistoryRoutesImgScalarFieldEnum = (typeof HistoryRoutesImgScalarFieldEnum)[keyof typeof HistoryRoutesImgScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1163,6 +1421,9 @@ export type GlobalOmitConfig = {
   point?: Prisma.PointOmit
   routesImg?: Prisma.RoutesImgOmit
   routStatus?: Prisma.RoutStatusOmit
+  historyRoutes?: Prisma.HistoryRoutesOmit
+  historyPoint?: Prisma.HistoryPointOmit
+  historyRoutesImg?: Prisma.HistoryRoutesImgOmit
 }
 
 /* Types for Logging */

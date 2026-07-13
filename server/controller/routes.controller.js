@@ -2,11 +2,43 @@ import prisma from "../prisma/prisma.js"
 import upload from "../middlewear/uploadFiles.js"
 import { deleteFiles } from "../utils/deleteFile.js";
 
+async function getRoutes(where) {
+    const routes = await prisma.Routes.findMany({
+        where,
+        select: {
+            id: true,
+            name: true,
+            description: true,
+            user: { select: {email: true}},
+            images: { take: 1, select: { img: true }
+            }
+        }
+    });
+    return routes.map(route => ({
+        id: route.id,
+        name: route.name,
+        description: route.description,
+        email: route.user.email,
+        image: route.images[0]?.img ?? null
+    }));
+}
+
+async function getRoute(where){
+    return prisma.Routes.findFirst({
+        where,
+        select:{
+            name:true,
+            description:true,
+            isPublic:true,
+            statusId: true,
+            points:{ select:{ id:true, lng:true, lat:true } },
+            images:{select:{img:true}}
+        }
+    });
+}
+
+
 export async function CreateRoute (req, res){
-    const token = req.cookies.refreshToken;
-    if(!token){
-        return res.status(401).json({message: "no token"})
-    }
     try{
         const data = JSON.parse(req.body.data);
         const Route = await prisma.Routes.create({
@@ -41,27 +73,20 @@ export async function CreateRoute (req, res){
         res.status(500).json({message: e.message})
     }
 }
+
 export async function UpdateRoute(req, res) {
     const { id } = req.params;
-
     try {
         const data = JSON.parse(req.body.data);
-
         // проверка владельца
-        const route = await prisma.Routes.findFirst({
-            where: {
+        const OldRoute = await getRoute({
                 id: Number(id),
                 userId: req.user.userId
-            },
-            include: {
-                images: true,
-            },
-        });
-
-        if (!route) {
+            }
+        );
+        if (!OldRoute) {
             return res.status(404).json({ message: "Маршрут не найден" });
         }
-
         // Проверяем уникальность имени
         const existName = await prisma.Routes.findFirst({
             where: {
@@ -72,20 +97,22 @@ export async function UpdateRoute(req, res) {
 
         if (existName) {
             if (req.files?.length) {
-                await deleteFiles(req.files);
+                try{
+                    await deleteFiles(req.files);
+                } catch (e){
+                    throw new Error(e)
+                }
             }
             return res.status(409).json({
                 message: "Имя маршрута уже занято"
             });
         }
-        const oldImages = route.images;
 
         const updateData = {
             name: data.name,
             description: data.description,
             isPublic: data.isPublic,
             statusId: data.isPublic ? 2 : 1,
-
             points: {
                 deleteMany: {},
                 create: data.points.map(point => ({
@@ -111,20 +138,46 @@ export async function UpdateRoute(req, res) {
             data: updateData
         });
 
-        // Если изображения были заменены —
-        // удаляем старые файлы с диска
-        if (req.files?.length && oldImages.length) {
-            await deleteFiles(oldImages);
-        }
 
+        const lastVersion = await prisma.historyRoutes.aggregate({
+            where: { routeId: Number(id)},
+            _max: { version: true }
+        });
+
+        const version = (lastVersion._max.version ?? 0) + 1;
+
+        await prisma.historyRoutes.create({
+             data: {
+                routeId: Number(id),
+                version,
+                userId: req.user.userId,
+                name: OldRoute.name,
+                description: OldRoute.description,
+                isPublic: OldRoute.isPublic,
+                statusId: OldRoute.statusId,
+                points: {
+                    create: OldRoute.points.map(point => ({
+                        lng: point.lng,
+                        lat: point.lat,
+                        address: point.address
+                    }))
+                },
+                images: {
+                    create: OldRoute.images.map(image => ({
+                        img: image.img
+                    }))
+                }
+            }
+        })
         return res.status(200).json({ message: "Маршрут успешно обновлён" });
-
     } catch (e) {
         console.log(e);
-        // Если произошла ошибка —
-        // удаляем только что загруженные файлы
         if (req.files?.length) {
-            await deleteFiles(req.files);
+            try{
+                await deleteFiles(req.files);
+            } catch (e){
+                throw new Error(e)
+            }
         }
         if (e.code === "P2002") {
             return res.status(409).json({
@@ -168,57 +221,27 @@ export async function DeleteRoute(req, res){
 
 export async function getPublicRoutes(req, res){
     try{
-        const routes = await prisma.Routes.findMany({
-            where: {
-                status: {name: "public"}
-            },
-            select: {
-                id: true,
-                name: true,
-                description: true,
-                user: { select: { email: true } },
-                images: { select: { img: true }, take: 1}
+        const routes = await getRoutes({
+            status:{
+                name:"public"
             }
         });
-        const result = routes.map(route => ({
-            id: route.id,
-            name: route.name,
-            description: route.description,
-            email: route.user.email,
-            image: route.images[0]?.img ?? null
-        }));
-        res.status(200).json(result)
-    } catch(e){
-        console.log(e.message)
-        res.status(500).json({message: e.message})
-    }    
+
+        res.json(routes);
+    }catch(e){
+        res.status(500).json({message:e.message});
+    }  
 }
 export async function getUserRoutes(req, res){
     try{
-        const routes = await prisma.Routes.findMany({
-            where: {
-                user: {id: req.user.userId}
-            },
-            select: {
-                id: true,
-                name: true,
-                description: true,
-                user: { select: { email: true } },
-                images: { select: { img: true }, take: 1}
-            }
+        const routes = await getRoutes({
+            userId:req.user.userId
         });
-        const result = routes.map(route => ({
-            id: route.id,
-            name: route.name,
-            description: route.description,
-            email: route.user.email,
-            image: route.images[0]?.img ?? null
-        }));
-        res.status(200).json(result)
-    } catch(e){
-        console.log(e.message)
-        res.status(500).json({message: e.message})
-    }    
+
+        res.json(routes);
+    }catch(e){
+        res.status(500).json({message:e.message});
+    }   
 }
 
 
@@ -226,19 +249,10 @@ export async function getUserRoutes(req, res){
 export async function getPublicRouteById(req, res){
     const {id} = req.params
     try{
-        const data = await prisma.Routes.findFirst({
-            where:{
-                id: Number(id),
-                status: {name: "public"}
-            },
-            select: {
-                name: true,
-                description: true,
-                isPublic: true,
-                points: {select: {id:true, lng:true, lat:true}},
-                images: { select: { img: true }}
-            }
-        })
+        const data = await getRoute({
+            id:Number(id),
+            status:{ name:"public" }
+        });
         res.status(200).json(data)
     } catch (e) {
         console.log(e.message)
@@ -248,19 +262,10 @@ export async function getPublicRouteById(req, res){
 export async function getUserRouteById(req, res){
     const {id} = req.params
     try{
-        const data = await prisma.Routes.findFirst({
-            where:{
-                id: Number(id),
-                user:{id: req.user.userId}
-            },
-            select: {
-                name: true,
-                description: true,
-                isPublic: true,
-                points: {select: {id:true, lng:true, lat:true}},
-                images: { select: { img: true }}
-            }
-        })
+       const data = await getRoute({
+            id:Number(id),
+            userId:req.user.userId
+        });
         res.status(200).json(data)
     } catch (e) {
         console.log(e.message)
@@ -277,9 +282,7 @@ export async function MakeRoutePublic(req, res){
     try{
         const result = await prisma.Routes.update({
             where: { id: Number(id) },
-            data:{
-                statusId: 3
-            }   
+            data:{ statusId: 3 }   
         })
         res.status(200).json({message: "make route public"})
     } catch (e){
@@ -293,18 +296,9 @@ export async function MakeRoutePublic(req, res){
 export async function getRouteById(req, res){
     const {id} = req.params
     try{
-        const data = await prisma.Routes.findFirst({
-            where:{
-                id: Number(id),
-            },
-            select: {
-                name: true,
-                description: true,
-                isPublic: true,
-                points: {select: {id:true, lng:true, lat:true}},
-                images: { select: { img: true }}
-            }
-        })
+        const data = await getRoute({
+            id:Number(id),
+        });
         res.status(200).json(data)
     } catch (e) {
         console.log(e.message)
@@ -313,28 +307,14 @@ export async function getRouteById(req, res){
 }
 export async function getModerateRoutes(req, res){
     try{
-        const routes = await prisma.Routes.findMany({
-            where: {
-                status: {name: "moderate"}
-            },
-            select: {
-                id: true,
-                name: true,
-                description: true,
-                user: { select: { email: true } },
-                images: { select: { img: true }, take: 1}
+        const routes = await getRoutes({
+            status:{
+                name:"moderate"
             }
         });
-        const result = routes.map(route => ({
-            id: route.id,
-            name: route.name,
-            description: route.description,
-            email: route.user.email,
-            image: route.images[0]?.img ?? null
-        }));
-        res.status(200).json(result)
-    } catch(e){
-        console.log(e.message)
-        res.status(500).json({message: e.message})
+
+        res.json(routes);
+    }catch(e){
+        res.status(500).json({message:e.message});
     }    
 }

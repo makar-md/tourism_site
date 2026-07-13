@@ -232,6 +232,7 @@ export type RoutesWhereInput = {
   points?: Prisma.PointListRelationFilter
   images?: Prisma.RoutesImgListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  Versions?: Prisma.HistoryRoutesListRelationFilter
 }
 
 export type RoutesOrderByWithRelationInput = {
@@ -245,6 +246,7 @@ export type RoutesOrderByWithRelationInput = {
   points?: Prisma.PointOrderByRelationAggregateInput
   images?: Prisma.RoutesImgOrderByRelationAggregateInput
   user?: Prisma.UserOrderByWithRelationInput
+  Versions?: Prisma.HistoryRoutesOrderByRelationAggregateInput
 }
 
 export type RoutesWhereUniqueInput = Prisma.AtLeast<{
@@ -261,6 +263,7 @@ export type RoutesWhereUniqueInput = Prisma.AtLeast<{
   points?: Prisma.PointListRelationFilter
   images?: Prisma.RoutesImgListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  Versions?: Prisma.HistoryRoutesListRelationFilter
 }, "id" | "name">
 
 export type RoutesOrderByWithAggregationInput = {
@@ -297,6 +300,7 @@ export type RoutesCreateInput = {
   points?: Prisma.PointCreateNestedManyWithoutRouteInput
   images?: Prisma.RoutesImgCreateNestedManyWithoutRouteInput
   user: Prisma.UserCreateNestedOneWithoutRouteInput
+  Versions?: Prisma.HistoryRoutesCreateNestedManyWithoutRouteInput
 }
 
 export type RoutesUncheckedCreateInput = {
@@ -308,6 +312,7 @@ export type RoutesUncheckedCreateInput = {
   userId: string
   points?: Prisma.PointUncheckedCreateNestedManyWithoutRouteInput
   images?: Prisma.RoutesImgUncheckedCreateNestedManyWithoutRouteInput
+  Versions?: Prisma.HistoryRoutesUncheckedCreateNestedManyWithoutRouteInput
 }
 
 export type RoutesUpdateInput = {
@@ -318,6 +323,7 @@ export type RoutesUpdateInput = {
   points?: Prisma.PointUpdateManyWithoutRouteNestedInput
   images?: Prisma.RoutesImgUpdateManyWithoutRouteNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutRouteNestedInput
+  Versions?: Prisma.HistoryRoutesUpdateManyWithoutRouteNestedInput
 }
 
 export type RoutesUncheckedUpdateInput = {
@@ -329,6 +335,7 @@ export type RoutesUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   points?: Prisma.PointUncheckedUpdateManyWithoutRouteNestedInput
   images?: Prisma.RoutesImgUncheckedUpdateManyWithoutRouteNestedInput
+  Versions?: Prisma.HistoryRoutesUncheckedUpdateManyWithoutRouteNestedInput
 }
 
 export type RoutesCreateManyInput = {
@@ -523,6 +530,20 @@ export type RoutesUncheckedUpdateManyWithoutStatusNestedInput = {
   deleteMany?: Prisma.RoutesScalarWhereInput | Prisma.RoutesScalarWhereInput[]
 }
 
+export type RoutesCreateNestedOneWithoutVersionsInput = {
+  create?: Prisma.XOR<Prisma.RoutesCreateWithoutVersionsInput, Prisma.RoutesUncheckedCreateWithoutVersionsInput>
+  connectOrCreate?: Prisma.RoutesCreateOrConnectWithoutVersionsInput
+  connect?: Prisma.RoutesWhereUniqueInput
+}
+
+export type RoutesUpdateOneRequiredWithoutVersionsNestedInput = {
+  create?: Prisma.XOR<Prisma.RoutesCreateWithoutVersionsInput, Prisma.RoutesUncheckedCreateWithoutVersionsInput>
+  connectOrCreate?: Prisma.RoutesCreateOrConnectWithoutVersionsInput
+  upsert?: Prisma.RoutesUpsertWithoutVersionsInput
+  connect?: Prisma.RoutesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RoutesUpdateToOneWithWhereWithoutVersionsInput, Prisma.RoutesUpdateWithoutVersionsInput>, Prisma.RoutesUncheckedUpdateWithoutVersionsInput>
+}
+
 export type RoutesCreateWithoutUserInput = {
   name: string
   description?: string | null
@@ -530,6 +551,7 @@ export type RoutesCreateWithoutUserInput = {
   status?: Prisma.RoutStatusCreateNestedOneWithoutRoutesInput
   points?: Prisma.PointCreateNestedManyWithoutRouteInput
   images?: Prisma.RoutesImgCreateNestedManyWithoutRouteInput
+  Versions?: Prisma.HistoryRoutesCreateNestedManyWithoutRouteInput
 }
 
 export type RoutesUncheckedCreateWithoutUserInput = {
@@ -540,6 +562,7 @@ export type RoutesUncheckedCreateWithoutUserInput = {
   statusId?: number | null
   points?: Prisma.PointUncheckedCreateNestedManyWithoutRouteInput
   images?: Prisma.RoutesImgUncheckedCreateNestedManyWithoutRouteInput
+  Versions?: Prisma.HistoryRoutesUncheckedCreateNestedManyWithoutRouteInput
 }
 
 export type RoutesCreateOrConnectWithoutUserInput = {
@@ -587,6 +610,7 @@ export type RoutesCreateWithoutPointsInput = {
   status?: Prisma.RoutStatusCreateNestedOneWithoutRoutesInput
   images?: Prisma.RoutesImgCreateNestedManyWithoutRouteInput
   user: Prisma.UserCreateNestedOneWithoutRouteInput
+  Versions?: Prisma.HistoryRoutesCreateNestedManyWithoutRouteInput
 }
 
 export type RoutesUncheckedCreateWithoutPointsInput = {
@@ -597,6 +621,7 @@ export type RoutesUncheckedCreateWithoutPointsInput = {
   statusId?: number | null
   userId: string
   images?: Prisma.RoutesImgUncheckedCreateNestedManyWithoutRouteInput
+  Versions?: Prisma.HistoryRoutesUncheckedCreateNestedManyWithoutRouteInput
 }
 
 export type RoutesCreateOrConnectWithoutPointsInput = {
@@ -622,6 +647,7 @@ export type RoutesUpdateWithoutPointsInput = {
   status?: Prisma.RoutStatusUpdateOneWithoutRoutesNestedInput
   images?: Prisma.RoutesImgUpdateManyWithoutRouteNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutRouteNestedInput
+  Versions?: Prisma.HistoryRoutesUpdateManyWithoutRouteNestedInput
 }
 
 export type RoutesUncheckedUpdateWithoutPointsInput = {
@@ -632,6 +658,7 @@ export type RoutesUncheckedUpdateWithoutPointsInput = {
   statusId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   images?: Prisma.RoutesImgUncheckedUpdateManyWithoutRouteNestedInput
+  Versions?: Prisma.HistoryRoutesUncheckedUpdateManyWithoutRouteNestedInput
 }
 
 export type RoutesCreateWithoutImagesInput = {
@@ -641,6 +668,7 @@ export type RoutesCreateWithoutImagesInput = {
   status?: Prisma.RoutStatusCreateNestedOneWithoutRoutesInput
   points?: Prisma.PointCreateNestedManyWithoutRouteInput
   user: Prisma.UserCreateNestedOneWithoutRouteInput
+  Versions?: Prisma.HistoryRoutesCreateNestedManyWithoutRouteInput
 }
 
 export type RoutesUncheckedCreateWithoutImagesInput = {
@@ -651,6 +679,7 @@ export type RoutesUncheckedCreateWithoutImagesInput = {
   statusId?: number | null
   userId: string
   points?: Prisma.PointUncheckedCreateNestedManyWithoutRouteInput
+  Versions?: Prisma.HistoryRoutesUncheckedCreateNestedManyWithoutRouteInput
 }
 
 export type RoutesCreateOrConnectWithoutImagesInput = {
@@ -676,6 +705,7 @@ export type RoutesUpdateWithoutImagesInput = {
   status?: Prisma.RoutStatusUpdateOneWithoutRoutesNestedInput
   points?: Prisma.PointUpdateManyWithoutRouteNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutRouteNestedInput
+  Versions?: Prisma.HistoryRoutesUpdateManyWithoutRouteNestedInput
 }
 
 export type RoutesUncheckedUpdateWithoutImagesInput = {
@@ -686,6 +716,7 @@ export type RoutesUncheckedUpdateWithoutImagesInput = {
   statusId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   points?: Prisma.PointUncheckedUpdateManyWithoutRouteNestedInput
+  Versions?: Prisma.HistoryRoutesUncheckedUpdateManyWithoutRouteNestedInput
 }
 
 export type RoutesCreateWithoutStatusInput = {
@@ -695,6 +726,7 @@ export type RoutesCreateWithoutStatusInput = {
   points?: Prisma.PointCreateNestedManyWithoutRouteInput
   images?: Prisma.RoutesImgCreateNestedManyWithoutRouteInput
   user: Prisma.UserCreateNestedOneWithoutRouteInput
+  Versions?: Prisma.HistoryRoutesCreateNestedManyWithoutRouteInput
 }
 
 export type RoutesUncheckedCreateWithoutStatusInput = {
@@ -705,6 +737,7 @@ export type RoutesUncheckedCreateWithoutStatusInput = {
   userId: string
   points?: Prisma.PointUncheckedCreateNestedManyWithoutRouteInput
   images?: Prisma.RoutesImgUncheckedCreateNestedManyWithoutRouteInput
+  Versions?: Prisma.HistoryRoutesUncheckedCreateNestedManyWithoutRouteInput
 }
 
 export type RoutesCreateOrConnectWithoutStatusInput = {
@@ -733,6 +766,64 @@ export type RoutesUpdateManyWithWhereWithoutStatusInput = {
   data: Prisma.XOR<Prisma.RoutesUpdateManyMutationInput, Prisma.RoutesUncheckedUpdateManyWithoutStatusInput>
 }
 
+export type RoutesCreateWithoutVersionsInput = {
+  name: string
+  description?: string | null
+  isPublic: boolean
+  status?: Prisma.RoutStatusCreateNestedOneWithoutRoutesInput
+  points?: Prisma.PointCreateNestedManyWithoutRouteInput
+  images?: Prisma.RoutesImgCreateNestedManyWithoutRouteInput
+  user: Prisma.UserCreateNestedOneWithoutRouteInput
+}
+
+export type RoutesUncheckedCreateWithoutVersionsInput = {
+  id?: number
+  name: string
+  description?: string | null
+  isPublic: boolean
+  statusId?: number | null
+  userId: string
+  points?: Prisma.PointUncheckedCreateNestedManyWithoutRouteInput
+  images?: Prisma.RoutesImgUncheckedCreateNestedManyWithoutRouteInput
+}
+
+export type RoutesCreateOrConnectWithoutVersionsInput = {
+  where: Prisma.RoutesWhereUniqueInput
+  create: Prisma.XOR<Prisma.RoutesCreateWithoutVersionsInput, Prisma.RoutesUncheckedCreateWithoutVersionsInput>
+}
+
+export type RoutesUpsertWithoutVersionsInput = {
+  update: Prisma.XOR<Prisma.RoutesUpdateWithoutVersionsInput, Prisma.RoutesUncheckedUpdateWithoutVersionsInput>
+  create: Prisma.XOR<Prisma.RoutesCreateWithoutVersionsInput, Prisma.RoutesUncheckedCreateWithoutVersionsInput>
+  where?: Prisma.RoutesWhereInput
+}
+
+export type RoutesUpdateToOneWithWhereWithoutVersionsInput = {
+  where?: Prisma.RoutesWhereInput
+  data: Prisma.XOR<Prisma.RoutesUpdateWithoutVersionsInput, Prisma.RoutesUncheckedUpdateWithoutVersionsInput>
+}
+
+export type RoutesUpdateWithoutVersionsInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.RoutStatusUpdateOneWithoutRoutesNestedInput
+  points?: Prisma.PointUpdateManyWithoutRouteNestedInput
+  images?: Prisma.RoutesImgUpdateManyWithoutRouteNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutRouteNestedInput
+}
+
+export type RoutesUncheckedUpdateWithoutVersionsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  statusId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  points?: Prisma.PointUncheckedUpdateManyWithoutRouteNestedInput
+  images?: Prisma.RoutesImgUncheckedUpdateManyWithoutRouteNestedInput
+}
+
 export type RoutesCreateManyUserInput = {
   id?: number
   name: string
@@ -748,6 +839,7 @@ export type RoutesUpdateWithoutUserInput = {
   status?: Prisma.RoutStatusUpdateOneWithoutRoutesNestedInput
   points?: Prisma.PointUpdateManyWithoutRouteNestedInput
   images?: Prisma.RoutesImgUpdateManyWithoutRouteNestedInput
+  Versions?: Prisma.HistoryRoutesUpdateManyWithoutRouteNestedInput
 }
 
 export type RoutesUncheckedUpdateWithoutUserInput = {
@@ -758,6 +850,7 @@ export type RoutesUncheckedUpdateWithoutUserInput = {
   statusId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   points?: Prisma.PointUncheckedUpdateManyWithoutRouteNestedInput
   images?: Prisma.RoutesImgUncheckedUpdateManyWithoutRouteNestedInput
+  Versions?: Prisma.HistoryRoutesUncheckedUpdateManyWithoutRouteNestedInput
 }
 
 export type RoutesUncheckedUpdateManyWithoutUserInput = {
@@ -783,6 +876,7 @@ export type RoutesUpdateWithoutStatusInput = {
   points?: Prisma.PointUpdateManyWithoutRouteNestedInput
   images?: Prisma.RoutesImgUpdateManyWithoutRouteNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutRouteNestedInput
+  Versions?: Prisma.HistoryRoutesUpdateManyWithoutRouteNestedInput
 }
 
 export type RoutesUncheckedUpdateWithoutStatusInput = {
@@ -793,6 +887,7 @@ export type RoutesUncheckedUpdateWithoutStatusInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   points?: Prisma.PointUncheckedUpdateManyWithoutRouteNestedInput
   images?: Prisma.RoutesImgUncheckedUpdateManyWithoutRouteNestedInput
+  Versions?: Prisma.HistoryRoutesUncheckedUpdateManyWithoutRouteNestedInput
 }
 
 export type RoutesUncheckedUpdateManyWithoutStatusInput = {
@@ -811,11 +906,13 @@ export type RoutesUncheckedUpdateManyWithoutStatusInput = {
 export type RoutesCountOutputType = {
   points: number
   images: number
+  Versions: number
 }
 
 export type RoutesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   points?: boolean | RoutesCountOutputTypeCountPointsArgs
   images?: boolean | RoutesCountOutputTypeCountImagesArgs
+  Versions?: boolean | RoutesCountOutputTypeCountVersionsArgs
 }
 
 /**
@@ -842,6 +939,13 @@ export type RoutesCountOutputTypeCountImagesArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.RoutesImgWhereInput
 }
 
+/**
+ * RoutesCountOutputType without action
+ */
+export type RoutesCountOutputTypeCountVersionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HistoryRoutesWhereInput
+}
+
 
 export type RoutesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -854,6 +958,7 @@ export type RoutesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   points?: boolean | Prisma.Routes$pointsArgs<ExtArgs>
   images?: boolean | Prisma.Routes$imagesArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  Versions?: boolean | Prisma.Routes$VersionsArgs<ExtArgs>
   _count?: boolean | Prisma.RoutesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["routes"]>
 
@@ -894,6 +999,7 @@ export type RoutesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   points?: boolean | Prisma.Routes$pointsArgs<ExtArgs>
   images?: boolean | Prisma.Routes$imagesArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  Versions?: boolean | Prisma.Routes$VersionsArgs<ExtArgs>
   _count?: boolean | Prisma.RoutesCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type RoutesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -912,6 +1018,7 @@ export type $RoutesPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     points: Prisma.$PointPayload<ExtArgs>[]
     images: Prisma.$RoutesImgPayload<ExtArgs>[]
     user: Prisma.$UserPayload<ExtArgs>
+    Versions: Prisma.$HistoryRoutesPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1318,6 +1425,7 @@ export interface Prisma__RoutesClient<T, Null = never, ExtArgs extends runtime.T
   points<T extends Prisma.Routes$pointsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Routes$pointsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PointPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   images<T extends Prisma.Routes$imagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Routes$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoutesImgPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  Versions<T extends Prisma.Routes$VersionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Routes$VersionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HistoryRoutesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1818,6 +1926,30 @@ export type Routes$imagesArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.RoutesImgScalarFieldEnum | Prisma.RoutesImgScalarFieldEnum[]
+}
+
+/**
+ * Routes.Versions
+ */
+export type Routes$VersionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HistoryRoutes
+   */
+  select?: Prisma.HistoryRoutesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HistoryRoutes
+   */
+  omit?: Prisma.HistoryRoutesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HistoryRoutesInclude<ExtArgs> | null
+  where?: Prisma.HistoryRoutesWhereInput
+  orderBy?: Prisma.HistoryRoutesOrderByWithRelationInput | Prisma.HistoryRoutesOrderByWithRelationInput[]
+  cursor?: Prisma.HistoryRoutesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HistoryRoutesScalarFieldEnum | Prisma.HistoryRoutesScalarFieldEnum[]
 }
 
 /**

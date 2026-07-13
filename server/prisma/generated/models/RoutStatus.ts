@@ -193,12 +193,14 @@ export type RoutStatusWhereInput = {
   id?: Prisma.IntFilter<"RoutStatus"> | number
   name?: Prisma.StringFilter<"RoutStatus"> | string
   routes?: Prisma.RoutesListRelationFilter
+  historyyRoute?: Prisma.HistoryRoutesListRelationFilter
 }
 
 export type RoutStatusOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   routes?: Prisma.RoutesOrderByRelationAggregateInput
+  historyyRoute?: Prisma.HistoryRoutesOrderByRelationAggregateInput
 }
 
 export type RoutStatusWhereUniqueInput = Prisma.AtLeast<{
@@ -208,6 +210,7 @@ export type RoutStatusWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.RoutStatusWhereInput[]
   NOT?: Prisma.RoutStatusWhereInput | Prisma.RoutStatusWhereInput[]
   routes?: Prisma.RoutesListRelationFilter
+  historyyRoute?: Prisma.HistoryRoutesListRelationFilter
 }, "id" | "name">
 
 export type RoutStatusOrderByWithAggregationInput = {
@@ -231,23 +234,27 @@ export type RoutStatusScalarWhereWithAggregatesInput = {
 export type RoutStatusCreateInput = {
   name: string
   routes?: Prisma.RoutesCreateNestedManyWithoutStatusInput
+  historyyRoute?: Prisma.HistoryRoutesCreateNestedManyWithoutStatusInput
 }
 
 export type RoutStatusUncheckedCreateInput = {
   id?: number
   name: string
   routes?: Prisma.RoutesUncheckedCreateNestedManyWithoutStatusInput
+  historyyRoute?: Prisma.HistoryRoutesUncheckedCreateNestedManyWithoutStatusInput
 }
 
 export type RoutStatusUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   routes?: Prisma.RoutesUpdateManyWithoutStatusNestedInput
+  historyyRoute?: Prisma.HistoryRoutesUpdateManyWithoutStatusNestedInput
 }
 
 export type RoutStatusUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   routes?: Prisma.RoutesUncheckedUpdateManyWithoutStatusNestedInput
+  historyyRoute?: Prisma.HistoryRoutesUncheckedUpdateManyWithoutStatusNestedInput
 }
 
 export type RoutStatusCreateManyInput = {
@@ -308,13 +315,31 @@ export type RoutStatusUpdateOneWithoutRoutesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RoutStatusUpdateToOneWithWhereWithoutRoutesInput, Prisma.RoutStatusUpdateWithoutRoutesInput>, Prisma.RoutStatusUncheckedUpdateWithoutRoutesInput>
 }
 
+export type RoutStatusCreateNestedOneWithoutHistoryyRouteInput = {
+  create?: Prisma.XOR<Prisma.RoutStatusCreateWithoutHistoryyRouteInput, Prisma.RoutStatusUncheckedCreateWithoutHistoryyRouteInput>
+  connectOrCreate?: Prisma.RoutStatusCreateOrConnectWithoutHistoryyRouteInput
+  connect?: Prisma.RoutStatusWhereUniqueInput
+}
+
+export type RoutStatusUpdateOneWithoutHistoryyRouteNestedInput = {
+  create?: Prisma.XOR<Prisma.RoutStatusCreateWithoutHistoryyRouteInput, Prisma.RoutStatusUncheckedCreateWithoutHistoryyRouteInput>
+  connectOrCreate?: Prisma.RoutStatusCreateOrConnectWithoutHistoryyRouteInput
+  upsert?: Prisma.RoutStatusUpsertWithoutHistoryyRouteInput
+  disconnect?: Prisma.RoutStatusWhereInput | boolean
+  delete?: Prisma.RoutStatusWhereInput | boolean
+  connect?: Prisma.RoutStatusWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RoutStatusUpdateToOneWithWhereWithoutHistoryyRouteInput, Prisma.RoutStatusUpdateWithoutHistoryyRouteInput>, Prisma.RoutStatusUncheckedUpdateWithoutHistoryyRouteInput>
+}
+
 export type RoutStatusCreateWithoutRoutesInput = {
   name: string
+  historyyRoute?: Prisma.HistoryRoutesCreateNestedManyWithoutStatusInput
 }
 
 export type RoutStatusUncheckedCreateWithoutRoutesInput = {
   id?: number
   name: string
+  historyyRoute?: Prisma.HistoryRoutesUncheckedCreateNestedManyWithoutStatusInput
 }
 
 export type RoutStatusCreateOrConnectWithoutRoutesInput = {
@@ -335,11 +360,51 @@ export type RoutStatusUpdateToOneWithWhereWithoutRoutesInput = {
 
 export type RoutStatusUpdateWithoutRoutesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  historyyRoute?: Prisma.HistoryRoutesUpdateManyWithoutStatusNestedInput
 }
 
 export type RoutStatusUncheckedUpdateWithoutRoutesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  historyyRoute?: Prisma.HistoryRoutesUncheckedUpdateManyWithoutStatusNestedInput
+}
+
+export type RoutStatusCreateWithoutHistoryyRouteInput = {
+  name: string
+  routes?: Prisma.RoutesCreateNestedManyWithoutStatusInput
+}
+
+export type RoutStatusUncheckedCreateWithoutHistoryyRouteInput = {
+  id?: number
+  name: string
+  routes?: Prisma.RoutesUncheckedCreateNestedManyWithoutStatusInput
+}
+
+export type RoutStatusCreateOrConnectWithoutHistoryyRouteInput = {
+  where: Prisma.RoutStatusWhereUniqueInput
+  create: Prisma.XOR<Prisma.RoutStatusCreateWithoutHistoryyRouteInput, Prisma.RoutStatusUncheckedCreateWithoutHistoryyRouteInput>
+}
+
+export type RoutStatusUpsertWithoutHistoryyRouteInput = {
+  update: Prisma.XOR<Prisma.RoutStatusUpdateWithoutHistoryyRouteInput, Prisma.RoutStatusUncheckedUpdateWithoutHistoryyRouteInput>
+  create: Prisma.XOR<Prisma.RoutStatusCreateWithoutHistoryyRouteInput, Prisma.RoutStatusUncheckedCreateWithoutHistoryyRouteInput>
+  where?: Prisma.RoutStatusWhereInput
+}
+
+export type RoutStatusUpdateToOneWithWhereWithoutHistoryyRouteInput = {
+  where?: Prisma.RoutStatusWhereInput
+  data: Prisma.XOR<Prisma.RoutStatusUpdateWithoutHistoryyRouteInput, Prisma.RoutStatusUncheckedUpdateWithoutHistoryyRouteInput>
+}
+
+export type RoutStatusUpdateWithoutHistoryyRouteInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  routes?: Prisma.RoutesUpdateManyWithoutStatusNestedInput
+}
+
+export type RoutStatusUncheckedUpdateWithoutHistoryyRouteInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  routes?: Prisma.RoutesUncheckedUpdateManyWithoutStatusNestedInput
 }
 
 
@@ -349,10 +414,12 @@ export type RoutStatusUncheckedUpdateWithoutRoutesInput = {
 
 export type RoutStatusCountOutputType = {
   routes: number
+  historyyRoute: number
 }
 
 export type RoutStatusCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   routes?: boolean | RoutStatusCountOutputTypeCountRoutesArgs
+  historyyRoute?: boolean | RoutStatusCountOutputTypeCountHistoryyRouteArgs
 }
 
 /**
@@ -372,11 +439,19 @@ export type RoutStatusCountOutputTypeCountRoutesArgs<ExtArgs extends runtime.Typ
   where?: Prisma.RoutesWhereInput
 }
 
+/**
+ * RoutStatusCountOutputType without action
+ */
+export type RoutStatusCountOutputTypeCountHistoryyRouteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HistoryRoutesWhereInput
+}
+
 
 export type RoutStatusSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   routes?: boolean | Prisma.RoutStatus$routesArgs<ExtArgs>
+  historyyRoute?: boolean | Prisma.RoutStatus$historyyRouteArgs<ExtArgs>
   _count?: boolean | Prisma.RoutStatusCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["routStatus"]>
 
@@ -398,6 +473,7 @@ export type RoutStatusSelectScalar = {
 export type RoutStatusOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name", ExtArgs["result"]["routStatus"]>
 export type RoutStatusInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   routes?: boolean | Prisma.RoutStatus$routesArgs<ExtArgs>
+  historyyRoute?: boolean | Prisma.RoutStatus$historyyRouteArgs<ExtArgs>
   _count?: boolean | Prisma.RoutStatusCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type RoutStatusIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -407,6 +483,7 @@ export type $RoutStatusPayload<ExtArgs extends runtime.Types.Extensions.Internal
   name: "RoutStatus"
   objects: {
     routes: Prisma.$RoutesPayload<ExtArgs>[]
+    historyyRoute: Prisma.$HistoryRoutesPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -806,6 +883,7 @@ readonly fields: RoutStatusFieldRefs;
 export interface Prisma__RoutStatusClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   routes<T extends Prisma.RoutStatus$routesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoutStatus$routesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoutesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  historyyRoute<T extends Prisma.RoutStatus$historyyRouteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoutStatus$historyyRouteArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HistoryRoutesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1251,6 +1329,30 @@ export type RoutStatus$routesArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.RoutesScalarFieldEnum | Prisma.RoutesScalarFieldEnum[]
+}
+
+/**
+ * RoutStatus.historyyRoute
+ */
+export type RoutStatus$historyyRouteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HistoryRoutes
+   */
+  select?: Prisma.HistoryRoutesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HistoryRoutes
+   */
+  omit?: Prisma.HistoryRoutesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HistoryRoutesInclude<ExtArgs> | null
+  where?: Prisma.HistoryRoutesWhereInput
+  orderBy?: Prisma.HistoryRoutesOrderByWithRelationInput | Prisma.HistoryRoutesOrderByWithRelationInput[]
+  cursor?: Prisma.HistoryRoutesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HistoryRoutesScalarFieldEnum | Prisma.HistoryRoutesScalarFieldEnum[]
 }
 
 /**
