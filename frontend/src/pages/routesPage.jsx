@@ -48,7 +48,7 @@ export default function RoutesPage({mode="public"}){
             <main className="w-11/12 lg:w-9/12 mx-auto bg-white dark:bg-zinc-900 min-h-screen flex flex-col relative pt-15 items-center">
                 <Header linksShow={true } isCheckAuthUser={true}/>
                 <div className="w-full py-5 px-10 flex flex-row flex-wrap gap-10 justify-around">
-                    {   routes?.map((route,index)=>(
+                    {   routes?.map((route)=>(
                             <Link to={mode === "public" ? `/routes/${route.id}` : mode === "private" ? `/routes/${route.id}/edit` : `/moderate/route/${route.id}`}>
                                 <RouteCard key={route.id} name={route.name} description={route.description} img={route.image} user={route.email}/>
                             </Link>

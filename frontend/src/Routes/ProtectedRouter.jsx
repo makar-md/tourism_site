@@ -27,6 +27,8 @@ export default function ProtectedRouter({ children }) {
                 
                 setIsLogined(res.ok);
             } catch (e) {
+                console.log(e);
+                alert(e.message)
                 setIsLogined(false);
             }
             

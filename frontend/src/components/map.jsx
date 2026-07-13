@@ -2,7 +2,7 @@
 // c1b475b8-063c-4269-8362-8569cbee864a
 // https://api-maps.yandex.ru/v3/?apikey=3ce309bc-953b-4b11-8a7f-5b6660b2aad5&lang=ru_RU
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useTheme } from '../Contexts/ThemContext.jsx';
 import Pointer from './pointer';
 import {
@@ -19,7 +19,7 @@ import {
 
 export default function Map({onClick, points}){
     const [center, setCenter] = useState([43.936403, 56.334218])
-    const {theme, toggleTheme} = useTheme();
+    const {theme} = useTheme();
     const API_KEY = import.meta.env.VITE_YANDEX_API_KEY;
         
 

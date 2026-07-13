@@ -11,7 +11,6 @@ import '../index.css'
 function Register() {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
-  const [passwordMatched, setPasswordMathced] = useState(null)
   const [data, setData] = useState({
     email: "",
     password: "",

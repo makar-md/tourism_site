@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import {validationUpdateUser} from "../schemas/validate.schema"
 import { useAuth } from '../Contexts/AuthContext'
 import {api} from "../api/api"
@@ -10,7 +10,6 @@ import Header from '../components/header'
 import '../index.css'
 
 export default function Profile(){
-    const navigate = useNavigate()
     const [errors, setErrors] = useState({})
     const {user, setUser} = useAuth()
 
@@ -134,7 +133,7 @@ export default function Profile(){
                             onChange={(e) => { uploadAvatar(e.target.files[0]); }}/>
                         <button className='text-sm font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300
                         transition-colors duration-200 flex items-center gap-2 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 
-                        rounded-lg px-4 py-2 border border-red-200 dark:border-red-800/50' onClick={(e) => deleteAvatar()}>
+                        rounded-lg px-4 py-2 border border-red-200 dark:border-red-800/50' onClick={() => deleteAvatar()}>
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
                                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -184,7 +183,7 @@ export default function Profile(){
                         <button className="mt-2 text-lg sm:text-xl md:text-2xl inline-flex items-center gap-2 justify-center rounded-md py-1 sm:py-2 px-3 outline-offset-2
                         transition active:transition-none bg-zinc-800 font-semibold text-zinc-100 hover:bg-zinc-700 active:bg-zinc-800 active:text-zinc-100/70
                         dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:active:bg-zinc-700 dark:active:text-zinc-100/70 flex-none w-full"
-                        onClick={(e)=>{handleUpdateUser()}}>Update</button>
+                        onClick={()=>{handleUpdateUser()}}>Update</button>
                     </div>
                 </div>
             </div>
