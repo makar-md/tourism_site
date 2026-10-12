@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
-import Map from "../components/map";
-import InputCustom from '../components/inputCustom';
-import { api } from "../api/api";
-import { useNavigate, useParams } from "react-router-dom";
-import { validateRouteData } from "../schemas/validate.schema";
-import PointCard from "../components/pointCard";
-import Body from "../components/body";
-import Header from "../components/header";
-import RouteImg from "../components/routeImg";
-import CustomSelect from "../components/customSelect";
+import { useEffect, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
+import { api } from "../api/api"
+import Body from "../components/body"
+import CustomSelect from "../components/customSelect"
+import Header from "../components/header"
+import InputCustom from '../components/inputCustom'
+import Map from "../components/map"
+import PointCard from "../components/pointCard"
+import RouteImg from "../components/routeImg"
+import { validateRouteData } from "../schemas/validate.schema"
 
 // /moderate/route/makePublic/:id
 
@@ -265,7 +265,7 @@ export default function EditorRoute({mode = "viewing"}){
         <Body>
 
             <Header linksShow={true} isCheckAuthUser={true} />
-            <main className="w-11/12 xl:w-10/12 mx-auto py-18  bg-white p-4 min-h-screen  dark:bg-zinc-900" >
+            <main className="w-11/12 xl:w-10/12 mx-auto py-18  bg-white p-4 min-h-screen dark:bg-zinc-900" >
                 <div className="grid grid-cols-1 xl:grid-cols-[6fr_5fr] gap-6">
                     
                     <div className="rounded-3xl overflow-hidden border border-zinc-200 dark:border-none shadow-xl shadow-zinc-900/5 h-[90vh] p-4">
